@@ -1,0 +1,7 @@
+@media (max-width: 767px) {
+  .mobileBottom {
+    top: auto !important;
+    bottom: 30px !important;
+    transform: none !important;
+  }
+}
