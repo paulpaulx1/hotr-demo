@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, Menu, X, ChevronDown } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
 
 // Navigation Component
 const Navigation = () => {
@@ -21,7 +21,7 @@ const Navigation = () => {
     }`}>
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex items-center justify-between">
-          <a href="#" className="flex items-center gap-3 text-white hover:opacity-80 transition-opacity">
+          <a href="#" className="flex items-center gap-3 text-white hover:opacity-80 transition-opacity cursor-pointer">
             <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
               <span className="font-serif text-lg">†</span>
             </div>
@@ -30,23 +30,23 @@ const Navigation = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8 text-white/90">
-            <a href="#worship" className="hover:text-white transition-colors font-light tracking-wide relative group">
+            <a href="#worship" className="hover:text-white cursor-pointer transition-colors font-light tracking-wide relative group">
               Worship
               <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover:w-full"></span>
             </a>
-            <a href="#about" className="hover:text-white transition-colors font-light tracking-wide relative group">
+            <a href="#about" className="hover:text-white cursor-pointer transition-colors font-light tracking-wide relative group">
               About
               <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover:w-full"></span>
             </a>
-            <a href="#events" className="hover:text-white transition-colors font-light tracking-wide relative group">
+            <a href="#events" className="hover:text-white cursor-pointer transition-colors font-light tracking-wide relative group">
               Events
               <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover:w-full"></span>
             </a>
-            <a href="#restoration" className="hover:text-white transition-colors font-light tracking-wide relative group">
+            <a href="#restoration" className="hover:text-white cursor-pointer transition-colors font-light tracking-wide relative group">
               Restoration
               <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover:w-full"></span>
             </a>
-            <a href="#contact" className="hover:text-white transition-colors font-light tracking-wide relative group">
+            <a href="#contact" className="hover:text-white cursor-pointer transition-colors font-light tracking-wide relative group">
               Visit
               <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover:w-full"></span>
             </a>
@@ -55,7 +55,7 @@ const Navigation = () => {
           {/* Mobile Hamburger */}
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden text-white"
+            className="md:hidden text-white cursor-pointer"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -69,7 +69,7 @@ const Navigation = () => {
                 <a
                   key={item}
                   href={`#${item.toLowerCase()}`}
-                  className="block text-white/90 hover:text-white transition-colors font-light tracking-wide py-2"
+                  className="block text-white/90 hover:text-white cursor-pointer transition-colors font-light tracking-wide py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {item}
@@ -83,7 +83,7 @@ const Navigation = () => {
   );
 };
 
-// Hero Carousel Component
+// Hero Carousel Component (patched)
 const HeroCarousel = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -113,76 +113,96 @@ const HeroCarousel = () => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 12000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
   const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
   return (
     <div className="relative h-screen overflow-hidden">
-      {slides.map((slide, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-all duration-1000 ease-in-out ${
-            index === currentSlide ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
-          }`}
-        >
-          <div 
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${slide.image})` }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/70" />
-          
-          <div className="relative z-10 flex items-center justify-center h-full">
-            <div className="max-w-6xl mx-auto px-6 text-center text-white">
-              <h1 className={`font-serif text-4xl md:text-6xl lg:text-7xl font-normal mb-8 tracking-wide transform transition-all duration-1000 delay-300 ${
-                index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
-              }`}>
-                {slide.title}
-              </h1>
-              
-              <div className={`flex flex-wrap justify-center gap-6 md:gap-12 text-lg md:text-xl font-light tracking-wide mb-8 transform transition-all duration-1000 delay-500 ${
-                index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
-              }`}>
-                {slide.services.map((service, i) => (
-                  <React.Fragment key={service}>
-                    <span className="text-white/95">{service}</span>
-                    {i < slide.services.length - 1 && <span className="text-white/60">|</span>}
-                  </React.Fragment>
-                ))}
-              </div>
+      {slides.map((slide, index) => {
+        const isActive = index === currentSlide;
+        return (
+          <div
+            key={index}
+            aria-hidden={!isActive}
+            className={[
+              "absolute inset-0 transition-all duration-1000 ease-in-out",
+              isActive
+                ? "opacity-100 scale-100 z-10 pointer-events-auto"
+                : "opacity-0 scale-105 z-0 pointer-events-none"
+            ].join(" ")}
+          >
+            {/* Background image and overlay should never capture events */}
+            <div
+              className="absolute inset-0 bg-cover bg-center pointer-events-none"
+              style={{ backgroundImage: `url(${slide.image})` }}
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/70 pointer-events-none" />
 
-              <p className={`text-xl md:text-2xl font-light max-w-3xl mx-auto mb-12 text-white/90 leading-relaxed transform transition-all duration-1000 delay-700 ${
-                index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
-              }`}>
-                {slide.description}
-              </p>
+            <div className="relative z-10 flex items-center justify-center h-full">
+              <div className="max-w-6xl mx-auto px-6 text-center text-white">
+                <h1
+                  className={[
+                    "font-serif text-4xl md:text-6xl lg:text-7xl font-normal mb-8 tracking-wide transform transition-all duration-1000 delay-300",
+                    isActive ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+                  ].join(" ")}
+                >
+                  {slide.title}
+                </h1>
 
-              <div className={`flex flex-col sm:flex-row gap-6 justify-center transform transition-all duration-1000 delay-900 ${
-                index === currentSlide ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
-              }`}>
-                <button className="px-8 py-4 bg-slate-700 hover:bg-transparent border-2 border-slate-700 hover:border-white text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:cursor-pointer">
-                  Plan Your Visit
-                </button>
-                <button className="px-8 py-4 bg-transparent border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:cursor-pointer">
-                  Learn More
-                </button>
+                <div
+                  className={[
+                    "flex flex-wrap justify-center gap-6 md:gap-12 text-lg md:text-xl font-light tracking-wide mb-8 transform transition-all duration-1000 delay-500",
+                    isActive ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+                  ].join(" ")}
+                >
+                  {slide.services.map((service, i) => (
+                    <React.Fragment key={service}>
+                      <span className="text-white/95">{service}</span>
+                      {i < slide.services.length - 1 && <span className="text-white/60">|</span>}
+                    </React.Fragment>
+                  ))}
+                </div>
+
+                <p
+                  className={[
+                    "text-xl md:text-2xl font-light max-w-3xl mx-auto mb-12 text-white/90 leading-relaxed transform transition-all duration-1000 delay-700",
+                    isActive ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+                  ].join(" ")}
+                >
+                  {slide.description}
+                </p>
+
+                <div
+                  className={[
+                    "flex flex-col sm:flex-row gap-6 justify-center transform transition-all duration-1000 delay-900",
+                    isActive ? "translate-y-0 opacity-100" : "translate-y-12 opacity-0"
+                  ].join(" ")}
+                >
+                  <button className="px-8 py-4 bg-slate-700 hover:bg-transparent border-2 border-slate-700 hover:border-white text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                    Plan Your Visit
+                  </button>
+                  <button className="px-8 py-4 bg-transparent border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                    Learn More
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        );
+      })}
 
       {/* Carousel Controls */}
       <button
         onClick={prevSlide}
-        className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 bg-black/20 backdrop-blur-sm p-3 rounded-full text-white/80 hover:text-white hover:bg-black/40 transition-all duration-300"
+        className="absolute left-6 top-1/2 transform -translate-y-1/2 z-20 bg-black/20 backdrop-blur-sm p-3 rounded-full text-white/80 hover:text-white hover:bg-black/40 hover:scale-110 transition-all duration-300 cursor-pointer"
       >
         <ChevronLeft size={24} />
       </button>
       <button
         onClick={nextSlide}
-        className="absolute right-6 top-1/2 transform -translate-y-1/2 z-20 bg-black/20 backdrop-blur-sm p-3 rounded-full text-white/80 hover:text-white hover:bg-black/40 transition-all duration-300"
+        className="absolute right-6 top-1/2 transform -translate-y-1/2 z-20 bg-black/20 backdrop-blur-sm p-3 rounded-full text-white/80 hover:text-white hover:bg-black/40 hover:scale-110 transition-all duration-300 cursor-pointer"
       >
         <ChevronRight size={24} />
       </button>
@@ -193,9 +213,10 @@ const HeroCarousel = () => {
           <button
             key={index}
             onClick={() => setCurrentSlide(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              index === currentSlide ? 'bg-white scale-125' : 'bg-white/50 hover:bg-white/70'
-            }`}
+            className={[
+              "w-3 h-3 rounded-full transition-all duration-300 cursor-pointer hover:scale-125",
+              index === currentSlide ? "bg-white scale-125" : "bg-white/50 hover:bg-white/70"
+            ].join(" ")}
           />
         ))}
       </div>
@@ -204,18 +225,17 @@ const HeroCarousel = () => {
       <div className="absolute bottom-8 left-8 z-20 text-white max-w-xs hidden lg:block">
         <h3 className="font-serif text-xl font-medium mb-2">Historic Sanctuary</h3>
         <p className="text-white/80 text-sm mb-4 font-light">Vanderbilt Mansion</p>
-        <a href="#about" className="text-white/90 hover:text-white text-sm font-light border-b border-white/30 hover:border-white transition-colors">
+        <a
+          href="#about"
+          className="text-white/90 hover:text-white cursor-pointer text-sm font-light border-b border-white/30 hover:border-white transition-all duration-300 hover:-translate-y-0.5"
+        >
           Learn More →
         </a>
-      </div>
-
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-20 text-white/70 animate-bounce">
-        <ChevronDown size={24} />
       </div>
     </div>
   );
 };
+
 
 // About Section Component
 const AboutSection = () => {
