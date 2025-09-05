@@ -554,7 +554,7 @@ const HouseRedeemerDemo = () => {
               <div className="mt-4 pt-4 border-t border-slate-600">
                 <p className="text-xs text-slate-400 text-center">
                   <strong className="text-slate-300">Result:</strong> Better Google search rankings, rich social media sharing, 
-                  improved click-through rates, and enhanced local SEO for "Episcopal church Carnegie Hill" searches.
+                  improved click-through rates, and enhanced local SEO for &ldquo;Episcopal church Carnegie Hill&rdquo; searches.
                 </p>
               </div>
             </div>
