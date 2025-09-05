@@ -608,7 +608,27 @@ const HouseRedeemerDemo = () => {
                   Meta Tags Best Practices
                 </a>
               </div>
-              <p className="text-slate-500 text-xs mt-3">
+              
+              {/* Deployment Process */}
+              <div className="mt-6 pt-4 border-t border-slate-700">
+                <h5 className="text-slate-300 font-medium mb-3">🚀 Post-Launch SEO Process</h5>
+                <div className="grid md:grid-cols-3 gap-4 text-xs">
+                  <div className="bg-slate-800/50 rounded p-3">
+                    <div className="text-green-400 font-medium mb-1">1. Request Google Reindex</div>
+                    <div className="text-slate-400">Submit new sitemap to Google Search Console for immediate crawling</div>
+                  </div>
+                  <div className="bg-slate-800/50 rounded p-3">
+                    <div className="text-blue-400 font-medium mb-1">2. Test Rich Results</div>
+                    <div className="text-slate-400">Verify structured data with Google&apos;s Rich Results Testing Tool</div>
+                  </div>
+                  <div className="bg-slate-800/50 rounded p-3">
+                    <div className="text-purple-400 font-medium mb-1">3. Monitor Performance</div>
+                    <div className="text-slate-400">Track rankings and traffic improvements over 2-3 months</div>
+                  </div>
+                </div>
+              </div>
+              
+              <p className="text-slate-500 text-xs mt-4">
                 These Google and platform documentation links explain exactly how structured data and meta tags improve search rankings and social media sharing.
               </p>
             </div>
