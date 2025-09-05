@@ -558,6 +558,60 @@ const HouseRedeemerDemo = () => {
                 </p>
               </div>
             </div>
+
+            {/* Technical Resources */}
+            <div className="mt-8 pt-6 border-t border-slate-600">
+              <h4 className="text-slate-300 font-medium mb-4">📚 Learn More About These SEO Improvements</h4>
+              <div className="flex flex-wrap justify-center gap-4 text-xs">
+                <a 
+                  href="https://developers.google.com/search/docs/appearance/structured-data/intro-structured-data" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-white underline hover:no-underline transition-colors"
+                >
+                  Google: Structured Data Guide
+                </a>
+                <span className="text-slate-600">•</span>
+                <a 
+                  href="https://developers.google.com/search/docs/appearance/structured-data/organization" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-white underline hover:no-underline transition-colors"
+                >
+                  Organization Schema
+                </a>
+                <span className="text-slate-600">•</span>
+                <a 
+                  href="https://ogp.me/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-white underline hover:no-underline transition-colors"
+                >
+                  Open Graph Protocol
+                </a>
+                <span className="text-slate-600">•</span>
+                <a 
+                  href="https://developer.twitter.com/en/docs/twitter-for-websites/cards/overview/abouts-cards" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-white underline hover:no-underline transition-colors"
+                >
+                  Twitter Cards Guide
+                </a>
+                <span className="text-slate-600">•</span>
+                <a 
+                  href="https://developers.google.com/search/docs/appearance/good-titles-snippets" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-slate-400 hover:text-white underline hover:no-underline transition-colors"
+                >
+                  Meta Tags Best Practices
+                </a>
+              </div>
+              <p className="text-slate-500 text-xs mt-3">
+                These Google and platform documentation links explain exactly how structured data and meta tags improve search rankings and social media sharing.
+              </p>
+            </div>
           </div>
         </div>
       </div>
