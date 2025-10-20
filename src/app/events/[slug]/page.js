@@ -16,7 +16,7 @@ function buildQuery(projectId, dataset, slug) {
   const qs = `query=${encodeURIComponent(GROQ)}&$slug=${encodeURIComponent(JSON.stringify(slug))}`;
   return `https://${projectId}.api.sanity.io/v2023-10-10/data/query/${dataset}?${qs}`;
 }
-
+ 
 
 export default async function EventPage({ params }) {
   const { slug } = await params  // some Next versions pass params as a promise
