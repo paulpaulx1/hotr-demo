@@ -1,5 +1,7 @@
 // src/app/api/hero-carousel/route.js
 export const revalidate = 86400; // 1 day — ISR handled by Next/Vercel
+export const dynamic = "force-dynamic";
+
 
 const query = `
   *[_type == "carouselItem" && active == true] | order(order asc) {
