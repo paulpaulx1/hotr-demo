@@ -31,7 +31,7 @@ export async function POST(req) {
   }
 
   // invalidate EVERYTHING tagged "sanity"
-  revalidateTag("sanity");
+  await revalidateTag("sanity");
 
   console.log("[revalidate] revalidated tag: sanity");
   return Response.json({ ok: true, revalidated: true });
