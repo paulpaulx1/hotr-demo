@@ -2,7 +2,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { client } from "../../../lib/sanity";
 
 const HeroCarousel = () => {
   const [slides, setSlides] = useState([]);
@@ -10,55 +9,39 @@ const HeroCarousel = () => {
   const [error, setError] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Fetch carousel items from Sanity
+  // Fetch carousel items from cached route handler
   useEffect(() => {
-    const fetchCarouselItems = async () => {
-      try {
-        // GROQ query to get active carousel items sorted by order
-        const query = `
-          *[_type == "carouselItem" && active == true] | order(order asc) {
-            _id,
-            title,
-            mediaType,
-            mediaSource,
-            "imageUrl": select(
-              mediaSource == "file" => image.asset->url,
-              mediaSource == "url" => imageUrl
-            ),
-            "videoUrl": select(
-              mediaSource == "file" => video.asset->url,
-              mediaSource == "url" => videoUrl
-            ),
-            "posterImageUrl": select(
-              mediaSource == "file" => posterImage.asset->url,
-              mediaSource == "url" => posterImageUrl
-            ),
-            services,
-            description
-          }
-        `;
+    const controller = new AbortController();
 
-        const data = await client.fetch(query);
-        setSlides(data);
-        setLoading(false);
+    async function fetchCarouselItems() {
+      try {
+        const res = await fetch("/api/hero-carousel", {
+          signal: controller.signal,
+          // You can keep default caching here; the server route is ISR-cached.
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        setSlides(Array.isArray(json.result) ? json.result : []);
       } catch (err) {
-        console.error("Failed to fetch carousel data:", err);
-        setError(err);
+        if (err.name !== "AbortError") {
+          console.error("Failed to fetch carousel data:", err);
+          setError(err);
+        }
+      } finally {
         setLoading(false);
       }
-    };
+    }
 
     fetchCarouselItems();
+    return () => controller.abort();
   }, []);
 
   // Auto-advance carousel
   useEffect(() => {
     if (slides.length === 0) return;
-
     const id = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
     }, 12000);
-
     return () => clearInterval(id);
   }, [slides]);
 
