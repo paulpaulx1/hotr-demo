@@ -1,6 +1,5 @@
 // src/app/api/hero-carousel/route.js
-// You can make this longer now that you have webhook invalidation
-export const revalidate = 86400; // 1 day
+export const revalidate = 86400; // 1 day — ISR handled by Next/Vercel
 
 const query = `
   *[_type == "carouselItem" && active == true] | order(order asc) {
@@ -22,21 +21,38 @@ export async function GET() {
     const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
     const url = `https://${projectId}.apicdn.sanity.io/v2023-10-10/data/query/${dataset}?query=${encodeURIComponent(query)}`;
 
-    // IMPORTANT: add tags so revalidateTag('sanity') clears this cache
+    // Tag ensures revalidateTag('sanity') clears this cache
     const res = await fetch(url, { next: { revalidate, tags: ["sanity"] } });
 
     if (!res.ok) {
-      return Response.json({ result: [], fetchedAt: Date.now() }, { status: 200 });
+      return Response.json(
+        { result: [], fetchedAt: Date.now() },
+        { status: 200 }
+      );
     }
 
     const { result } = await res.json();
 
-    // Cache-Control header is optional; ISR already handles it. Safe to keep.
+    // 🧠 dual-layer caching:
+    // - Browsers: no-store (always refetch from edge)
+    // - Vercel Edge / ISR: still caches (s-maxage)
     return Response.json(
-      { result: result || [], fetchedAt: Date.now() }, // fetchedAt helps you verify revalidation
-      { headers: { "Cache-Control": "s-maxage=86400, stale-while-revalidate=300" } }
+      { result: result || [], fetchedAt: Date.now() },
+      {
+        headers: {
+          // Browser caching OFF — ensures editors & users always see fresh data
+          "Cache-Control": "no-store, no-cache, must-revalidate",
+
+          // Edge (Vercel / CDN) caching ON — keeps site fast
+          "CDN-Cache-Control": "s-maxage=86400, stale-while-revalidate=300",
+        },
+      }
     );
-  } catch {
-    return Response.json({ result: [], fetchedAt: Date.now() }, { status: 200 });
+  } catch (err) {
+    console.error("[hero-carousel] Fetch error:", err);
+    return Response.json(
+      { result: [], fetchedAt: Date.now() },
+      { status: 200 }
+    );
   }
 }
