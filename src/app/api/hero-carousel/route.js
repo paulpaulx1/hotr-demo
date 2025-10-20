@@ -1,5 +1,6 @@
 // src/app/api/hero-carousel/route.js
-export const revalidate = 300; // cache for 5 minutes on the server (ISR)
+// You can make this longer now that you have webhook invalidation
+export const revalidate = 86400; // 1 day
 
 const query = `
   *[_type == "carouselItem" && active == true] | order(order asc) {
@@ -19,28 +20,23 @@ export async function GET() {
   try {
     const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "pionkkje";
     const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
-    const encoded = encodeURIComponent(query);
+    const url = `https://${projectId}.apicdn.sanity.io/v2023-10-10/data/query/${dataset}?query=${encodeURIComponent(query)}`;
 
-    // Hit the Sanity *CDN* (fast + globally cached)
-    const res = await fetch(
-      `https://${projectId}.apicdn.sanity.io/v2023-10-10/data/query/${dataset}?query=${encoded}`,
-      { next: { revalidate: 300 } }
-    );
+    // IMPORTANT: add tags so revalidateTag('sanity') clears this cache
+    const res = await fetch(url, { next: { revalidate, tags: ["sanity"] } });
 
     if (!res.ok) {
-      // fall back to empty result; you could also bubble the error
-      return Response.json({ result: [] }, { status: 200 });
+      return Response.json({ result: [], fetchedAt: Date.now() }, { status: 200 });
     }
 
     const { result } = await res.json();
 
-    // Optional: add edge cache headers (works great on Vercel)
+    // Cache-Control header is optional; ISR already handles it. Safe to keep.
     return Response.json(
-      { result: result || [] },
-      { headers: { "Cache-Control": "s-maxage=300, stale-while-revalidate=60" } }
+      { result: result || [], fetchedAt: Date.now() }, // fetchedAt helps you verify revalidation
+      { headers: { "Cache-Control": "s-maxage=86400, stale-while-revalidate=300" } }
     );
-  } catch (err) {
-    // Avoid leaking details; return empty array so UI can render gracefully
-    return Response.json({ result: [] }, { status: 200 });
+  } catch {
+    return Response.json({ result: [], fetchedAt: Date.now() }, { status: 200 });
   }
 }
