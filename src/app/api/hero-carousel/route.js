@@ -1,6 +1,7 @@
-// src/app/api/hero-carousel/route.js
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
+// ✅ Hybrid: ISR + Webhook invalidation + fresh Sanity origin
+export const revalidate = 86400; // 1 day (or however long you want)
+export const fetchCache = "force-cache"; // let ISR cache at edge
+export const dynamic = "force-static";   // make route cacheable
 
 const query = `
   *[_type == "carouselItem" && active == true] | order(order asc) {
@@ -26,16 +27,25 @@ const query = `
 `;
 
 export async function GET() {
-  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "pionkkje";
-  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
-  const url = `https://${projectId}.apicdn.sanity.io/v2023-10-10/data/query/${dataset}?query=${encodeURIComponent(query)}`;
-
   try {
-    const res = await fetch(url); // no cache options here
+    const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "pionkkje";
+    const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
+    const url = `https://${projectId}.api.sanity.io/v2023-10-10/data/query/${dataset}?query=${encodeURIComponent(query)}`;
+
+    // ✅ ISR caching + tag invalidation
+    const res = await fetch(url, {
+      next: { revalidate, tags: ["sanity"] },
+    });
+
+    if (!res.ok) throw new Error(`Sanity fetch failed: ${res.status}`);
+
     const { result } = await res.json();
-    return Response.json({ result, fetchedAt: Date.now() });
+    return Response.json(
+      { result, fetchedAt: Date.now() },
+      { headers: { "Cache-Control": "s-maxage=86400, stale-while-revalidate=300" } }
+    );
   } catch (err) {
-    console.error("Failed to fetch from Sanity:", err);
-    return Response.json({ result: [], fetchedAt: Date.now() });
+    console.error("[hero-carousel] error:", err);
+    return Response.json({ result: [], fetchedAt: Date.now() }, { status: 200 });
   }
 }
