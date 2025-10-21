@@ -20,7 +20,6 @@ function buildQuery(projectId, dataset, slug) {
 
 export default async function EventPage({ params }) {
   const { slug } = await params  // some Next versions pass params as a promise
-console.log('SLUG SLUG SLUG',slug);
   const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'pionkkje'
   const dataset   = process.env.NEXT_PUBLIC_SANITY_DATASET || 'production'
   const url = buildQuery(projectId, dataset, slug)

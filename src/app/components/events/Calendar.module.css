@@ -1,0 +1,162 @@
+.calendarWrapper {
+  /* Container styling */
+  background: #ffffff;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  color: #333;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #eaeaea;
+}
+
+/* Calendar header styling */
+.calendarWrapper :global(.rbc-toolbar) {
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-geist-sans);
+}
+
+.calendarWrapper :global(.rbc-toolbar-label) {
+  font-family: var(--font-serif, serif);
+  font-size: 1.5rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: #333;
+}
+
+/* Navigation buttons */
+.calendarWrapper :global(.rbc-btn-group) {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.calendarWrapper :global(.rbc-btn-group button) {
+  background: #f8f9fa;
+  border: 1px solid #dee2e6;
+  color: #495057;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  font-weight: 400;
+  transition: all 0.2s ease;
+}
+
+.calendarWrapper :global(.rbc-btn-group button:hover) {
+  background: #e9ecef;
+  border-color: #ced4da;
+}
+
+.calendarWrapper :global(.rbc-btn-group button.rbc-active) {
+  background: #e9ecef;
+  border-color: #adb5bd;
+  box-shadow: inset 0 3px 5px rgba(0,0,0,0.1);
+}
+
+/* Day header styling */
+.calendarWrapper :global(.rbc-header) {
+  padding: 0.75rem 0.5rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #dee2e6;
+  color: #495057;
+}
+
+/* Month view cells */
+.calendarWrapper :global(.rbc-month-view) {
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.calendarWrapper :global(.rbc-month-row) {
+  border-top: 1px solid #dee2e6;
+}
+
+.calendarWrapper :global(.rbc-day-bg) {
+  transition: background 0.2s ease;
+}
+
+.calendarWrapper :global(.rbc-day-bg:hover) {
+  background: #f8f9fa;
+}
+
+.calendarWrapper :global(.rbc-off-range-bg) {
+  background: #f8f9fa;
+}
+
+.calendarWrapper :global(.rbc-today) {
+  background-color: rgba(0, 123, 255, 0.08);
+}
+
+/* Date display in cells */
+.calendarWrapper :global(.rbc-date-cell) {
+  padding: 0.5rem;
+  text-align: right;
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.calendarWrapper :global(.rbc-date-cell.rbc-now) {
+  color: #007bff;
+  font-weight: 500;
+}
+
+/* Event styling */
+.calendarWrapper :global(.rbc-event) {
+  background-color: #3174ad;
+  border: none;
+  border-radius: 0.25rem;
+  color: white;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.8125rem;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.calendarWrapper :global(.rbc-event:hover) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.calendarWrapper :global(.rbc-event.opacity-75) {
+  opacity: 0.75;
+}
+
+/* Agenda view styling */
+.calendarWrapper :global(.rbc-agenda-view) {
+  background: #ffffff;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.calendarWrapper :global(.rbc-agenda-table) {
+  border: 1px solid #dee2e6;
+}
+
+.calendarWrapper :global(.rbc-agenda-table th) {
+  background: #f8f9fa;
+  color: #495057;
+  padding: 0.75rem;
+  font-weight: 500;
+  font-size: 0.875rem;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.calendarWrapper :global(.rbc-agenda-table td) {
+  padding: 0.75rem;
+  border-bottom: 1px solid #f2f2f2;
+  color: #495057;
+}
+
+/* Loading and empty states */
+.loadingState,
+.emptyState {
+  text-align: center;
+  padding: 2.5rem;
+  font-size: 1rem;
+  color: #6c757d;
+  font-weight: 400;
+}

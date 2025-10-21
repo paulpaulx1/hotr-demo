@@ -6,6 +6,7 @@ import { format, parse, startOfWeek, getDay } from 'date-fns'
 import { enUS } from 'date-fns/locale'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import { useRouter } from 'next/navigation'
+import styles from './Calendar.module.css'
 
 const locales = { 'en-US': enUS }
 const localizer = dateFnsLocalizer({
@@ -46,11 +47,11 @@ export default function EventsCalendar() {
       .filter((e) => e.start && e.end)
   }, [events])
 
-  if (loading) return <div className="text-white/80 py-6">Loading calendar…</div>
-  if (!rbcEvents.length) return <div className="text-white/70 py-6">No events scheduled.</div>
+  if (loading) return <div className={styles.loadingState}>Loading calendar…</div>
+  if (!rbcEvents.length) return <div className={styles.emptyState}>No events scheduled.</div>
 
   return (
-    <div className="bg-white/5 rounded-xl p-4 border border-white/10">
+    <div className={styles.calendarWrapper}>
       <Calendar
         localizer={localizer}
         events={rbcEvents}
