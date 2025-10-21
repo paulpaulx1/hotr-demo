@@ -1,5 +1,6 @@
 // src/components/events/CalendarSection.js
 import React from 'react';
+import Link from 'next/link'; // Import Next.js Link
 import EventsCalendar from './Calendar';
 import CalendarSubscribeDropdown from './CalendarSubscribeDropdown';
 
@@ -25,18 +26,18 @@ export default function CalendarSection() {
           <CalendarSubscribeDropdown />
         </div>
         
-        {/* Call to action below calendar */}
+        {/* Call to action below calendar - using Next.js Link */}
         <div className="mt-10 text-center">
           <p className="text-slate-600 mb-6">
             Looking to host your own event? The House of the Redeemer offers unique spaces for 
             retreats, weddings, and cultural gatherings.
           </p>
-          <a 
-            href="/events/host" 
+          <Link 
+            href="/events/host"
             className="inline-block px-8 py-3 bg-slate-700 hover:bg-slate-600 border-2 border-slate-700 hover:border-slate-500 text-white font-light tracking-wide transition-all duration-300 rounded-md"
           >
             Learn About Hosting
-          </a>
+          </Link>
         </div>
       </div>
     </section>
