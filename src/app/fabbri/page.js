@@ -5,7 +5,7 @@ import styles from "./fabbri.module.css";
 export const metadata = {
   title: "Fabbri Chamber Concerts | House of the Redeemer",
   description:
-    "Learn about the Fabbri Chamber Concerts — an intimate annual series of chamber music performances held in the House of the Redeemer’s historic library since 1999.",
+    "Learn about the Fabbri Chamber Concerts &mdash; an intimate annual series of chamber music performances held in the House of the Redeemer&apos;s historic library since 1999.",
 };
 
 export default function FabbriPage() {
@@ -67,7 +67,8 @@ export default function FabbriPage() {
           Stanley Drucker, clarinetist; Andre Emelianoff, cellist; and Carol
           Wincenc, flutist. Pianist and Artistic Director of the series, Andrew
           Armstrong, praised by the <em>New York Times</em> for playing that
-          “danced and glittered deliciously,” frequently joins the performances.
+          &ldquo;danced and glittered deliciously,&rdquo; frequently joins the
+          performances.
         </p>
 
         <p>
@@ -81,11 +82,11 @@ export default function FabbriPage() {
 
         <p>
           The House has been noted by the <em>New York Times</em> as embodying
-          “the artisanship of a bygone era.” The House and its library were
-          first opened with a private recital by violinist Fritz Kreisler in
-          1917. Concerts were often performed in the library while Mrs. Fabbri
-          was in residence. The Fabbri Chamber Concerts continues the musical
-          tradition begun by the Fabbri family.
+          &ldquo;the artisanship of a bygone era.&rdquo; The House and its
+          library were first opened with a private recital by violinist Fritz
+          Kreisler in 1917. Concerts were often performed in the library while
+          Mrs. Fabbri was in residence. The Fabbri Chamber Concerts continues
+          the musical tradition begun by the Fabbri family.
         </p>
       </section>
 
