@@ -1,0 +1,163 @@
+/* facilities.css */
+
+/* Import Libre Baskerville font */
+@import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400;700&display=swap');
+
+.font-libre-baskerville {
+  font-family: 'Libre Baskerville', serif;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  color: #334155; /* slate-700 */
+}
+
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  padding: 0;
+  margin: 0;
+}
+
+.lightbox-content {
+  position: relative;
+  background-color: white;
+  padding: 30px 20px 20px;
+  border-radius: 8px;
+  width: 95%;
+  height: 95%;
+  max-width: 1400px;
+  max-height: 95vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+  overflow: hidden; /* Prevents scrollbars */
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  border: none;
+  background: none;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  color: #475569; /* slate-600 */
+  z-index: 5;
+  padding: 5px;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.lightbox-close:hover {
+  transform: scale(1.2);
+  color: #1e293b; /* slate-800 */
+}
+
+.lightbox-title {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #334155; /* slate-700 */
+}
+
+.room-image-container {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+}
+
+/* Floorplan styles */
+.floorplan-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.floorplan-wrapper {
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.room-area {
+  position: absolute;
+  cursor: pointer;
+  transition: background-color 0.2s, border 0.2s;
+}
+
+.room-area:hover,
+.room-area-active {
+  background-color: rgba(100, 116, 139, 0.2); /* slate color with transparency */
+  border: 1px dashed rgba(71, 85, 105, 0.5); /* slate-600 with transparency */
+}
+
+/* Loading spinner */
+.spinner {
+  border: 4px solid rgba(100, 116, 139, 0.1); /* slate-500 with transparency */
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #475569; /* slate-600 */
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .lightbox-content {
+    width: 95%;
+    height: 85%;
+  }
+  
+  .lightbox-title {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .lightbox-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .lightbox-content {
+    padding: 25px 15px 15px;
+  }
+  
+  .page-title {
+    font-size: 1.8rem;
+  }
+}

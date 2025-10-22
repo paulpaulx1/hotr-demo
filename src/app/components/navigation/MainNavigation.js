@@ -1,72 +1,64 @@
-// src/components/navigation/MainNavigation.js
 "use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { Menu, X, ChevronDown } from "lucide-react";
 
 const MainNavigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  
+  // Get current pathname to determine if we're on the homepage
+  const pathname = usePathname();
+  const isHomepage = pathname === "/";
 
+  // Updated navItems structure to match the wireframe
   const navItems = [
-    { label: "Worship", href: "/about/worship", dropdown: false },
     {
       label: "About",
       href: "/about",
       dropdown: true,
       items: [
-        { label: "History", href: "/about/history" },
-        { label: "Board of Trustees", href: "/about/board-of-trustees" },
+        { label: "Worship", href: "/about/worship" },
+        { label: "Gallery", href: "/gallery" },
+        { label: "History and Neighborhood", href: "/about/history" },
+        { label: "Space and Facilities", href: "/about/facilities" },
+        { label: "Board and Staff", href: "/about/board" },
+        { label: "Preferred Vendors", href: "/about/vendors" },
       ],
     },
     {
-      label: "Events",
-      href: "/events",
+      label: "Visit",
+      href: "/visit",
       dropdown: true,
       items: [
-        { label: "Calendar", href: "/calendar" },
-        { label: "Retreats", href: "/events/retreats" },
-        { label: "Non-Profits", href: "/events/non-profits" },
-        { label: "Weddings", href: "/events/weddings" },
-        { label: "Film & Photography", href: "/events/film-photography" },
-        { label: "Spaces & Facilities", href: "/events/spaces-facilities" },
+        { label: "House Rules and FAQ", href: "/visit/rules" },
+        { label: "Private Retreats", href: "/visit/retreats" },
+        { label: "Weddings & Special Events", href: "/visit/events" },
+        { label: "Church Groups & Non-Profits", href: "/visit/groups" },
+        { label: "TV & Film", href: "/visit/media" },
       ],
     },
-    {
-      label: "Gallery",
-      href: "/gallery",
-      dropdown: true,
-      items: [
-        { label: "Past Events", href: "/gallery/past-events" },
-        { label: "Film & TV", href: "/gallery/film-tv" },
-        { label: "Architecture", href: "/gallery/architecture" },
-      ],
-    },
-    { label: "Visit", href: "/visit", dropdown: false },
+    { label: "Calendar", href: "/calendar", dropdown: false },
+    { label: "Give", href: "/give", dropdown: false },
+    { label: "Contact", href: "/contact", dropdown: false },
   ];
 
-  // Lock body scroll when menu is open
-  useEffect(() => {
-    const cls = ["overflow-hidden", "touch-none"];
-    if (isMobileMenuOpen) {
-      document.documentElement.classList.add(...cls);
-      document.body.classList.add(...cls);
-    } else {
-      document.documentElement.classList.remove(...cls);
-      document.body.classList.remove(...cls);
-    }
-    return () => {
-      document.documentElement.classList.remove(...cls);
-      document.body.classList.remove(...cls);
-    };
-  }, [isMobileMenuOpen]);
-
+  // Handle scroll effects - only apply transparent effect on homepage
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 100);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    
+    // Only add scroll listener if we're on the homepage
+    if (isHomepage) {
+      window.addEventListener("scroll", onScroll);
+      return () => window.removeEventListener("scroll", onScroll);
+    } else {
+      // On other pages, always set isScrolled to true to keep solid background
+      setIsScrolled(true);
+    }
+  }, [isHomepage]);
 
   // Close mobile menu when window resizes to desktop
   useEffect(() => {
@@ -77,41 +69,67 @@ const MainNavigation = () => {
     return () => window.removeEventListener("resize", onResize);
   }, []);
 
+  // Toggle mobile dropdown
   const toggleMobileDropdown = (index) => {
     setActiveDropdown((cur) => (cur === index ? null : index));
   };
 
+  // Determine nav background class based on scroll position and current page
+  const getNavBackgroundClass = () => {
+    if (!isHomepage) {
+      // Always solid background on non-homepage
+      return "bg-slate-900 py-3";
+    } else {
+      // On homepage, transparent when at top, solid when scrolled
+      return isScrolled 
+        ? "bg-slate-900/80 backdrop-blur-md py-3" 
+        : "bg-slate-900/20 py-4";
+    }
+  };
+
   return (
     <>
+      {/* Main Navigation Bar */}
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-          isScrolled
-            ? "bg-slate-900/80 backdrop-blur-md py-3"
-            : "bg-slate-900/20 py-4"
-        }`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${getNavBackgroundClass()}`}
       >
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center justify-between">
+            {/* Logo with Image - Simple approach */}
             <Link
               href="/"
-              className="flex items-center gap-3 text-white hover:opacity-80 transition-opacity cursor-pointer"
+              className="flex items-center gap-3 text-white hover:opacity-90 transition-opacity cursor-pointer"
             >
-              <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center backdrop-blur-sm">
-                <span className="font-serif text-lg">†</span>
-              </div>
+              <img 
+                src="/hotr-slate-logo.png" 
+                alt="House of the Redeemer Logo"
+                width="50"
+                height="50"
+                className="rounded-md"
+              />
               <span className="font-serif text-xl font-medium tracking-wide">
                 House of the Redeemer
               </span>
             </Link>
 
-            {/* Desktop Menu with Dropdowns */}
+            {/* Desktop Navigation Bar */}
             <div className="hidden md:flex items-center space-x-8 text-white/90">
               {navItems.map((item, index) => (
                 <div key={index} className="relative group">
+                  {/* Nav Item */}
                   <Link
                     href={item.href}
-                    className="flex items-center hover:text-white cursor-pointer transition-colors font-light tracking-wide relative"
+                    className="flex items-center hover:text-white cursor-pointer transition-colors font-light tracking-wide relative py-2"
                     aria-haspopup={item.dropdown ? "menu" : undefined}
+                    onClick={(e) => {
+                      if (item.dropdown) {
+                        // Prevent navigation for items with dropdowns on desktop
+                        // This allows the dropdown to appear on hover without navigating
+                        if (window.innerWidth >= 768) {
+                          e.preventDefault();
+                        }
+                      }
+                    }}
                   >
                     {item.label}
                     {item.dropdown && (
@@ -120,26 +138,40 @@ const MainNavigation = () => {
                     <span className="absolute bottom-0 left-0 w-0 h-px bg-white transition-all duration-300 group-hover:w-full" />
                   </Link>
 
-                  {/* Dropdown Menu */}
+                  {/* Fix for dropdown gap - add an invisible bridge and position dropdown directly */}
                   {item.dropdown && (
-                    <div className="absolute left-0 mt-2 w-48 rounded-md shadow-lg bg-white hidden group-hover:block transition-all duration-200 py-1 z-50 opacity-0 group-hover:opacity-100 translate-y-1 group-hover:translate-y-0">
-                      {item.items.map((subItem, subIndex) => (
-                        <Link
-                          key={subIndex}
-                          href={subItem.href}
-                          className="block px-4 py-2 text-sm text-slate-800 hover:bg-slate-100 hover:text-slate-900"
-                          role="menuitem"
-                        >
-                          {subItem.label}
-                        </Link>
-                      ))}
-                    </div>
+                    <>
+                      {/* Invisible bridge element to connect the nav item and dropdown */}
+                      <div 
+                        className="absolute h-6 w-full left-0 -bottom-6 opacity-0" 
+                        aria-hidden="true"
+                      />
+                      
+                      {/* Dropdown Menu - now positioned to connect with the bridge */}
+                      <div 
+                        className="absolute left-0 top-full w-48 rounded-md shadow-lg bg-white 
+                                 invisible group-hover:visible opacity-0 group-hover:opacity-100
+                                 transition-all duration-200 py-1 z-50 -mt-1"
+                        role="menu"
+                      >
+                        {item.items.map((subItem, subIndex) => (
+                          <Link
+                            key={subIndex}
+                            href={subItem.href}
+                            className="block px-4 py-2 text-sm text-slate-800 hover:bg-slate-100 hover:text-slate-900"
+                            role="menuitem"
+                          >
+                            {subItem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </>
                   )}
                 </div>
               ))}
             </div>
 
-            {/* Mobile Hamburger — hide while menu is open */}
+            {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
               className={`md:hidden text-white cursor-pointer ${
@@ -155,101 +187,116 @@ const MainNavigation = () => {
         </div>
       </nav>
 
-      {/* Backdrop + Slide-in Flyout */}
-      <div
-        className={[
-          "fixed inset-0 z-[60] md:hidden transition-opacity duration-300",
-          isMobileMenuOpen
-            ? "bg-white/20 backdrop-blur-sm opacity-100"
-            : "pointer-events-none opacity-0",
-        ].join(" ")}
-        onClick={() => setIsMobileMenuOpen(false)}
-        aria-hidden={!isMobileMenuOpen}
-      >
-        <aside
-          id="mobile-flyout"
-          className={[
-            "absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-slate-800/95 border-l border-white/10 text-white",
-            "transition-transform duration-300 will-change-transform z-[61]",
-            isMobileMenuOpen ? "translate-x-0" : "translate-x-full",
-          ].join(" ")}
-          onClick={(e) => e.stopPropagation()}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Site menu"
+      {/* Mobile Menu Overlay - Conditionally rendered based on state */}
+      {isMobileMenuOpen && (
+        <div 
+          className="fixed inset-0 z-[60] md:hidden bg-white/20 backdrop-blur-sm"
+          onClick={() => setIsMobileMenuOpen(false)}
+          aria-hidden="true"
         >
-          <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
-            <span className="font-serif text-lg">Menu</span>
-            <button
-              className="p-1 hover:opacity-80 cursor-pointer"
-              onClick={() => setIsMobileMenuOpen(false)}
-              aria-label="Close menu"
-            >
-              <X size={22} />
-            </button>
-          </div>
-
-          {/* Mobile Navigation with Accordion Dropdowns */}
-          <nav className="px-5 py-4 overflow-y-auto max-h-[calc(100vh-70px)]">
-            {navItems.map((item, index) => (
-              <div
-                key={index}
-                className="border-b border-white/10 last:border-b-0"
+          {/* Mobile Menu Slide-in Panel */}
+          <aside
+            id="mobile-flyout"
+            className="absolute right-0 top-0 h-full w-80 max-w-[85vw] bg-slate-800/95 border-l border-white/10 text-white overflow-auto"
+            onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Site menu"
+            style={{
+              maxHeight: '100vh'
+            }}
+          >
+            {/* Mobile Menu Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                {/* Mobile menu logo - simple img tag */}
+                <img 
+                  src="/hotr-slate-logo.png" 
+                  alt="House of the Redeemer Logo"
+                  width="24"
+                  height="24"
+                  className="rounded-sm"
+                />
+                <span className="font-serif text-lg">Menu</span>
+              </div>
+              <button
+                className="p-1 hover:opacity-80 cursor-pointer"
+                onClick={() => setIsMobileMenuOpen(false)}
+                aria-label="Close menu"
               >
-                <div className="flex items-center justify-between py-3">
-                  <Link
-                    href={item.href}
-                    className="text-white/90 hover:text-white"
-                    onClick={() => {
-                      if (!item.dropdown) setIsMobileMenuOpen(false);
-                    }}
-                  >
-                    {item.label}
-                  </Link>
+                <X size={22} />
+              </button>
+            </div>
 
-                  {item.dropdown && (
-                    <button
-                      onClick={() => toggleMobileDropdown(index)}
-                      className="p-1 text-white/70 hover:text-white"
-                      aria-expanded={activeDropdown === index}
-                      aria-controls={`mobile-sub-${index}`}
-                      aria-label={`Toggle ${item.label} submenu`}
+            {/* Mobile Navigation Items */}
+            <nav className="px-5 py-4">
+              {navItems.map((item, index) => (
+                <div
+                  key={index}
+                  className="border-b border-white/10 last:border-b-0"
+                >
+                  <div className="flex items-center justify-between py-3">
+                    <Link
+                      href={item.href}
+                      className="text-white/90 hover:text-white"
+                      onClick={(e) => {
+                        if (item.dropdown) {
+                          e.preventDefault(); // Prevent navigation for dropdown items
+                          toggleMobileDropdown(index);
+                        } else {
+                          setIsMobileMenuOpen(false); // Close menu for direct links
+                        }
+                      }}
                     >
-                      <ChevronDown
-                        size={18}
-                        className={`transform transition-transform ${
-                          activeDropdown === index ? "rotate-180" : ""
-                        }`}
-                      />
-                    </button>
+                      {item.label}
+                    </Link>
+
+                    {item.dropdown && (
+                      <button
+                        onClick={() => toggleMobileDropdown(index)}
+                        className="p-1 text-white/70 hover:text-white"
+                        aria-expanded={activeDropdown === index}
+                        aria-controls={`mobile-sub-${index}`}
+                        aria-label={`Toggle ${item.label} submenu`}
+                      >
+                        <ChevronDown
+                          size={18}
+                          className={`transform transition-transform ${
+                            activeDropdown === index ? "rotate-180" : ""
+                          }`}
+                        />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* Mobile Dropdown Items */}
+                  {item.dropdown && (
+                    <div
+                      id={`mobile-sub-${index}`}
+                      style={{
+                        maxHeight: activeDropdown === index ? '500px' : '0',
+                        overflow: 'hidden',
+                        transition: 'max-height 0.3s ease-in-out'
+                      }}
+                    >
+                      {item.items.map((subItem, subIndex) => (
+                        <Link
+                          key={subIndex}
+                          href={subItem.href}
+                          className="block py-2 text-sm text-white/80 hover:text-white border-t border-white/5 first:border-t-0 pl-4"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {subItem.label}
+                        </Link>
+                      ))}
+                    </div>
                   )}
                 </div>
-
-                {/* Mobile Dropdown Items */}
-                {item.dropdown && (
-                  <div
-                    id={`mobile-sub-${index}`}
-                    className={`pl-4 overflow-hidden transition-all duration-300 ${
-                      activeDropdown === index ? "max-h-60" : "max-h-0"
-                    }`}
-                  >
-                    {item.items.map((subItem, subIndex) => (
-                      <Link
-                        key={subIndex}
-                        href={subItem.href}
-                        className="block py-2 text-sm text-white/80 hover:text-white border-t border-white/5 first:border-t-0"
-                        onClick={() => setIsMobileMenuOpen(false)}
-                      >
-                        {subItem.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </nav>
-        </aside>
-      </div>
+              ))}
+            </nav>
+          </aside>
+        </div>
+      )}
     </>
   );
 };
