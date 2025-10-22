@@ -116,10 +116,12 @@ const HeroCarousel = () => {
           >
             {/* Background Image or Video */}
             {slide.mediaType === "image" && (
-              <div
-                className="absolute inset-0 bg-cover bg-center pointer-events-none"
-                style={{ backgroundImage: `url(${slide.imageUrl})` }}
-              />
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div
+                  className="absolute inset-0 bg-cover bg-center animate-slow-zoom"
+                  style={{ backgroundImage: `url(${slide.imageUrl})` }}
+                />
+              </div>
             )}
             {slide.mediaType === "video" && (
               <div className="absolute inset-0 pointer-events-none">

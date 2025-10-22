@@ -34,7 +34,7 @@ const MainNavigation = () => {
       href: "/visit",
       dropdown: true,
       items: [
-        { label: "House Rules and FAQ", href: "/visit/rules" },
+        { label: "FAQ", href: "/visit/FAQ" },
         { label: "Private Retreats", href: "/visit/retreats" },
         { label: "Weddings & Special Events", href: "/visit/events" },
         { label: "Church Groups & Non-Profits", href: "/visit/groups" },
