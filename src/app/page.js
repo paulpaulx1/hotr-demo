@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <main>
       <HeroCarousel />
-      <CalendarSection />
+      {/* <CalendarSection /> */}
       {/* <AboutSection /> */}
       {/* Remove the SEO info section for production if desired */}
       {/* <SEOInfoSection /> */}
