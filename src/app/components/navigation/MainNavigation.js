@@ -9,7 +9,7 @@ const MainNavigation = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-  
+
   // Get current pathname to determine if we're on the homepage
   const pathname = usePathname();
   const isHomepage = pathname === "/";
@@ -27,6 +27,7 @@ const MainNavigation = () => {
         { label: "Space and Facilities", href: "/about/facilities" },
         { label: "Board and Staff", href: "/about/board" },
         { label: "Preferred Vendors", href: "/about/vendors" },
+        { label: "Fabbri Chamber Concerts", href: "/fabbri" },
       ],
     },
     {
@@ -49,7 +50,7 @@ const MainNavigation = () => {
   // Handle scroll effects - only apply transparent effect on homepage
   useEffect(() => {
     const onScroll = () => setIsScrolled(window.scrollY > 100);
-    
+
     // Only add scroll listener if we're on the homepage
     if (isHomepage) {
       window.addEventListener("scroll", onScroll);
@@ -81,8 +82,8 @@ const MainNavigation = () => {
       return "bg-slate-900 py-3";
     } else {
       // On homepage, transparent when at top, solid when scrolled
-      return isScrolled 
-        ? "bg-slate-900/80 backdrop-blur-md py-3" 
+      return isScrolled
+        ? "bg-slate-900/80 backdrop-blur-md py-3"
         : "bg-slate-900/20 py-4";
     }
   };
@@ -100,8 +101,8 @@ const MainNavigation = () => {
               href="/"
               className="flex items-center gap-3 text-white hover:opacity-90 transition-opacity cursor-pointer"
             >
-              <img 
-                src="/hotr-slate-logo.png" 
+              <img
+                src="/hotr-slate-logo.png"
                 alt="House of the Redeemer Logo"
                 width="50"
                 height="50"
@@ -142,13 +143,13 @@ const MainNavigation = () => {
                   {item.dropdown && (
                     <>
                       {/* Invisible bridge element to connect the nav item and dropdown */}
-                      <div 
-                        className="absolute h-6 w-full left-0 -bottom-6 opacity-0" 
+                      <div
+                        className="absolute h-6 w-full left-0 -bottom-6 opacity-0"
                         aria-hidden="true"
                       />
-                      
+
                       {/* Dropdown Menu - now positioned to connect with the bridge */}
-                      <div 
+                      <div
                         className="absolute left-0 top-full w-48 rounded-md shadow-lg bg-white 
                                  invisible group-hover:visible opacity-0 group-hover:opacity-100
                                  transition-all duration-200 py-1 z-50 -mt-1"
@@ -189,7 +190,7 @@ const MainNavigation = () => {
 
       {/* Mobile Menu Overlay - Conditionally rendered based on state */}
       {isMobileMenuOpen && (
-        <div 
+        <div
           className="fixed inset-0 z-[60] md:hidden bg-white/20 backdrop-blur-sm"
           onClick={() => setIsMobileMenuOpen(false)}
           aria-hidden="true"
@@ -203,15 +204,15 @@ const MainNavigation = () => {
             aria-modal="true"
             aria-label="Site menu"
             style={{
-              maxHeight: '100vh'
+              maxHeight: "100vh",
             }}
           >
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
               <div className="flex items-center gap-2">
                 {/* Mobile menu logo - simple img tag */}
-                <img 
-                  src="/hotr-slate-logo.png" 
+                <img
+                  src="/hotr-slate-logo.png"
                   alt="House of the Redeemer Logo"
                   width="24"
                   height="24"
@@ -274,9 +275,9 @@ const MainNavigation = () => {
                     <div
                       id={`mobile-sub-${index}`}
                       style={{
-                        maxHeight: activeDropdown === index ? '500px' : '0',
-                        overflow: 'hidden',
-                        transition: 'max-height 0.3s ease-in-out'
+                        maxHeight: activeDropdown === index ? "500px" : "0",
+                        overflow: "hidden",
+                        transition: "max-height 0.3s ease-in-out",
                       }}
                     >
                       {item.items.map((subItem, subIndex) => (

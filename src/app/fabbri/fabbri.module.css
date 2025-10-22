@@ -1,0 +1,23 @@
+.header {
+  font-family: "Garamond", "EB Garamond", "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #2e2e2e;
+}
+
+.subhead {
+  font-family: "Garamond", "EB Garamond", "Times New Roman", serif;
+  font-weight: 500;
+  font-size: 1.75rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid #b33; /* subtle red underline */
+  padding-bottom: 0.25rem;
+}
+
+.body {
+  font-family: "Georgia", "Times New Roman", serif;
+  font-size: 1.05rem;
+  color: #3a3a3a;
+  line-height: 1.75;
+}
