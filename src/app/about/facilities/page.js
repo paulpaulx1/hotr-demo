@@ -105,12 +105,14 @@ export default function FacilitiesPage() {
       Courtyard: "/firstfloor/house-of-the-redeemer_courtyard.jpg",
       "Entrance Hall": "/firstfloor/house-of-the-redeemer_lobby3.jpg",
       Vestibule: "/firstfloor/house-of-the-redeemer_entry1-768x512.jpg",
-      "Reception Room": "/firstfloor/house-of-the-redeemer_reception5-768x512.jpg",
+      "Reception Room":
+        "/firstfloor/house-of-the-redeemer_reception5-768x512.jpg",
       Bathroom: "https://placehold.co/800x600?text=Bathroom",
 
       // Second floor rooms
       "Second Story Library": "/secondfloor/house-of-the-redeemer_library2.jpg",
-      "Second Story Hall": "/secondfloor/house-of-the-redeemer_upstairs-hall.jpg",
+      "Second Story Hall":
+        "/secondfloor/house-of-the-redeemer_upstairs-hall.jpg",
       "Drawing Room": "/secondfloor/house-of-the-redeemer_chapel2.jpg",
     };
 
@@ -143,7 +145,7 @@ export default function FacilitiesPage() {
           {roomData.map((room, index) => (
             <div
               key={index}
-              className={`room-area ${hoveredRoom === room.name ? 'room-area-active' : ''}`}
+              className={`room-area ${hoveredRoom === room.name ? "room-area-active" : ""}`}
               style={{
                 left: `${room.x}%`,
                 top: `${room.y}%`,
@@ -158,7 +160,7 @@ export default function FacilitiesPage() {
               role="button"
               tabIndex={0}
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   handleRoomClick(room.name);
                 }
               }}
@@ -170,23 +172,23 @@ export default function FacilitiesPage() {
   );
 
   return (
-    <div className="container mx-auto px-4 py-8 mt-24"> {/* Increased top margin from mt-12 to mt-24 */}
+    <div className="container mx-auto px-4 py-8 mt-24">
+      {" "}
+      {/* Increased top margin from mt-12 to mt-24 */}
       <h1 className="page-title font-libre-baskerville">Spaces & Facilities</h1>
       <p className="text-lg mb-8 max-w-3xl mx-auto text-center">
         Stylistically, the House is based on Italian Renaissance prototypes. It
-        shares many characteristics with Italian palazzi, such as the "L-shaped"
-        floor plan, the courtyard, the window enframements, and the heavy stone
-        cornice that crowns the building. The House was designated a New York
-        City Landmark in 1974, and is considered by many architectural
-        historians to be one of the most distinguished examples of early 20th
-        century residential architecture in New York City.
+        shares many characteristics with Italian palazzi, such as the
+        &quot;L-shaped&quot; floor plan, the courtyard, the window enframements,
+        and the heavy stone cornice that crowns the building. The House was
+        designated a New York City Landmark in 1974, and is considered by many
+        architectural historians to be one of the most distinguished examples of
+        early 20th century residential architecture in New York City.
       </p>
-
       {/* Instructions */}
       <div className="text-center mb-8 text-gray-600">
         <p>Click on any room in the floorplans to see photos</p>
       </div>
-
       {/* Side by side floorplans on desktop, stacked on mobile */}
       <div className="md:flex md:gap-8">
         <div className="md:w-1/2 mb-8 md:mb-0">
@@ -204,28 +206,26 @@ export default function FacilitiesPage() {
           )}
         </div>
       </div>
-
       {/* Enhanced Lightbox - Focused on images */}
       {activeRoom && (
-        <div 
-          className="lightbox-overlay"
-          onClick={closeLightbox}
-        >
+        <div className="lightbox-overlay" onClick={closeLightbox}>
           <div
             className="lightbox-content"
             onClick={(e) => e.stopPropagation()}
           >
-            <button 
+            <button
               className="lightbox-close"
               onClick={closeLightbox}
               aria-label="Close"
             >
               ×
             </button>
-            
+
             {/* Room Name as H1 */}
-            <h1 className="lightbox-title font-libre-baskerville">{activeRoom}</h1>
-            
+            <h1 className="lightbox-title font-libre-baskerville">
+              {activeRoom}
+            </h1>
+
             {/* Simplified image container - maximized for image display */}
             <div className="room-image-container">
               {/* Optional loading indicator */}
@@ -234,7 +234,7 @@ export default function FacilitiesPage() {
                   <div className="spinner"></div>
                 </div>
               )}
-              
+
               <Image
                 src={getRoomImage(activeRoom)}
                 alt={activeRoom}
