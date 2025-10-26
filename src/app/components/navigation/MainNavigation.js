@@ -35,10 +35,8 @@ const MainNavigation = () => {
       href: "/visit",
       dropdown: true,
       items: [
+        { label: "Hosting Events & Retreats", href: "/hosting-events" },
         { label: "FAQ", href: "/visit/FAQ" },
-        { label: "Private Retreats", href: "/visit/retreats" },
-        { label: "Weddings & Special Events", href: "/visit/events" },
-        { label: "Church Groups & Non-Profits", href: "/visit/groups" },
         { label: "TV & Film", href: "/visit/media" },
       ],
     },

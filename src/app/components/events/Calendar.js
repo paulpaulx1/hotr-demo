@@ -20,10 +20,31 @@ export default function EventsCalendar() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hoveredEvent, setHoveredEvent] = useState(null);
-  const [anchorEl, setAnchorEl] = useState(null);
+  const [coords, setCoords] = useState({ x: 0, y: 0, flipY: false, flipX: false });
   const router = useRouter();
 
-  // Fetch events
+  // --- Smart tooltip position (hook must always run) ---
+  const tooltipStyle = useMemo(() => {
+    const offsetY = 16;
+    const offsetX = 0;
+    const tooltipWidth = 280;
+
+    let top = coords.y - offsetY;
+    let transform = "translate(-50%, -100%)";
+
+    if (coords.flipY) {
+      top = coords.y + offsetY;
+      transform = "translate(-50%, 0)";
+    }
+
+    const left = coords.flipX
+      ? window.innerWidth - tooltipWidth - 24
+      : coords.x + offsetX;
+
+    return { top, left, transform };
+  }, [coords]);
+
+  // --- Fetch events ---
   useEffect(() => {
     fetch("/api/events?range=all", { cache: "no-store" })
       .then((r) => r.json())
@@ -48,48 +69,44 @@ export default function EventsCalendar() {
       .filter((e) => e.start && e.end);
   }, [events]);
 
+  // --- Smart hover handler (always defined) ---
+  const handleMouseMove = (e, event) => {
+    const tooltipWidth = 280;
+    const tooltipHeight = 200;
+    const padding = 16;
+
+    const flipY = e.clientY - tooltipHeight - padding < 0;
+    const flipX = e.clientX + tooltipWidth / 2 > window.innerWidth;
+
+    setCoords({ x: e.clientX, y: e.clientY, flipY, flipX });
+    setHoveredEvent(event);
+  };
+
+  // --- Render logic ---
   if (loading)
     return <div className={styles.loadingState}>Loading calendar…</div>;
   if (!rbcEvents.length)
     return <div className={styles.emptyState}>No events scheduled.</div>;
 
-  // Event component with hover behavior
   const EventComponent = ({ event }) => (
     <div
       className={styles.eventItem}
-      onMouseEnter={(e) => {
-        const parentCell = e.currentTarget.closest(
-          ".rbc-event-content, .rbc-day-bg, .rbc-row-segment"
-        );
-        setHoveredEvent(event);
-        setAnchorEl(parentCell);
-      }}
-      onMouseLeave={() => {
-        setTimeout(() => setHoveredEvent(null), 120);
-      }}
+      onMouseEnter={(e) => handleMouseMove(e, event)}
+      onMouseMove={(e) => handleMouseMove(e, event)}
+      onMouseLeave={() => setTimeout(() => setHoveredEvent(null), 120)}
       onClick={() => event.href && router.push(event.href)}
     >
       <div className={styles.eventTitle}>{event.title}</div>
+      {event.start && (
+        <div className={styles.eventTime}>
+          {new Date(event.start).toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })}
+        </div>
+      )}
     </div>
   );
-
-  const hoverPosition = (() => {
-    if (!anchorEl) return { top: 0, left: 0 };
-
-    // Anchor to the nearest full calendar cell instead of the small event div
-    const cell =
-      anchorEl.closest(".rbc-day-bg, .rbc-date-cell, .rbc-row-segment") ||
-      anchorEl;
-    const rect = cell.getBoundingClientRect();
-
-    const cardHeight = 200; // estimated tooltip height (image + text)
-    const gap = 8; // spacing between event and tooltip
-
-    const top = rect.top + window.scrollY - cardHeight - gap;
-    const left = rect.left + rect.width / 2 + window.scrollX;
-
-    return { top, left };
-  })();
 
   return (
     <div className={styles.calendarWrapper}>
@@ -108,8 +125,7 @@ export default function EventsCalendar() {
       {hoveredEvent && (
         <div
           className={styles.hoverCard}
-          style={{ top: hoverPosition.top, left: hoverPosition.left }}
-          onMouseEnter={() => setHoveredEvent(hoveredEvent)}
+          style={tooltipStyle}
           onMouseLeave={() => setHoveredEvent(null)}
         >
           {hoveredEvent.heroUrl && (

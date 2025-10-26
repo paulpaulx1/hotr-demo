@@ -76,7 +76,7 @@ export default async function EventPage({ params }) {
       <main className="bg-white">
         <div className="container mx-auto px-6 py-12">
           {/* Back button */}
-          <Link href="/events" className={styles.backLink}>
+          <Link href="/calendar" className={styles.backLink}>
             <ArrowLeft size={16} />
             <span>Back to Events</span>
           </Link>
