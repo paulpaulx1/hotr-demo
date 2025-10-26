@@ -2,6 +2,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
 const HeroCarousel = () => {
   const [slides, setSlides] = useState([]);
@@ -191,12 +192,18 @@ const HeroCarousel = () => {
                       : "translate-y-12 opacity-0",
                   ].join(" ")}
                 >
-                  <button className="px-8 py-4 bg-slate-700 hover:bg-transparent border-2 border-slate-700 hover:border-white text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                  <Link
+                    href="/faq"
+                    className="px-8 py-4 bg-slate-700 hover:bg-transparent border-2 border-slate-700 hover:border-white text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg cursor-pointer text-center"
+                  >
                     Plan Your Visit
-                  </button>
-                  <button className="px-8 py-4 bg-transparent border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg cursor-pointer">
+                  </Link>
+                  <Link
+                    href="/faq"
+                    className="px-8 py-4 bg-transparent border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg cursor-pointer text-center"
+                  >
                     Learn More
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -243,12 +250,12 @@ const HeroCarousel = () => {
         <p className="text-white/80 text-sm mb-4 font-light">
           Vanderbilt Mansion
         </p>
-        <a
-          href="#about"
+        <Link
+          href="/faq"
           className="text-white/90 hover:text-white cursor-pointer text-sm font-light border-b border-white/30 hover:border-white transition-all duration-300 hover:-translate-y-0.5"
         >
           Learn More →
-        </a>
+        </Link>
       </div>
     </div>
   );
