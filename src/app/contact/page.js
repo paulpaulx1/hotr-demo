@@ -44,7 +44,7 @@ export default function ContactPage() {
                 Contact Us
               </h2>
               <p className="text-slate-600">
-                Please fill out the form below and we'll get back to you as soon as possible.
+                Please fill out the form below and we&apos;ll get back to you as soon as possible.
               </p>
             </div>
             
