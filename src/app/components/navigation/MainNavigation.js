@@ -21,7 +21,7 @@ const MainNavigation = () => {
       href: "/about",
       dropdown: true,
       items: [
-        { label: "Worship", href: "/about/worship" },
+        { label: "Worship", href: "/worship" },
         { label: "Gallery", href: "/gallery" },
         { label: "History and Neighborhood", href: "/about/history" },
         { label: "Space and Facilities", href: "/about/facilities" },

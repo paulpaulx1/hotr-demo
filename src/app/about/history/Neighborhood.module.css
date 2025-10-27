@@ -1,0 +1,79 @@
+/* -- Links -- */
+.link {
+    color: #4b5563;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.25s ease;
+}
+
+.link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background-color: #6b2f2a;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+}
+
+.link:hover {
+    color: #1e293b;
+}
+
+.link:hover::after {
+    transform: scaleX(1);
+}
+
+/* -- Subsection headers -- */
+.subheading {
+    font-family: var(--font-serif, Georgia, serif);
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: #6b2f2a;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+    letter-spacing: 0.02em;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 0.25rem;
+}
+
+/* -- Paragraph rhythm override (higher specificity than Tailwind prose) -- */
+.textBlock :global(p) {
+    margin-top: 1.25rem;
+    margin-bottom: 1.25rem;
+    text-indent: 1.25rem;
+    line-height: 1.8;
+}
+
+/* -- Images -- */
+.image {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: 0 auto;
+    border-radius: 4px;
+}
+
+/* -- Section wrapper spacing -- */
+.neighborhoodSection {
+    margin-top: 4rem;
+    border-top: 1px solid rgba(203, 213, 225, 0.6);
+    /* subtle slate tone */
+    padding-top: 4rem;
+}
+
+.textBlock:global(.prose) :where(p) {
+    /* win against Tailwind’s prose defaults */
+    margin-top: 1.25rem !important;
+    margin-bottom: 1.25rem !important;
+    text-indent: 1.25rem;
+    line-height: 1.85;
+}
+
+/* conventional book style: first paragraph no indent */
+.textBlock:global(.prose) :where(p):first-child {
+    text-indent: 0;
+}

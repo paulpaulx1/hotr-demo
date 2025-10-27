@@ -24,10 +24,12 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
 @keyframes slowZoom {
   0% {
     transform: scale(1);
   }
+
   100% {
     transform: scale(1.08);
   }
@@ -37,15 +39,19 @@ body {
   0% {
     transform: scale(1) translate(0%, 0%);
   }
+
   25% {
     transform: scale(1.03) translate(1%, -1%);
   }
+
   50% {
     transform: scale(1.06) translate(-1%, 1%);
   }
+
   75% {
     transform: scale(1.08) translate(2%, -1%);
   }
+
   100% {
     transform: scale(1.1) translate(-2%, 1%);
   }
@@ -55,4 +61,40 @@ body {
   animation: slowZoomPan 50s ease-in-out infinite alternate;
   will-change: transform;
   transform-origin: center center;
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInBg {
+  0% {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(1rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

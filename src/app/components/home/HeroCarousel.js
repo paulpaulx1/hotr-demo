@@ -1,4 +1,3 @@
-// src/components/home/HeroCarousel.js
 "use client";
 import React, { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -9,17 +8,15 @@ const HeroCarousel = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [isReady, setIsReady] = useState(false);
 
-  // Fetch carousel items from cached route handler
+  // --- Fetch carousel items ---
   useEffect(() => {
     const controller = new AbortController();
 
     async function fetchCarouselItems() {
       try {
-        const res = await fetch("/api/hero-carousel", {
-          signal: controller.signal,
-          // You can keep default caching here; the server route is ISR-cached.
-        });
+        const res = await fetch("/api/hero-carousel", { signal: controller.signal });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
         setSlides(Array.isArray(json.result) ? json.result : []);
@@ -37,7 +34,15 @@ const HeroCarousel = () => {
     return () => controller.abort();
   }, []);
 
-  // Auto-advance carousel
+  // --- Fade in once data is loaded ---
+  useEffect(() => {
+    if (!loading && slides.length > 0 && !error) {
+      const t = setTimeout(() => setIsReady(true), 100);
+      return () => clearTimeout(t);
+    }
+  }, [loading, slides, error]);
+
+  // --- Auto-advance slides ---
   useEffect(() => {
     if (slides.length === 0) return;
     const id = setInterval(() => {
@@ -46,62 +51,58 @@ const HeroCarousel = () => {
     return () => clearInterval(id);
   }, [slides]);
 
-  const nextSlide = () => {
-    if (slides.length === 0) return;
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
-  };
+  const nextSlide = () => setCurrentSlide((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
 
-  const prevSlide = () => {
-    if (slides.length === 0) return;
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
-  };
-
-  // Show loading state
+  // --- Loading skeleton ---
   if (loading) {
     return (
-      <div className="relative h-screen overflow-hidden bg-slate-800 flex items-center justify-center">
-        <div className="text-white">Loading content...</div>
-      </div>
-    );
-  }
-
-  // Handle error state
-  if (error) {
-    return (
-      <div className="relative h-screen overflow-hidden bg-slate-800 flex items-center justify-center">
-        <div className="text-white">
-          <p className="mb-4">Unable to load carousel content.</p>
-          <p className="text-sm opacity-75">Please try refreshing the page.</p>
+      <div className="relative h-screen bg-slate-900 flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-slate-800 to-slate-900" />
+        <div className="animate-pulse text-white/70 text-center z-10">
+          <div className="h-6 w-48 bg-slate-700/50 mx-auto mb-4 rounded" />
+          <div className="h-4 w-64 bg-slate-700/40 mx-auto rounded" />
         </div>
       </div>
     );
   }
 
-  // Handle empty state
-  if (slides.length === 0) {
+  // --- Error or empty states ---
+  if (error || slides.length === 0) {
     return (
       <div className="relative h-screen overflow-hidden bg-slate-800 flex items-center justify-center">
-        <div className="max-w-xl text-center text-white">
+        <div className="text-white text-center">
           <h1 className="font-serif text-4xl mb-6">House of the Redeemer</h1>
           <p className="text-xl mb-8">
             A welcoming Episcopal community in a historic Vanderbilt mansion on
             Carnegie Hill
           </p>
           <div className="flex justify-center gap-6">
-            <button className="px-8 py-4 bg-slate-700 hover:bg-transparent border-2 border-slate-700 hover:border-white text-white font-light tracking-wide transition-all duration-300">
+            <Link
+              href="/faq"
+              className="px-8 py-4 bg-slate-700 hover:bg-transparent border-2 border-slate-700 hover:border-white text-white font-light tracking-wide transition-all duration-300"
+            >
               Plan Your Visit
-            </button>
-            <button className="px-8 py-4 bg-transparent border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-light tracking-wide transition-all duration-300">
+            </Link>
+            <Link
+              href="/faq"
+              className="px-8 py-4 bg-transparent border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-light tracking-wide transition-all duration-300"
+            >
               Learn More
-            </button>
+            </Link>
           </div>
         </div>
       </div>
     );
   }
 
+  // --- Main carousel ---
   return (
-    <div className="relative h-screen overflow-hidden">
+    <div
+      className={`relative h-screen overflow-hidden transition-opacity duration-1000 ease-in-out ${
+        isReady ? "opacity-100" : "opacity-0"
+      }`}
+    >
       {slides.map((slide, index) => {
         const isActive = index === currentSlide;
         return (
@@ -109,17 +110,19 @@ const HeroCarousel = () => {
             key={slide._id}
             aria-hidden={!isActive}
             className={[
-              "absolute inset-0 transition-all duration-1000 ease-in-out",
+              "absolute inset-0 transition-all duration-[1600ms] ease-in-out",
               isActive
                 ? "opacity-100 scale-100 z-10 pointer-events-auto"
                 : "opacity-0 scale-105 z-0 pointer-events-none",
             ].join(" ")}
           >
-            {/* Background Image or Video */}
+            {/* --- Background media --- */}
             {slide.mediaType === "image" && (
               <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div
-                  className="absolute inset-0 bg-cover bg-center animate-slow-zoom"
+                  className={`absolute inset-0 bg-cover bg-center transition-transform duration-[1600ms] ${
+                    isActive ? "scale-100" : "scale-110"
+                  }`}
                   style={{ backgroundImage: `url(${slide.imageUrl})` }}
                 />
               </div>
@@ -139,8 +142,10 @@ const HeroCarousel = () => {
               </div>
             )}
 
+            {/* --- Gradient overlay --- */}
             <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/60 to-slate-900/70 pointer-events-none" />
 
+            {/* --- Slide content --- */}
             <div className="relative z-10 flex items-center justify-center h-full">
               <div className="max-w-6xl mx-auto px-6 text-center text-white">
                 <h1
@@ -211,7 +216,7 @@ const HeroCarousel = () => {
         );
       })}
 
-      {/* Carousel Controls — hidden on mobile */}
+      {/* --- Carousel controls --- */}
       <button
         onClick={prevSlide}
         className="hidden md:inline-flex absolute left-6 top-1/2 -translate-y-1/2 z-20 bg-slate-800/20 backdrop-blur-sm p-3 rounded-full text-white/80 hover:text-white hover:bg-slate-800/40 hover:scale-110 transition-all duration-300 cursor-pointer"
@@ -225,7 +230,7 @@ const HeroCarousel = () => {
         <ChevronRight size={24} />
       </button>
 
-      {/* Indicators */}
+      {/* --- Indicators --- */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex space-x-3">
         {slides.map((_, index) => (
           <button
@@ -242,7 +247,7 @@ const HeroCarousel = () => {
         ))}
       </div>
 
-      {/* Historic Project Info (desktop only) */}
+      {/* --- Static bottom-left tag --- */}
       <div className="absolute bottom-8 left-8 z-20 text-white max-w-xs hidden lg:block">
         <h3 className="font-serif text-xl font-medium mb-2">
           Historic Sanctuary
