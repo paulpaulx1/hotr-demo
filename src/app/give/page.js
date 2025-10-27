@@ -23,9 +23,9 @@ export default function DonatePage() {
           priority
         />
         <div className='absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/50 flex items-center'>
-          <div className='max-w-7xl mx-auto px-6 w-full'>
+          <div className='max-w-7xl mx-auto px-6 w-full flex justify-center items-center"'>
             <div className='max-w-2xl text-white'>
-              <h1 className='font-serif text-4xl md:text-5xl font-medium mb-4 tracking-wide'>
+              <h1 className='font-serif text-4xl md:text-5xl font-medium mb-4 tracking-wide flex justify-center items-center"'>
                 Support Our Mission
               </h1>
               <p className='text-lg md:text-xl text-white/90 leading-relaxed'>
