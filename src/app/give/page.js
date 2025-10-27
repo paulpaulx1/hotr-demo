@@ -1,5 +1,8 @@
 import DonationForm from './DonationForm';
 import Image from "next/image";
+import { Church } from 'lucide-react';
+import { BookHeart } from 'lucide-react';
+import { Handshake } from 'lucide-react';
 
 export const metadata = {
   title: "Donate | House of the Redeemer",
@@ -71,7 +74,7 @@ export default function DonatePage() {
           <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
             <div className='text-center'>
               <div className='w-16 h-16 bg-[#6b2f2a] rounded-full flex items-center justify-center mx-auto mb-4'>
-                <span className='text-white text-2xl'>🏛️</span>
+                <span className='text-[#fbf9f7] text-2xl'><Church/></span>
               </div>
               <h3 className='text-xl font-medium text-[#6b2f2a] mb-2'>
                 Preserve History
@@ -82,7 +85,7 @@ export default function DonatePage() {
             </div>
             <div className='text-center'>
               <div className='w-16 h-16 bg-[#6b2f2a] rounded-full flex items-center justify-center mx-auto mb-4'>
-                <span className='text-white text-2xl'>🎵</span>
+                <span className='text-[#fbf9f7] text-2xl'><BookHeart/></span>
               </div>
               <h3 className='text-xl font-medium text-[#6b2f2a] mb-2'>
                 Support Programs
@@ -93,7 +96,7 @@ export default function DonatePage() {
             </div>
             <div className='text-center'>
               <div className='w-16 h-16 bg-[#6b2f2a] rounded-full flex items-center justify-center mx-auto mb-4'>
-                <span className='text-white text-2xl'>🤝</span>
+                <span className='text-[#fbf9f7] text-2xl'><Handshake/></span>
               </div>
               <h3 className='text-xl font-medium text-[#6b2f2a] mb-2'>
                 Welcome All
