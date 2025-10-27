@@ -67,15 +67,15 @@ export default function HistoryPage() {
             husband, Ernesto Fabbri, an associate of J. Pierpont Morgan. The
             house was designed by Grosvenor Atterbury, an American architect and
             town planner trained at the École des Beaux-Arts in Paris, noted for
-            the 1908 restoration of New York's City Hall. The interior
-            decoration, however, was executed by Egisto Fabbri, Ernesto's
-            brother, who incorporated Edith Fabbri's collection of Italian
+            the 1908 restoration of New York&apos;s City Hall. The interior
+            decoration, however, was executed by Egisto Fabbri, Ernesto&apos;s
+            brother, who incorporated Edith Fabbri&apos;s collection of Italian
             Renaissance and Baroque furnishings and architectural fragments into
             his designs.
           </p>
 
           <p>
-            The House of the Redeemer's outstanding architectural feature is the
+            The House of the Redeemer&apos;s outstanding architectural feature is the
             library, a treasure built in the 1600s for a ducal palace on the
             outskirts of Urbino, Italy. The library boasts a beautifully painted
             coat of arms, dated 1605–1609, on the vaulted 25-foot-high ceiling.
@@ -128,7 +128,7 @@ export default function HistoryPage() {
             of the Episcopal Church to be used as a religious retreat house
             under the name <em>House of the Redeemer</em>. A new corporation by
             that name was formed to receive the gift of her house and administer
-            it as a "place apart." The Rt. Rev. Charles K. Gilbert, Bishop of
+            it as a &quot;place apart.&quot; The Rt. Rev. Charles K. Gilbert, Bishop of
             New York, was the first president of the board of trustees. A year
             later, Bishop Horace W. B. Donegan succeeded him and remained
             president until his death in 1991.
@@ -137,7 +137,7 @@ export default function HistoryPage() {
           <p>
             The house was operated by Episcopal nuns — the Sisters of St. Mary —
             from 1949 until 1980, when the first residential Warden was
-            appointed to oversee the House's daily life. It was designated a New
+            appointed to oversee the House&apos;s daily life. It was designated a New
             York City Landmark in 1974 and is now considered one of the finest
             examples of early twentieth-century residential architecture in the
             city.
@@ -147,7 +147,7 @@ export default function HistoryPage() {
             Today, the House is guided by a Board of Trustees, with Episcopal
             priests-in-residence providing spiritual care. Daily operations are
             overseen by the House Manager and staff. Board Member Percy
-            Preston's book <em>A Place Apart</em> is available for purchase at
+            Preston&apos;s book <em>A Place Apart</em> is available for purchase at
             the House.
           </p>
         </div>

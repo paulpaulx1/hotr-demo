@@ -42,7 +42,7 @@ export default function Neighborhood() {
           </h2>
           <p className="text-lg text-slate-600 max-w-3xl mx-auto">
             Located in the historic Carnegie Hill District on the Upper East Side of Manhattan,
-            the House is on "Museum Mile," within walking distance of major museums, cultural
+            the House is on &quot;Museum Mile,&quot; within walking distance of major museums, cultural
             institutions, and near{" "}
             <a
               href="https://www.centralparknyc.org"
@@ -173,7 +173,7 @@ export default function Neighborhood() {
         <div className="mt-12 text-center">
           <p className="text-slate-600 text-lg max-w-3xl mx-auto">
             Within this serene neighborhood, the House of the Redeemer continues to offer
-            its mission of quiet hospitality — a "place apart" where heritage, faith, and
+            its mission of quiet hospitality — a &quot;place apart&quot; where heritage, faith, and
             the rhythms of city life meet.
           </p>
         </div>
