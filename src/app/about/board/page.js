@@ -124,9 +124,9 @@ export default function BoardPage() {
       </div>
 
       {/* Trustees Emeritus Section */}
-      <div className='bg-[#fbf9f7] py-16'>
+      <div className='bg-slate-50 py-16'>
         <div className='max-w-6xl mx-auto px-6'>
-          <div className='bg-white rounded-lg shadow-lg p-8 md:p-12'>
+          <div className='bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12'>
             <h2 className='font-serif text-3xl font-medium text-[#6b2f2a] mb-8 pb-3 border-b-2 border-slate-200 text-center'>
               Trustees Emeritus
             </h2>

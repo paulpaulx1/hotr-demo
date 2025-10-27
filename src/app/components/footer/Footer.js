@@ -78,7 +78,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/visit"
+                  href="/visit/faq"
                   className="text-white/70 hover:text-white transition-colors"
                 >
                   Visit
