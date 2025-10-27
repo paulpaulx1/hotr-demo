@@ -11,7 +11,7 @@ export default function DonatePage() {
   return (
     <main className="min-h-screen">
       {/* Hero Section */}
-      <div className="relative h-[400px] md:h-[650px] overflow-hidden">
+      <div className="relative h-[400px] md:h-[750px] overflow-hidden">
         <Image
           src="/donation-hero.jpg" // Replace with your actual hero image
           alt="Support House of the Redeemer"
