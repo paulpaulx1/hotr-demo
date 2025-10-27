@@ -235,69 +235,69 @@ function DonationFormContent() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className='space-y-6'>
       {/* Error Message */}
       {errorMessage && (
-        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md">
+        <div className='bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md'>
           {errorMessage}
         </div>
       )}
 
       {/* Personal Information */}
       <div>
-        <h3 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200">
+        <h3 className='text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200'>
           Personal Information
         </h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
           <div>
             <label
-              htmlFor="firstName"
-              className="block text-sm font-medium text-slate-700 mb-1"
+              htmlFor='firstName'
+              className='block text-sm font-medium text-slate-700 mb-1'
             >
-              First Name <span className="text-red-500">*</span>
+              First Name <span className='text-red-500'>*</span>
             </label>
             <input
-              type="text"
-              id="firstName"
-              name="firstName"
+              type='text'
+              id='firstName'
+              name='firstName'
               value={formData.firstName}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+              className='w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent'
               required
             />
           </div>
           <div>
             <label
-              htmlFor="lastName"
-              className="block text-sm font-medium text-slate-700 mb-1"
+              htmlFor='lastName'
+              className='block text-sm font-medium text-slate-700 mb-1'
             >
-              Last Name <span className="text-red-500">*</span>
+              Last Name <span className='text-red-500'>*</span>
             </label>
             <input
-              type="text"
-              id="lastName"
-              name="lastName"
+              type='text'
+              id='lastName'
+              name='lastName'
               value={formData.lastName}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+              className='w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent'
               required
             />
           </div>
         </div>
-        <div className="mt-4">
+        <div className='mt-4'>
           <label
-            htmlFor="email"
-            className="block text-sm font-medium text-slate-700 mb-1"
+            htmlFor='email'
+            className='block text-sm font-medium text-slate-700 mb-1'
           >
-            Email Address <span className="text-red-500">*</span>
+            Email Address <span className='text-red-500'>*</span>
           </label>
           <input
-            type="email"
-            id="email"
-            name="email"
+            type='email'
+            id='email'
+            name='email'
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+            className='w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent'
             required
           />
         </div>
@@ -305,76 +305,76 @@ function DonationFormContent() {
 
       {/* Billing Address */}
       <div>
-        <h3 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200">
+        <h3 className='text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200'>
           Billing Address
         </h3>
-        <div className="space-y-4">
+        <div className='space-y-4'>
           <div>
             <label
-              htmlFor="address"
-              className="block text-sm font-medium text-slate-700 mb-1"
+              htmlFor='address'
+              className='block text-sm font-medium text-slate-700 mb-1'
             >
-              Street Address <span className="text-red-500">*</span>
+              Street Address <span className='text-red-500'>*</span>
             </label>
             <input
-              type="text"
-              id="address"
-              name="address"
+              type='text'
+              id='address'
+              name='address'
               value={formData.address}
               onChange={handleInputChange}
-              className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+              className='w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent'
               required
             />
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
             <div>
               <label
-                htmlFor="city"
-                className="block text-sm font-medium text-slate-700 mb-1"
+                htmlFor='city'
+                className='block text-sm font-medium text-slate-700 mb-1'
               >
-                City <span className="text-red-500">*</span>
+                City <span className='text-red-500'>*</span>
               </label>
               <input
-                type="text"
-                id="city"
-                name="city"
+                type='text'
+                id='city'
+                name='city'
                 value={formData.city}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                className='w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent'
                 required
               />
             </div>
             <div>
               <label
-                htmlFor="state"
-                className="block text-sm font-medium text-slate-700 mb-1"
+                htmlFor='state'
+                className='block text-sm font-medium text-slate-700 mb-1'
               >
-                State <span className="text-red-500">*</span>
+                State <span className='text-red-500'>*</span>
               </label>
               <input
-                type="text"
-                id="state"
-                name="state"
+                type='text'
+                id='state'
+                name='state'
                 value={formData.state}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                className='w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent'
                 required
               />
             </div>
             <div>
               <label
-                htmlFor="zipCode"
-                className="block text-sm font-medium text-slate-700 mb-1"
+                htmlFor='zipCode'
+                className='block text-sm font-medium text-slate-700 mb-1'
               >
-                Zip Code <span className="text-red-500">*</span>
+                Zip Code <span className='text-red-500'>*</span>
               </label>
               <input
-                type="text"
-                id="zipCode"
-                name="zipCode"
+                type='text'
+                id='zipCode'
+                name='zipCode'
                 value={formData.zipCode}
                 onChange={handleInputChange}
-                className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                className='w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent'
                 required
               />
             </div>
@@ -384,19 +384,19 @@ function DonationFormContent() {
 
       {/* Donation Amount */}
       <div>
-        <h3 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200">
-          Donation Amount <span className="text-red-500">*</span>
+        <h3 className='text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200'>
+          Donation Amount <span className='text-red-500'>*</span>
         </h3>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
+        <div className='grid grid-cols-2 md:grid-cols-3 gap-3 mb-4'>
           {presetAmounts.map((amount) => (
             <button
               key={amount}
-              type="button"
+              type='button'
               onClick={() => handleAmountSelect(amount)}
               className={`py-3 px-4 rounded-md border-2 font-medium transition-all ${
                 selectedAmount === amount
-                  ? "bg-slate-900 text-white border-slate-900"
-                  : "bg-white text-slate-700 border-slate-300 hover:border-slate-900"
+                  ? 'bg-slate-900 text-white border-slate-900'
+                  : 'bg-white text-slate-700 border-slate-300 hover:border-slate-900'
               }`}
             >
               ${amount}
@@ -405,23 +405,23 @@ function DonationFormContent() {
         </div>
         <div>
           <label
-            htmlFor="customAmount"
-            className="block text-sm font-medium text-slate-700 mb-1"
+            htmlFor='customAmount'
+            className='block text-sm font-medium text-slate-700 mb-1'
           >
             Or enter custom amount
           </label>
-          <div className="relative">
-            <span className="absolute left-4 top-2.5 text-slate-600">$</span>
+          <div className='relative'>
+            <span className='absolute left-4 top-2.5 text-slate-600'>$</span>
             <input
-              type="number"
-              id="customAmount"
-              name="customAmount"
+              type='number'
+              id='customAmount'
+              name='customAmount'
               value={formData.customAmount}
               onChange={handleCustomAmountChange}
-              placeholder="0.00"
-              min="1"
-              step="0.01"
-              className="w-full pl-8 pr-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+              placeholder='0.00'
+              min='1'
+              step='0.01'
+              className='w-full pl-8 pr-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent'
             />
           </div>
         </div>
@@ -429,16 +429,16 @@ function DonationFormContent() {
 
       {/* Payment Information */}
       <div>
-        <h3 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200">
+        <h3 className='text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200'>
           Payment Information
         </h3>
-        <div className="bg-slate-50 p-4 rounded-md border border-slate-200">
-          <label className="block text-sm font-medium text-slate-700 mb-2">
-            Credit Card <span className="text-red-500">*</span>
+        <div className='bg-slate-50 p-4 rounded-md border border-slate-200'>
+          <label className='block text-sm font-medium text-slate-700 mb-2'>
+            Credit Card <span className='text-red-500'>*</span>
           </label>
           <CardElement options={CARD_ELEMENT_OPTIONS} />
         </div>
-        <p className="text-xs text-slate-500 mt-2">
+        <p className='text-xs text-slate-500 mt-2'>
           Your payment information is encrypted and secure.
         </p>
       </div>
@@ -453,47 +453,47 @@ function DonationFormContent() {
       </div>
 
       {/* Privacy Policy Agreement */}
-      <div className="flex items-start">
+      <div className='flex items-start'>
         <input
-          type="checkbox"
-          id="privacyPolicy"
+          type='checkbox'
+          id='privacyPolicy'
           checked={agreedToPrivacy}
           onChange={(e) => setAgreedToPrivacy(e.target.checked)}
-          className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
+          className='mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded'
           required
         />
-        <label htmlFor="privacyPolicy" className="ml-3 text-sm text-slate-600">
-          I agree to the{" "}
+        <label htmlFor='privacyPolicy' className='ml-3 text-sm text-slate-600'>
+          I agree to the{' '}
           <a
-            href="/privacy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-slate-900 underline hover:text-slate-700"
+            href='/privacy'
+            target='_blank'
+            rel='noopener noreferrer'
+            className='text-slate-900 underline hover:text-slate-700'
           >
             Privacy Policy
-          </a>{" "}
-          and consent to the processing of my personal data.{" "}
-          <span className="text-red-500">*</span>
+          </a>{' '}
+          and consent to the processing of my personal data.{' '}
+          <span className='text-red-500'>*</span>
         </label>
       </div>
 
       {/* Submit Button */}
-      <div className="pt-4">
+      <div className='pt-4'>
         <button
-          type="submit"
+          type='submit'
           disabled={isProcessing || !stripe}
-          className="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center"
+          className='w-full bg-[#6b2f2a] hover:[#4e1f1a] disabled:bg-slate-400 text-white font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center cursor-pointer'
         >
           {isProcessing ? (
             <>
-              <Loader2 className="animate-spin mr-2" size={20} />
+              <Loader2 className='animate-spin mr-2' size={20} />
               Processing...
             </>
           ) : (
-            `Donate $${formData.amount || "0.00"}`
+            `Donate $${formData.amount || '0.00'}`
           )}
         </button>
-        <p className="text-xs text-center text-slate-500 mt-3">
+        <p className='text-xs text-center text-slate-500 mt-3'>
           Secure payment powered by Stripe
         </p>
       </div>

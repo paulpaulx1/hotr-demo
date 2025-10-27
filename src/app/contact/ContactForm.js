@@ -489,7 +489,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center"
+          className="w-full bg-[#6b2f2a] hover:bg-[#4e1f1a] disabled:bg-slate-400 text-white font-medium py-3 px-6 rounded-md transition-colors flex items-center justify-center cursor-pointer"
         >
           {isSubmitting ? (
             <>
