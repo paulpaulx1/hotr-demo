@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Link from "next/link";
 import {
   Mail,
@@ -11,7 +11,11 @@ import {
 } from "lucide-react";
 
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const [currentYear, setCurrentYear] = useState(2025); // fallback year
+
+  useEffect(() => {
+    setCurrentYear(new Date().getFullYear());
+  }, []);
 
   return (
     <footer className="bg-slate-900 text-white pt-12 pb-6">
