@@ -196,7 +196,7 @@ export default function BoardPage() {
           </h3>
           <p className='text-slate-600 mb-6'>
             Have questions or want to learn more about supporting our mission?
-            We'd love to hear from you.
+            We&apos;d love to hear from you.
           </p>
           <a
             href='/contact'
