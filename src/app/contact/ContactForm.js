@@ -109,7 +109,7 @@ export default function ContactForm() {
       }
 
       setSuccessMessage(
-        "Thank you for contacting us! We'll get back to you within 1-2 business days."
+        "Thank you for contacting us! We&apos;ll get back to you within 1-2 business days."
       );
       
       // Reset form
@@ -385,7 +385,7 @@ export default function ContactForm() {
               className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
             />
             <label htmlFor="interest-filmPhoto" className="ml-3 text-sm text-slate-700">
-              Film & photography at the House
+              Film &amp; photography at the House
             </label>
           </div>
 
@@ -477,7 +477,7 @@ export default function ContactForm() {
               onChange={(e) => setPrivacyAccepted(e.target.value)}
               className="h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300"
             />
-            <label htmlFor="privacy-no" className="ml-2 text-sm text-slate-700">
+            <label htmlFor="privacy-no" className="ml-2 text-slate-700">
               No
             </label>
           </div>
