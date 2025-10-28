@@ -8,11 +8,24 @@
   position: relative;
 }
 
-/* Let rows expand naturally */
+@media (max-width: 768px) {
+  .calendarWrapper {
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+  }
+}
+
 .calendarContainer {
   min-height: 800px;
   height: auto;
   margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+  .calendarContainer {
+    min-height: 500px;
+    margin-top: 0.5rem;
+  }
 }
 
 /* ---------------- Toolbar ---------------- */
@@ -21,12 +34,50 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-toolbar) {
+    margin-bottom: 0.75rem;
+    flex-direction: column;
+  }
 }
 
 .calendarWrapper :global(.rbc-toolbar-label) {
   font-family: var(--font-serif, Garamond, serif);
   font-size: 1.5rem;
   color: #0f172a;
+}
+
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-toolbar-label) {
+    font-size: 1.125rem;
+    text-align: center;
+    width: 100%;
+    order: 1;
+  }
+}
+
+.calendarWrapper :global(.rbc-btn-group) {
+  display: flex;
+  gap: 0.25rem;
+}
+
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-btn-group) {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .calendarWrapper :global(.rbc-btn-group):first-child {
+    order: 2;
+  }
+  
+  .calendarWrapper :global(.rbc-btn-group):last-child {
+    order: 3;
+  }
 }
 
 .calendarWrapper :global(.rbc-btn-group button) {
@@ -37,9 +88,26 @@
   font-size: 0.875rem;
   border-radius: 0.375rem;
   transition: all 0.2s ease;
+  cursor: pointer;
+  min-height: 44px;
 }
+
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-btn-group button) {
+    flex: 1;
+    padding: 0.625rem 0.5rem;
+    font-size: 0.8125rem;
+  }
+}
+
 .calendarWrapper :global(.rbc-btn-group button:hover) {
   background: #e2e8f0;
+}
+
+.calendarWrapper :global(.rbc-btn-group button.rbc-active) {
+  background: #334155;
+  color: white;
+  border-color: #334155;
 }
 
 /* ---------------- Month Layout ---------------- */
@@ -53,20 +121,184 @@
 }
 
 .calendarWrapper :global(.rbc-month-row) {
-  flex: 1 1 160px !important; /* taller rows that push the container */
+  flex: 1 1 160px !important;
   min-height: 160px !important;
   border-bottom: 1px solid #e2e8f0;
 }
+
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-month-row) {
+    min-height: 80px !important;
+    flex: 1 1 80px !important;
+  }
+}
+
 .calendarWrapper :global(.rbc-month-row:last-child) {
   border-bottom: none;
 }
 
-/* Slightly roomier cells */
 .calendarWrapper :global(.rbc-date-cell) {
   padding: 0.75rem !important;
 }
 
-/* ---------------- Events ---------------- */
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-date-cell) {
+    padding: 0.25rem !important;
+    font-size: 0.75rem;
+  }
+}
+
+/* ---------------- Agenda View ---------------- */
+.calendarWrapper :global(.rbc-agenda-view) {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  background: white;
+  overflow: hidden;
+}
+
+.calendarWrapper :global(.rbc-agenda-table) {
+  border: none;
+  width: 100%;
+}
+
+.calendarWrapper :global(.rbc-agenda-date-cell) {
+  padding: 1rem;
+  font-weight: 600;
+  color: #0f172a;
+  background: #f8fafc;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  width: 120px;
+}
+
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-agenda-date-cell) {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.8125rem;
+    width: 80px;
+  }
+}
+
+.calendarWrapper :global(.rbc-agenda-time-cell) {
+  padding: 1rem;
+  font-size: 0.875rem;
+  color: #64748b;
+  white-space: nowrap;
+  width: 100px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-agenda-time-cell) {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.75rem;
+    width: 70px;
+  }
+}
+
+.calendarWrapper :global(.rbc-agenda-event-cell) {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-agenda-event-cell) {
+    padding: 0.5rem;
+  }
+}
+
+/* Custom Agenda Event Item */
+.agendaEventItem {
+  display: flex;
+  gap: 1rem;
+  padding: 0.75rem;
+  background: white;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+@media (max-width: 768px) {
+  .agendaEventItem {
+    flex-direction: column;
+    padding: 0.5rem;
+    gap: 0.75rem;
+  }
+}
+
+.agendaEventItem:hover {
+  background: #f8fafc;
+  transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+  .agendaEventItem:active {
+    transform: scale(0.98);
+  }
+}
+
+.agendaEventImage {
+  width: 100px;
+  height: 70px;
+  object-fit: cover;
+  border-radius: 0.25rem;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .agendaEventImage {
+    width: 100%;
+    height: 120px;
+  }
+}
+
+.agendaEventContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.agendaEventTitle {
+  font-weight: 600;
+  color: #0f172a;
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+  line-height: 1.4;
+}
+
+@media (max-width: 768px) {
+  .agendaEventTitle {
+    font-size: 0.875rem;
+  }
+}
+
+.agendaEventTime {
+  font-size: 0.8125rem;
+  color: #64748b;
+  font-style: italic;
+  margin-bottom: 0.375rem;
+}
+
+@media (max-width: 768px) {
+  .agendaEventTime {
+    font-size: 0.75rem;
+  }
+}
+
+.agendaEventDescription {
+  font-size: 0.8125rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .agendaEventDescription {
+    font-size: 0.75rem;
+  }
+}
+
+/* ---------------- Month Events ---------------- */
 .calendarWrapper :global(.rbc-event) {
   position: relative !important;
   height: 100% !important;
@@ -85,12 +317,18 @@
   padding: 0.4rem;
   max-width: 100%;
 }
+
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-event) {
+    padding: 0.2rem;
+  }
+}
+
 .calendarWrapper :global(.rbc-event:hover) {
   background: #cbd5e1 !important;
   transform: scale(1.02);
 }
 
-/* Inner event text */
 .eventItem {
   width: 100%;
   max-width: 100%;
@@ -107,13 +345,26 @@
   line-height: 1.3;
 }
 
+@media (max-width: 768px) {
+  .eventTitle {
+    font-size: 0.7rem;
+  }
+}
+
 .eventTime {
   font-size: 0.75rem;
   color: #475569;
   margin-top: 2px;
 }
 
-/* ---------------- Hover Card ---------------- */
+@media (max-width: 768px) {
+  .eventTime {
+    font-size: 0.65rem;
+    display: none;
+  }
+}
+
+/* ---------------- Hover Card (Desktop Only) ---------------- */
 .hoverCard {
   position: fixed;
   z-index: 2000;
@@ -125,6 +376,12 @@
   transition: opacity 0.2s ease;
   pointer-events: auto;
   animation: fadeIn 0.15s ease-out;
+}
+
+@media (max-width: 768px) {
+  .hoverCard {
+    display: none;
+  }
 }
 
 .hoverImage {
@@ -154,7 +411,6 @@
   color: #475569;
 }
 
-/* Small triangle “tail” connecting hover card */
 .hoverCard::after {
   content: "";
   position: absolute;
@@ -166,6 +422,7 @@
   border-color: white transparent transparent transparent;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
+
 .hoverCard[data-flip="true"]::after {
   top: -8px;
   bottom: auto;
@@ -173,7 +430,6 @@
   border-color: transparent transparent white transparent;
 }
 
-/* ---------------- Animation ---------------- */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -192,4 +448,12 @@
   padding: 2rem;
   color: #64748b;
   font-size: 1rem;
+}
+
+@media (max-width: 768px) {
+  .loadingState,
+  .emptyState {
+    padding: 1.5rem;
+    font-size: 0.9375rem;
+  }
 }

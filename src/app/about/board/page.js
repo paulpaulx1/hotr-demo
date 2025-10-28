@@ -134,7 +134,7 @@ export default function BoardPage() {
               {trusteesEmeritus.map((trustee, index) => (
                 <div
                   key={index}
-                  className='bg-slate-50 p-5 rounded-md shadow-sm border border-slate-200'
+                  className='bg-slate-50 p-5 rounded-md shadow-sm border border-slate-200 hover:border-[#6b2f2a] transition-colors'
                 >
                   <h4 className='font-medium text-slate-900 text-lg mb-1'>
                     {trustee.name}

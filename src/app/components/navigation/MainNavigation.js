@@ -173,9 +173,8 @@ const MainNavigation = () => {
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className={`md:hidden text-white cursor-pointer ${
-                isMobileMenuOpen ? "hidden" : ""
-              }`}
+              className={`md:hidden text-white cursor-pointer ${isMobileMenuOpen ? "hidden" : ""
+                }`}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-flyout"
               aria-label="Open menu"
@@ -234,39 +233,32 @@ const MainNavigation = () => {
                   key={index}
                   className="border-b border-white/10 last:border-b-0"
                 >
-                  <div className="flex items-center justify-between py-3">
-                    <Link
-                      href={item.href}
-                      className="text-white/90 hover:text-white"
-                      onClick={(e) => {
-                        if (item.dropdown) {
-                          e.preventDefault(); // Prevent navigation for dropdown items
-                          toggleMobileDropdown(index);
-                        } else {
-                          setIsMobileMenuOpen(false); // Close menu for direct links
-                        }
-                      }}
-                    >
-                      {item.label}
-                    </Link>
+                  {/* Make entire row clickable */}
+                  <button
+                    onClick={() => {
+                      if (item.dropdown) {
+                        toggleMobileDropdown(index);
+                      } else {
+                        // Navigate to href for non-dropdown items
+                        window.location.href = item.href;
+                        setIsMobileMenuOpen(false);
+                      }
+                    }}
+                    className="flex items-center justify-between py-3 w-full text-left text-white/90 hover:text-white transition-colors"
+                    aria-expanded={item.dropdown ? activeDropdown === index : undefined}
+                    aria-controls={item.dropdown ? `mobile-sub-${index}` : undefined}
+                  >
+                    <span>{item.label}</span>
 
                     {item.dropdown && (
-                      <button
-                        onClick={() => toggleMobileDropdown(index)}
-                        className="p-1 text-white/70 hover:text-white"
-                        aria-expanded={activeDropdown === index}
-                        aria-controls={`mobile-sub-${index}`}
-                        aria-label={`Toggle ${item.label} submenu`}
-                      >
-                        <ChevronDown
-                          size={18}
-                          className={`transform transition-transform ${
-                            activeDropdown === index ? "rotate-180" : ""
+                      <ChevronDown
+                        size={18}
+                        className={`transform transition-transform text-white/70 ${activeDropdown === index ? "rotate-180" : ""
                           }`}
-                        />
-                      </button>
+                        aria-hidden="true"
+                      />
                     )}
-                  </div>
+                  </button>
 
                   {/* Mobile Dropdown Items */}
                   {item.dropdown && (
@@ -293,6 +285,7 @@ const MainNavigation = () => {
                 </div>
               ))}
             </nav>
+
           </aside>
         </div>
       )}
