@@ -12,54 +12,61 @@ export default function FacilitiesPage() {
   // First floor room data
   const firstFloorRoomData = [
     {
-      x: "21.17",
-      y: "5.70",
-      width: "35.19",
-      height: "31.41",
-      name: "Dining Room",
-    },
-    {
-      x: "57.00",
-      y: "5.59",
-      width: "13.90",
-      height: "24.91",
-      name: "Pantry",
-    },
-    {
-      x: "46.36",
-      y: "41.69",
-      width: "22.75",
-      height: "19.00",
-      name: "Entrance Hall",
-    },
-    {
-      x: "20.99",
-      y: "40.10",
-      width: "23.09",
-      height: "52.86",
-      name: "Courtyard",
-    },
-    {
-      x: "46.30",
-      y: "73.22",
-      width: "8.32",
-      height: "19.41",
-      name: "Vestibule",
-    },
-    {
-      x: "55.72",
-      y: "70.66",
-      width: "23.21",
-      height: "21.38",
-      name: "Reception Room",
-    },
-    {
-      x: "55.08",
-      y: "62.47",
-      width: "6.86",
-      height: "7.37",
-      name: "Bathroom",
-    },
+    "x": "19.42",
+    "y": "3.42",
+    "width": "36.84",
+    "height": "33.12",
+    "name": "Refectory"
+  },
+  {
+    "x": "57.38",
+    "y": "3.25",
+    "width": "14.40",
+    "height": "26.45",
+    "name": "Pantry"
+  },
+  {
+    "x": "18.89",
+    "y": "42.68",
+    "width": "24.91",
+    "height": "53.13",
+    "name": "Courtyard"
+  },
+  {
+    "x": "45.81",
+    "y": "41.26",
+    "width": "24.14",
+    "height": "19.89",
+    "name": "Entrance Hall"
+  },
+  {
+    "x": "57.20",
+    "y": "30.28",
+    "width": "14.70",
+    "height": "10.04",
+    "name": "Bathroom"
+  },
+  {
+    "x": "55.31",
+    "y": "63.34",
+    "width": "6.79",
+    "height": "7.85",
+    "name": "Bathroom"
+  },
+  {
+    "x": "45.81",
+    "y": "74.97",
+    "width": "8.38",
+    "height": "11.81",
+    "name": "Vestibule"
+  },
+  {
+    "x": "56.08",
+    "y": "71.96",
+    "width": "23.97",
+    "height": "21.96",
+    "name": "Reception Room"
+  }
   ];
 
   // Second floor room data
@@ -83,7 +90,7 @@ export default function FacilitiesPage() {
       y: "72.23",
       width: "33.80",
       height: "22.18",
-      name: "Drawing Room",
+      name: "Chapel",
     },
   ];
 
@@ -100,7 +107,7 @@ export default function FacilitiesPage() {
   const getRoomImage = (roomName) => {
     const imageMap = {
       // First floor rooms
-      "Dining Room": "/firstfloor/house-of-the-redeemer_dining1.jpg",
+      Refectory: "/firstfloor/house-of-the-redeemer_dining1.jpg",
       Pantry: "/firstfloor/house-of-the-redeemer_pantry1-1024x683.jpg",
       Courtyard: "/firstfloor/house-of-the-redeemer_courtyard.jpg",
       "Entrance Hall": "/firstfloor/house-of-the-redeemer_lobby3.jpg",
@@ -113,7 +120,7 @@ export default function FacilitiesPage() {
       "Second Story Library": "/secondfloor/house-of-the-redeemer_library2.jpg",
       "Second Story Hall":
         "/secondfloor/house-of-the-redeemer_upstairs-hall.jpg",
-      "Drawing Room": "/secondfloor/house-of-the-redeemer_chapel2.jpg",
+      Chapel: "/secondfloor/house-of-the-redeemer_chapel2.jpg",
     };
 
     // Return the mapped image or a placeholder with the room name
@@ -193,14 +200,14 @@ export default function FacilitiesPage() {
       <div className="md:flex md:gap-8">
         <div className="md:w-1/2 mb-8 md:mb-0">
           {renderFloorplan(
-            "/house-of-the-redeemer_floorplan1-1.jpg",
+            "/house-of-the-redeemer_floorplan1final.jpeg",
             firstFloorRoomData,
             "First Floor"
           )}
         </div>
         <div className="md:w-1/2">
           {renderFloorplan(
-            "/house-of-the-redeemer_floorplan2-1.jpg",
+            "/house-of-the-redeemer_floorplan2final.jpeg",
             secondFloorRoomData,
             "Second Floor"
           )}
