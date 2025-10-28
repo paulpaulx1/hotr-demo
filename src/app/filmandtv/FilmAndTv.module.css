@@ -1,57 +1,141 @@
-.wrapper {
-  padding-top: 6rem;
-  padding-bottom: 4rem;
-  max-width: 80rem;
-  margin: 0 auto;
-  padding-left: 1rem;
-  padding-right: 1rem;
+.wrapper{
+  padding:6rem 2rem;
+  max-width:1200px;
+  margin:0 auto;
+  background:#fff;
 }
-.heading {
-  font-family: Garamond, serif;
-  font-size: 2rem;
-  text-align: center;
-  margin-bottom: 0.5rem;
+
+.heading{
+  font-family: "Garamond", serif;
+  font-size:3.5rem;
+  text-align:center;
+  margin:0 0 1.5rem;
+  color:#333;
+  position:relative;
 }
-.intro {
-  text-align: center;
-  color: #444;
-  margin-bottom: 2rem;
+.heading:after{
+  content:"";
+  position:absolute;
+  bottom:-15px;
+  left:50%;
+  transform:translateX(-50%);
+  width:80px;height:3px;background:#6b2f2a;
 }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.5rem;
+
+.intro{
+  text-align:center;color:#555;margin:0 auto 3rem;
+  font-size:1.125rem;line-height:1.7;max-width:800px;
 }
-.card {
-  background: #fafafa;
-  border-radius: 0.5rem;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-  transition: transform 0.2s ease;
+
+/* list container: let the page grow; no fixed height */
+.grid{
+  display:flex;flex-direction:column;gap:0;
+  padding:0; /* scrollbar removed to avoid odd overflows */
 }
-.card:hover {
-  transform: scale(1.02);
+
+/* each row */
+.card{
+  display:flex;align-items:stretch;gap:clamp(1rem,3vw,3rem);
+  padding:3rem 0;position:relative;transition:background .2s ease;
+  contain:layout paint; /* avoids rare shimmer on image zoom */
 }
-.card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
+.card:hover{ background:#f9f5f5; }
+
+/* burgundy rule between items */
+.card:after{
+  content:""; position:absolute; bottom:0; left:10%; width:80%;
+  height:2px; background:#6b2f2a; opacity:.65;
 }
-.text {
-  padding: 1rem;
-  text-align: left;
+.card:last-child:after{ display:none; }
+
+/* A/B alternating */
+.card:nth-of-type(even){ flex-direction:row-reverse; }
+
+/* media block */
+.image{
+  flex:0 1 42%;
+  max-width:520px;
+  align-self:center;
 }
-.text h2 {
-  font-family: Garamond, serif;
-  margin-bottom: 0.25rem;
+.imageEl{
+  display:block; width:100%; height:auto; max-height:420px;
+  object-fit:cover; border-radius:8px;
+  box-shadow:0 5px 15px rgba(107,47,42,.15);
+  transition:transform .35s ease, box-shadow .35s ease;
 }
-.year {
-  color: #666;
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
+.card:hover .imageEl{
+  transform:scale(1.02);
+  box-shadow:0 10px 28px rgba(107,47,42,.25);
 }
-.location {
-  color: #333;
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
+
+/* text block */
+.text{
+  flex:1 1 0;
+  padding:0;
+  display:flex;flex-direction:column;justify-content:center;
+  min-width:0; /* allow shrinking without overflow */
+  overflow-wrap:anywhere; /* avoid word overflow */
+}
+
+.text h2{
+  font-family:"Garamond", serif;
+  margin:0 0 .75rem;color:#222;font-size:2.1rem;line-height:1.2;
+  position:relative;
+}
+.text h2:after{
+  content:""; position:absolute; bottom:-8px; left:0; width:48px; height:2px; background:#6b2f2a;
+}
+.card:nth-of-type(even) .text h2:after{ left:auto; right:0; }
+
+.year{ color:#6b2f2a; font-size:1.05rem; font-weight:600; margin:.75rem 0 1rem; }
+.location{ color:#444; font-size:1.02rem; margin-top:.75rem; font-style:italic; }
+.location strong{ color:#6b2f2a; font-weight:700; font-style:normal; }
+
+.description, .notes{
+  color:#2b2f36; line-height:1.7; margin:.5rem 0;
+}
+
+/* when there is no image, make text full width and remove the gap nicely */
+.noImage{ gap:0; }
+.noImage .text{ padding:0; }
+.noImage .image{ display:none; }
+
+/* medium screens */
+@media (max-width: 1100px){
+  .image{ flex-basis:46%; }
+}
+@media (max-width: 980px){
+  .heading{ font-size:3rem; }
+  .imageEl{ max-height:360px; }
+}
+
+/* stack on small screens */
+@media (max-width: 860px){
+  .card, .card:nth-of-type(even){ flex-direction:column; }
+  .image{ flex-basis:auto; max-width:100%; }
+  .imageEl{ max-height:320px; }
+  .text h2:after{ left:0; right:auto; } /* keep underline left-aligned */
+  .card:after{ left:6%; width:88%; }
+}
+
+/* very small */
+@media (max-width: 560px){
+  .wrapper{ padding:4rem 1rem; }
+  .heading{ font-size:2.2rem; }
+  .text h2{ font-size:1.7rem; }
+  .intro{ font-size:1rem; }
+}
+
+.external {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  font-style: italic;
+}
+.external .link {
+  color: #6b2f2a;
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+.external .link:hover {
+  color: #3d1814;
 }
