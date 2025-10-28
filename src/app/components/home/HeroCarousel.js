@@ -79,13 +79,13 @@ const HeroCarousel = () => {
           </p>
           <div className="flex justify-center gap-6">
             <Link
-              href="/faq"
+              href="/visit/faq"
               className="px-8 py-4 bg-slate-700 hover:bg-transparent border-2 border-slate-700 hover:border-white text-white font-light tracking-wide transition-all duration-300"
             >
               Plan Your Visit
             </Link>
             <Link
-              href="/faq"
+              href="/visit/faq"
               className="px-8 py-4 bg-transparent border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-light tracking-wide transition-all duration-300"
             >
               Learn More
@@ -198,13 +198,13 @@ const HeroCarousel = () => {
                   ].join(" ")}
                 >
                   <Link
-                    href="/faq"
+                    href="/visit/faq"
                     className="px-8 py-4 bg-slate-700 hover:bg-transparent border-2 border-slate-700 hover:border-white text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg cursor-pointer text-center"
                   >
                     Plan Your Visit
                   </Link>
                   <Link
-                    href="/faq"
+                    href="/visit/faq"
                     className="px-8 py-4 bg-transparent border-2 border-white/80 hover:bg-white hover:text-slate-900 text-white font-light tracking-wide transition-all duration-300 transform hover:scale-105 hover:-translate-y-1 hover:shadow-lg cursor-pointer text-center"
                   >
                     Learn More
@@ -256,7 +256,7 @@ const HeroCarousel = () => {
           Vanderbilt Mansion
         </p>
         <Link
-          href="/faq"
+          href="/visit/faq"
           className="text-white/90 hover:text-white cursor-pointer text-sm font-light border-b border-white/30 hover:border-white transition-all duration-300 hover:-translate-y-0.5"
         >
           Learn More →
