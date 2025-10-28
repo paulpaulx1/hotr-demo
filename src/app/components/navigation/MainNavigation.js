@@ -37,7 +37,7 @@ const MainNavigation = () => {
       items: [
         { label: "Hosting Events & Retreats", href: "/hosting-events" },
         { label: "FAQ", href: "/visit/faq" },
-        { label: "TV & Film", href: "/visit/media" },
+        { label: "TV & Film", href: "/filmandtv" },
       ],
     },
     { label: "Calendar", href: "/calendar", dropdown: false },
@@ -148,17 +148,18 @@ const MainNavigation = () => {
 
                       {/* Dropdown Menu - now positioned to connect with the bridge */}
                       <div
-                        className="absolute left-0 top-full w-48 rounded-md shadow-lg bg-white 
-                                 invisible group-hover:visible opacity-0 group-hover:opacity-100
-                                 transition-all duration-200 py-1 z-50 -mt-1"
+                        className="absolute left-0 top-full mt-3 min-w-[11rem] rounded-xl border border-slate-200/70 
+             bg-white/95 backdrop-blur-sm shadow-lg
+             opacity-0 translate-y-1 invisible group-hover:visible group-hover:opacity-100 
+             group-hover:translate-y-0 transition-all duration-300 ease-out z-50"
                         role="menu"
                       >
                         {item.items.map((subItem, subIndex) => (
                           <Link
                             key={subIndex}
                             href={subItem.href}
-                            className="block px-4 py-2 text-sm text-slate-800 hover:bg-slate-100 hover:text-slate-900"
-                            role="menuitem"
+                            className="block px-4 py-2.5 text-[0.9rem] text-slate-700 hover:text-slate-900
+             hover:bg-slate-50/90 rounded-lg mx-1 transition-colors font-light tracking-wide"
                           >
                             {subItem.label}
                           </Link>
@@ -173,8 +174,9 @@ const MainNavigation = () => {
             {/* Mobile Menu Toggle Button */}
             <button
               onClick={() => setIsMobileMenuOpen(true)}
-              className={`md:hidden text-white cursor-pointer ${isMobileMenuOpen ? "hidden" : ""
-                }`}
+              className={`md:hidden text-white cursor-pointer ${
+                isMobileMenuOpen ? "hidden" : ""
+              }`}
               aria-expanded={isMobileMenuOpen}
               aria-controls="mobile-flyout"
               aria-label="Open menu"
@@ -245,16 +247,21 @@ const MainNavigation = () => {
                       }
                     }}
                     className="flex items-center justify-between py-3 w-full text-left text-white/90 hover:text-white transition-colors"
-                    aria-expanded={item.dropdown ? activeDropdown === index : undefined}
-                    aria-controls={item.dropdown ? `mobile-sub-${index}` : undefined}
+                    aria-expanded={
+                      item.dropdown ? activeDropdown === index : undefined
+                    }
+                    aria-controls={
+                      item.dropdown ? `mobile-sub-${index}` : undefined
+                    }
                   >
                     <span>{item.label}</span>
 
                     {item.dropdown && (
                       <ChevronDown
                         size={18}
-                        className={`transform transition-transform text-white/70 ${activeDropdown === index ? "rotate-180" : ""
-                          }`}
+                        className={`transform transition-transform text-white/70 ${
+                          activeDropdown === index ? "rotate-180" : ""
+                        }`}
                         aria-hidden="true"
                       />
                     )}
@@ -285,7 +292,6 @@ const MainNavigation = () => {
                 </div>
               ))}
             </nav>
-
           </aside>
         </div>
       )}
