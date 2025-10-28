@@ -13,7 +13,7 @@ export default function HostingEventsPage() {
       <section className="relative min-h-[60vh] flex items-center justify-center overflow-hidden bg-slate-900 text-white">
         <div
           className="absolute inset-0 bg-cover bg-center opacity-0 animate-[fadeInBg_1.2s_ease-out_forwards]"
-          style={{ backgroundImage: "url('/fabri-concerts.jpg')" }}
+          style={{ backgroundImage: "url('/hosting-events.jpg')" }}
         />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-900/40 via-slate-900/60 to-slate-900/70" />
         <div className="relative z-10 max-w-3xl px-6 text-center opacity-0 translate-y-4 animate-[fadeInUp_1.8s_ease-out_forwards]">
@@ -58,7 +58,7 @@ export default function HostingEventsPage() {
         id="retreats"
         title="Retreats"
         text="House of the Redeemer is dedicated to providing peace and serenity for those who seek 'a place apart' — the designation given to it by its donor, Edith Fabbri. The House offers unique spaces for prayer, meditation, and spiritual renewal, welcoming all to experience its tranquility."
-        image="/images/dining3.jpg"
+        image="/images/visiting-room.jpg"
         reverse={false}
       />
       <Section
