@@ -12,61 +12,61 @@ export default function FacilitiesPage() {
   // First floor room data
   const firstFloorRoomData = [
     {
-    "x": "19.42",
-    "y": "3.42",
-    "width": "36.84",
-    "height": "33.12",
-    "name": "Refectory"
-  },
-  {
-    "x": "57.38",
-    "y": "3.25",
-    "width": "14.40",
-    "height": "26.45",
-    "name": "Pantry"
-  },
-  {
-    "x": "18.89",
-    "y": "42.68",
-    "width": "24.91",
-    "height": "53.13",
-    "name": "Courtyard"
-  },
-  {
-    "x": "45.81",
-    "y": "41.26",
-    "width": "24.14",
-    "height": "19.89",
-    "name": "Entrance Hall"
-  },
-  {
-    "x": "57.20",
-    "y": "30.28",
-    "width": "14.70",
-    "height": "10.04",
-    "name": "Bathroom"
-  },
-  {
-    "x": "55.31",
-    "y": "63.34",
-    "width": "6.79",
-    "height": "7.85",
-    "name": "Bathroom"
-  },
-  {
-    "x": "45.81",
-    "y": "74.97",
-    "width": "8.38",
-    "height": "11.81",
-    "name": "Vestibule"
-  },
-  {
-    "x": "56.08",
-    "y": "71.96",
-    "width": "23.97",
-    "height": "21.96",
-    "name": "Reception Room"
-  }
+      x: "19.42",
+      y: "3.42",
+      width: "36.84",
+      height: "33.12",
+      name: "Refectory",
+    },
+    {
+      x: "57.38",
+      y: "3.25",
+      width: "14.40",
+      height: "26.45",
+      name: "Pantry",
+    },
+    {
+      x: "18.89",
+      y: "42.68",
+      width: "24.91",
+      height: "53.13",
+      name: "Courtyard",
+    },
+    {
+      x: "45.81",
+      y: "41.26",
+      width: "24.14",
+      height: "19.89",
+      name: "Entrance Hall",
+    },
+    {
+      x: "57.20",
+      y: "30.28",
+      width: "14.70",
+      height: "10.04",
+      name: "Bathroom",
+    },
+    {
+      x: "55.31",
+      y: "63.34",
+      width: "6.79",
+      height: "7.85",
+      name: "Bathroom",
+    },
+    {
+      x: "45.81",
+      y: "74.97",
+      width: "8.38",
+      height: "11.81",
+      name: "Vestibule",
+    },
+    {
+      x: "56.08",
+      y: "71.96",
+      width: "23.97",
+      height: "21.96",
+      name: "Reception Room",
+    },
   ];
 
   // Second floor room data
@@ -214,34 +214,36 @@ export default function FacilitiesPage() {
         </div>
       </div>
       {/* Enhanced Lightbox - Focused on images */}
+      {/* Gallery-style Lightbox */}
       {activeRoom && (
-        <div className="lightbox-overlay" onClick={closeLightbox}>
+        <div
+          className="facility-lightbox"
+          onClick={closeLightbox}
+          role="dialog"
+          aria-modal="true"
+        >
           <div
-            className="lightbox-content"
+            className="facility-lightbox-inner"
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              className="lightbox-close"
+              className="facility-lightbox-close"
               onClick={closeLightbox}
               aria-label="Close"
             >
               ×
             </button>
 
-            {/* Room Name as H1 */}
-            <h1 className="lightbox-title font-libre-baskerville">
+            <h1 className="facility-lightbox-title font-libre-baskerville">
               {activeRoom}
             </h1>
 
-            {/* Simplified image container - maximized for image display */}
-            <div className="room-image-container">
-              {/* Optional loading indicator */}
+            <div className="facility-lightbox-image-frame">
               {!imageLoaded && (
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="spinner"></div>
                 </div>
               )}
-
               <Image
                 src={getRoomImage(activeRoom)}
                 alt={activeRoom}
@@ -252,8 +254,8 @@ export default function FacilitiesPage() {
                   transition: "opacity 0.3s ease-in-out",
                 }}
                 onLoadingComplete={() => setImageLoaded(true)}
-                priority={true}
-                className="max-h-full max-w-full object-contain"
+                className="object-contain"
+                priority
               />
             </div>
           </div>

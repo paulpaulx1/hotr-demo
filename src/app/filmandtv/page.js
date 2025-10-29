@@ -35,10 +35,9 @@ export default async function FilmAndTvPage() {
   return (
     <main className={styles.wrapper}>
       <h1 className={styles.heading}>Film &amp; Television at the House</h1>
-      <p className={styles.intro}>
-        Many notable productions have filmed here. The images below depict the
-        House itself — not copyrighted promotional materials.
-      </p>
+      {/* <p className={styles.intro}>
+        Many notable productions have filmed here. 
+      </p> */}
 
       <div className={styles.grid}>
         {films.map((f) => {
