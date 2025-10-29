@@ -26,6 +26,7 @@ export default function EventsCalendar() {
   const [currentDate, setCurrentDate] = useState(new Date());
   const router = useRouter();
 
+  // detect mobile (disables hover behavior)
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
@@ -33,26 +34,36 @@ export default function EventsCalendar() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // tooltip positioning (kept away from cursor so it doesn’t sit under click)
   const tooltipStyle = useMemo(() => {
-    const offsetY = 16;
+    const offsetY = 20;           // ↑ a bit more space
+    const offsetX = 14;           // → nudge right
     const tooltipWidth = 280;
+
     let top = coords.y - offsetY;
     let transform = "translate(-50%, -100%)";
     if (coords.flipY) {
       top = coords.y + offsetY;
       transform = "translate(-50%, 0)";
     }
-    const left = coords.flipX ? window.innerWidth - tooltipWidth - 24 : coords.x;
+
+    // avoid going off the right edge
+    const preferredLeft = coords.x + offsetX;
+    const maxLeft = window.innerWidth - tooltipWidth - 24;
+    const left = coords.flipX ? Math.max(12, maxLeft) : Math.max(12, Math.min(preferredLeft, maxLeft));
+
     return { top, left, transform };
   }, [coords]);
 
+  // fetch events (already expanded by your /api/events)
   useEffect(() => {
     (async () => {
       try {
         const res = await fetch("/api/events?range=all", { cache: "no-store" });
         const data = await res.json();
         setEvents(Array.isArray(data.events) ? data.events : []);
-      } catch {
+      } catch (e) {
+        console.error("Error fetching events:", e);
         setEvents([]);
       } finally {
         setLoading(false);
@@ -60,6 +71,7 @@ export default function EventsCalendar() {
     })();
   }, []);
 
+  // normalize for RBC
   const rbcEvents = useMemo(() => {
     const seen = new Set();
     return (events || [])
@@ -68,9 +80,11 @@ export default function EventsCalendar() {
         const start = new Date(e.start);
         const end = e.end ? new Date(e.end) : start;
         if (isNaN(start) || isNaN(end)) return null;
+
         const id = `${e.title}-${start.toISOString()}`;
         if (seen.has(id)) return null;
         seen.add(id);
+
         return {
           ...e,
           start,
@@ -83,6 +97,7 @@ export default function EventsCalendar() {
       .sort((a, b) => a.start - b.start);
   }, [events]);
 
+  // hover tracking (desktop only)
   const handleMouseMove = (e, event) => {
     if (isMobile) return;
     const tooltipWidth = 280;
@@ -99,13 +114,13 @@ export default function EventsCalendar() {
   if (loading) return <div className={styles.loadingState}>Loading calendar…</div>;
   if (!rbcEvents.length) return <div className={styles.emptyState}>No events scheduled.</div>;
 
+  // month cell event (navigation handled by onSelectEvent, not here)
   const EventComponent = ({ event }) => (
     <div
       className={styles.eventItem}
       onMouseEnter={(e) => handleMouseMove(e, event)}
       onMouseMove={(e) => handleMouseMove(e, event)}
-      onMouseLeave={() => !isMobile && setTimeout(() => setHoveredEvent(null), 100)}
-      onClick={() => event.href && router.push(event.href)}
+      onMouseLeave={() => !isMobile && setHoveredEvent(null)}
     >
       <div className={styles.eventTitle}>{event.title}</div>
       {event.start && (
@@ -116,7 +131,7 @@ export default function EventsCalendar() {
     </div>
   );
 
-  /* --- Custom Toolbar with fade + buttons --- */
+  // custom toolbar (centered month with fade + pill buttons)
   const CustomToolbar = ({ label, onNavigate }) => (
     <div className={styles.customToolbar} role="group" aria-label="Calendar navigation">
       <button
@@ -131,7 +146,7 @@ export default function EventsCalendar() {
       <div className={styles.toolbarLabelWrap} aria-live="polite" aria-atomic="true">
         <AnimatePresence mode="wait">
           <motion.div
-            key={label} // changes when month changes
+            key={label}
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -4 }}
@@ -170,29 +185,44 @@ export default function EventsCalendar() {
           view="month"
           date={currentDate}
           onNavigate={handleNavigate}
+          onSelectEvent={(event) => {
+            if (event?.href) router.push(event.href); // single-click anywhere on event
+          }}
           showMultiDayTimes={false}
         />
       </div>
 
-      {hoveredEvent && !isMobile && (
-        <div
+      {/* Hover card as a link — click anywhere to navigate */}
+      {hoveredEvent && hoveredEvent.href && !isMobile && (
+        <a
+          href={hoveredEvent.href}
           className={styles.hoverCard}
           style={tooltipStyle}
           onMouseLeave={() => setHoveredEvent(null)}
         >
           {hoveredEvent.heroUrl && (
-            <img src={hoveredEvent.heroUrl} alt={hoveredEvent.title} className={styles.hoverImage} />
+            <img
+              src={hoveredEvent.heroUrl}
+              alt={hoveredEvent.title}
+              className={styles.hoverImage}
+            />
           )}
           <div className={styles.hoverContent}>
-            <h4>{hoveredEvent.title}</h4>
+            <h4 className={styles.hoverTitle}>{hoveredEvent.title}</h4>
             {hoveredEvent.start && (
               <p className={styles.hoverTime}>
-                {hoveredEvent.start.toLocaleString([], { dateStyle: "long", timeStyle: "short" })}
+                {hoveredEvent.start.toLocaleString([], {
+                  dateStyle: "long",
+                  timeStyle: "short",
+                })}
               </p>
             )}
-            {hoveredEvent.description && <p>{hoveredEvent.description.slice(0, 140)}…</p>}
+            {hoveredEvent.description && (
+              <p>{hoveredEvent.description.slice(0, 140)}…</p>
+            )}
+            <div className={styles.hoverCta}>View details →</div>
           </div>
-        </div>
+        </a>
       )}
     </div>
   );
