@@ -35,9 +35,12 @@ export default async function FilmAndTvPage() {
   return (
     <main className={styles.wrapper}>
       <h1 className={styles.heading}>Film &amp; Television at the House</h1>
-      {/* <p className={styles.intro}>
-        Many notable productions have filmed here. 
-      </p> */}
+      <p className={styles.intro}>
+        Over the years, the House of the Redeemer has served as a distinctive
+        backdrop for feature films, television productions, and documentaries.
+        Its architectural character and atmosphere continue to attract
+        filmmakers seeking timeless New York interiors.
+      </p>
 
       <div className={styles.grid}>
         {films.map((f) => {
