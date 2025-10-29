@@ -24,20 +24,25 @@ export default function EventsCalendar() {
   const [coords, setCoords] = useState({ x: 0, y: 0, flipY: false, flipX: false });
   const [isMobile, setIsMobile] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [viewportWidth, setViewportWidth] = useState(1024); // ✅ safe default for SSR
   const router = useRouter();
 
-  // detect mobile (disables hover behavior)
+  // Detect mobile + viewport width (client-only)
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const handleResize = () => {
+      const w = window.innerWidth;
+      setViewportWidth(w);
+      setIsMobile(w < 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // tooltip positioning (kept away from cursor so it doesn’t sit under click)
+  // Tooltip positioning — uses viewportWidth state (no window at render)
   const tooltipStyle = useMemo(() => {
-    const offsetY = 20;           // ↑ a bit more space
-    const offsetX = 14;           // → nudge right
+    const offsetY = 20;
+    const offsetX = 14;
     const tooltipWidth = 280;
 
     let top = coords.y - offsetY;
@@ -47,15 +52,16 @@ export default function EventsCalendar() {
       transform = "translate(-50%, 0)";
     }
 
-    // avoid going off the right edge
     const preferredLeft = coords.x + offsetX;
-    const maxLeft = window.innerWidth - tooltipWidth - 24;
-    const left = coords.flipX ? Math.max(12, maxLeft) : Math.max(12, Math.min(preferredLeft, maxLeft));
+    const maxLeft = viewportWidth - tooltipWidth - 24;
+    const left = coords.flipX
+      ? Math.max(12, maxLeft)
+      : Math.max(12, Math.min(preferredLeft, maxLeft));
 
     return { top, left, transform };
-  }, [coords]);
+  }, [coords, viewportWidth]);
 
-  // fetch events (already expanded by your /api/events)
+  // Fetch events
   useEffect(() => {
     (async () => {
       try {
@@ -71,7 +77,7 @@ export default function EventsCalendar() {
     })();
   }, []);
 
-  // normalize for RBC
+  // Normalize for RBC
   const rbcEvents = useMemo(() => {
     const seen = new Set();
     return (events || [])
@@ -97,14 +103,17 @@ export default function EventsCalendar() {
       .sort((a, b) => a.start - b.start);
   }, [events]);
 
-  // hover tracking (desktop only)
+  // Hover tracking (desktop only)
   const handleMouseMove = (e, event) => {
     if (isMobile) return;
+
     const tooltipWidth = 280;
     const tooltipHeight = 200;
     const padding = 16;
+
     const flipY = e.clientY - tooltipHeight - padding < 0;
-    const flipX = e.clientX + tooltipWidth / 2 > window.innerWidth;
+    const flipX = e.clientX + tooltipWidth / 2 > viewportWidth;
+
     setCoords({ x: e.clientX, y: e.clientY, flipY, flipX });
     setHoveredEvent(event);
   };
@@ -114,7 +123,7 @@ export default function EventsCalendar() {
   if (loading) return <div className={styles.loadingState}>Loading calendar…</div>;
   if (!rbcEvents.length) return <div className={styles.emptyState}>No events scheduled.</div>;
 
-  // month cell event (navigation handled by onSelectEvent, not here)
+  // Month cell event (navigation handled by onSelectEvent)
   const EventComponent = ({ event }) => (
     <div
       className={styles.eventItem}
@@ -131,7 +140,7 @@ export default function EventsCalendar() {
     </div>
   );
 
-  // custom toolbar (centered month with fade + pill buttons)
+  // Custom toolbar with centered month + fade and pill buttons
   const CustomToolbar = ({ label, onNavigate }) => (
     <div className={styles.customToolbar} role="group" aria-label="Calendar navigation">
       <button
@@ -181,7 +190,7 @@ export default function EventsCalendar() {
           allDayAccessor="allDay"
           components={{ event: EventComponent, toolbar: CustomToolbar }}
           popup
-          views={{ month: true }}
+          views={{ month: true }}   // month-only
           view="month"
           date={currentDate}
           onNavigate={handleNavigate}
