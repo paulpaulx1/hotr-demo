@@ -5,6 +5,7 @@ import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { useRouter } from "next/navigation";
+import { AnimatePresence, motion } from "framer-motion";
 import styles from "./Calendar.module.css";
 
 const locales = { "en-US": enUS };
@@ -22,81 +23,54 @@ export default function EventsCalendar() {
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [coords, setCoords] = useState({ x: 0, y: 0, flipY: false, flipX: false });
   const [isMobile, setIsMobile] = useState(false);
-  
-  // Add state for controlling view and navigation
-  const [currentView, setCurrentView] = useState("month");
   const [currentDate, setCurrentDate] = useState(new Date());
-  
   const router = useRouter();
 
-  // Detect mobile on mount and resize
   useEffect(() => {
-    const checkMobile = () => {
-      const mobile = window.innerWidth < 768;
-      setIsMobile(mobile);
-      // Default to agenda view on mobile
-      if (mobile && currentView === "month") {
-        setCurrentView("agenda");
-      }
-    };
-
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Smart tooltip position
   const tooltipStyle = useMemo(() => {
     const offsetY = 16;
-    const offsetX = 0;
     const tooltipWidth = 280;
-
     let top = coords.y - offsetY;
     let transform = "translate(-50%, -100%)";
-
     if (coords.flipY) {
       top = coords.y + offsetY;
       transform = "translate(-50%, 0)";
     }
-
-    const left = coords.flipX
-      ? window.innerWidth - tooltipWidth - 24
-      : coords.x + offsetX;
-
+    const left = coords.flipX ? window.innerWidth - tooltipWidth - 24 : coords.x;
     return { top, left, transform };
   }, [coords]);
 
-  // Fetch events
   useEffect(() => {
-    fetch("/api/events?range=all", { cache: "no-store" })
-      .then((r) => r.json())
-      .then((d) => {
-        console.log("Fetched events:", d.events); // Debug log
-        setEvents(d.events || []);
-      })
-      .catch((err) => {
-        console.error("Error fetching events:", err);
+    (async () => {
+      try {
+        const res = await fetch("/api/events?range=all", { cache: "no-store" });
+        const data = await res.json();
+        setEvents(Array.isArray(data.events) ? data.events : []);
+      } catch {
         setEvents([]);
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const rbcEvents = useMemo(() => {
-    const processed = (events || [])
+    const seen = new Set();
+    return (events || [])
       .map((e) => {
-        const start = e.start ? new Date(e.start) : null;
+        if (!e.start) return null;
+        const start = new Date(e.start);
         const end = e.end ? new Date(e.end) : start;
-        
-        // Validate dates
-        if (!start || isNaN(start.getTime())) {
-          console.warn("Invalid start date for event:", e);
-          return null;
-        }
-        if (!end || isNaN(end.getTime())) {
-          console.warn("Invalid end date for event:", e);
-          return null;
-        }
-        
+        if (isNaN(start) || isNaN(end)) return null;
+        const id = `${e.title}-${start.toISOString()}`;
+        if (seen.has(id)) return null;
+        seen.add(id);
         return {
           ...e,
           start,
@@ -105,98 +79,78 @@ export default function EventsCalendar() {
           href: e.href || (e.slug ? `/events/${e.slug}` : null),
         };
       })
-      .filter((e) => e !== null);
-    
-    console.log("Processed events for calendar:", processed); // Debug log
-    return processed;
+      .filter(Boolean)
+      .sort((a, b) => a.start - b.start);
   }, [events]);
 
-  // Smart hover handler (disabled on mobile)
   const handleMouseMove = (e, event) => {
     if (isMobile) return;
-    
     const tooltipWidth = 280;
     const tooltipHeight = 200;
     const padding = 16;
-
     const flipY = e.clientY - tooltipHeight - padding < 0;
     const flipX = e.clientX + tooltipWidth / 2 > window.innerWidth;
-
     setCoords({ x: e.clientX, y: e.clientY, flipY, flipX });
     setHoveredEvent(event);
   };
 
-  // Handle navigation (Back, Next, Today buttons)
-  const handleNavigate = useCallback((newDate) => {
-    console.log("Navigating to:", newDate); // Debug log
-    setCurrentDate(newDate);
-  }, []);
+  const handleNavigate = useCallback((newDate) => setCurrentDate(newDate), []);
 
-  // Handle view change (Month, Agenda buttons)
-  const handleViewChange = useCallback((newView) => {
-    console.log("Changing view to:", newView); // Debug log
-    setCurrentView(newView);
-  }, []);
+  if (loading) return <div className={styles.loadingState}>Loading calendar…</div>;
+  if (!rbcEvents.length) return <div className={styles.emptyState}>No events scheduled.</div>;
 
-  // Render logic
-  if (loading)
-    return <div className={styles.loadingState}>Loading calendar…</div>;
-  if (!rbcEvents.length)
-    return <div className={styles.emptyState}>No events scheduled.</div>;
-
-  // Custom Event Component for Month View
   const EventComponent = ({ event }) => (
     <div
       className={styles.eventItem}
       onMouseEnter={(e) => handleMouseMove(e, event)}
       onMouseMove={(e) => handleMouseMove(e, event)}
-      onMouseLeave={() => !isMobile && setTimeout(() => setHoveredEvent(null), 120)}
+      onMouseLeave={() => !isMobile && setTimeout(() => setHoveredEvent(null), 100)}
       onClick={() => event.href && router.push(event.href)}
     >
       <div className={styles.eventTitle}>{event.title}</div>
       {event.start && (
         <div className={styles.eventTime}>
-          {new Date(event.start).toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-          })}
+          {event.start.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
         </div>
       )}
     </div>
   );
 
-  // Custom Agenda Event Component (mobile-optimized)
-  const AgendaEvent = ({ event }) => (
-    <div 
-      className={styles.agendaEventItem}
-      onClick={() => event.href && router.push(event.href)}
-    >
-      {event.heroUrl && (
-        <img
-          src={event.heroUrl}
-          alt={event.title}
-          className={styles.agendaEventImage}
-        />
-      )}
-      <div className={styles.agendaEventContent}>
-        <h4 className={styles.agendaEventTitle}>{event.title}</h4>
-        {event.start && (
-          <p className={styles.agendaEventTime}>
-            {new Date(event.start).toLocaleString([], {
-              weekday: 'short',
-              month: 'short',
-              day: 'numeric',
-              hour: 'numeric',
-              minute: '2-digit',
-            })}
-          </p>
-        )}
-        {event.description && (
-          <p className={styles.agendaEventDescription}>
-            {event.description.slice(0, 120)}…
-          </p>
-        )}
+  /* --- Custom Toolbar with fade + buttons --- */
+  const CustomToolbar = ({ label, onNavigate }) => (
+    <div className={styles.customToolbar} role="group" aria-label="Calendar navigation">
+      <button
+        type="button"
+        className={styles.navButton}
+        onClick={() => onNavigate("PREV")}
+        aria-label="Previous month"
+      >
+        ← Previous Month
+      </button>
+
+      <div className={styles.toolbarLabelWrap} aria-live="polite" aria-atomic="true">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={label} // changes when month changes
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className={styles.toolbarLabel}
+          >
+            {label}
+          </motion.div>
+        </AnimatePresence>
       </div>
+
+      <button
+        type="button"
+        className={styles.navButton}
+        onClick={() => onNavigate("NEXT")}
+        aria-label="Next month"
+      >
+        Next Month →
+      </button>
     </div>
   );
 
@@ -210,50 +164,33 @@ export default function EventsCalendar() {
           endAccessor="end"
           titleAccessor="title"
           allDayAccessor="allDay"
-          components={{ 
-            event: EventComponent,
-            agenda: {
-              event: AgendaEvent,
-            }
-          }}
+          components={{ event: EventComponent, toolbar: CustomToolbar }}
           popup
-          views={["month", "agenda"]}
-          view={currentView}
+          views={{ month: true }}
+          view="month"
           date={currentDate}
-          onView={handleViewChange}
           onNavigate={handleNavigate}
-          length={30}
-          showMultiDayTimes
+          showMultiDayTimes={false}
         />
       </div>
 
-      {/* Hover card only shows on desktop in month view */}
-      {hoveredEvent && !isMobile && currentView === "month" && (
+      {hoveredEvent && !isMobile && (
         <div
           className={styles.hoverCard}
           style={tooltipStyle}
           onMouseLeave={() => setHoveredEvent(null)}
         >
           {hoveredEvent.heroUrl && (
-            <img
-              src={hoveredEvent.heroUrl}
-              alt={hoveredEvent.title}
-              className={styles.hoverImage}
-            />
+            <img src={hoveredEvent.heroUrl} alt={hoveredEvent.title} className={styles.hoverImage} />
           )}
           <div className={styles.hoverContent}>
             <h4>{hoveredEvent.title}</h4>
             {hoveredEvent.start && (
               <p className={styles.hoverTime}>
-                {new Date(hoveredEvent.start).toLocaleString([], {
-                  dateStyle: "long",
-                  timeStyle: "short",
-                })}
+                {hoveredEvent.start.toLocaleString([], { dateStyle: "long", timeStyle: "short" })}
               </p>
             )}
-            {hoveredEvent.description && (
-              <p>{hoveredEvent.description.slice(0, 140)}…</p>
-            )}
+            {hoveredEvent.description && <p>{hoveredEvent.description.slice(0, 140)}…</p>}
           </div>
         </div>
       )}
