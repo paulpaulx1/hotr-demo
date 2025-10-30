@@ -1,11 +1,12 @@
 "use client";
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+
+import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import styles from "./Calendar.module.css";
 
 const locales = { "en-US": enUS };
@@ -17,29 +18,57 @@ const localizer = dateFnsLocalizer({
   locales,
 });
 
-export default function EventsCalendar() {
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function EventsCalendar({ events = [] }) {
   const [hoveredEvent, setHoveredEvent] = useState(null);
   const [coords, setCoords] = useState({ x: 0, y: 0, flipY: false, flipX: false });
   const [isMobile, setIsMobile] = useState(false);
+  const [viewportWidth, setViewportWidth] = useState(1024);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [viewportWidth, setViewportWidth] = useState(1024); // ✅ safe default for SSR
   const router = useRouter();
 
-  // Detect mobile + viewport width (client-only)
+  // ✅ Resize detection
   useEffect(() => {
+    let timeout;
     const handleResize = () => {
-      const w = window.innerWidth;
-      setViewportWidth(w);
-      setIsMobile(w < 768);
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        const w = window.innerWidth;
+        setViewportWidth(w);
+        setIsMobile(w < 768);
+      }, 100);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Tooltip positioning — uses viewportWidth state (no window at render)
+  // ✅ Normalize + sort events
+  const rbcEvents = useMemo(() => {
+    const seen = new Set();
+    return (events || [])
+      .map((e) => {
+        if (!e.start) return null;
+        const start = new Date(e.start);
+        const end = e.end ? new Date(e.end) : start;
+        if (isNaN(start) || isNaN(end)) return null;
+
+        const id = `${e.title}-${start.toISOString()}`;
+        if (seen.has(id)) return null;
+        seen.add(id);
+
+        return {
+          ...e,
+          start,
+          end,
+          allDay: !!e.allDay,
+          href: e.href || (e.slug ? `/events/${e.slug}` : null),
+        };
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.start - b.start);
+  }, [events]);
+
+  // ✅ Tooltip positioning
   const tooltipStyle = useMemo(() => {
     const offsetY = 20;
     const offsetX = 14;
@@ -61,69 +90,60 @@ export default function EventsCalendar() {
     return { top, left, transform };
   }, [coords, viewportWidth]);
 
-  // Fetch events
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch("/api/events?range=all", { cache: "no-store" });
-        const data = await res.json();
-        setEvents(Array.isArray(data.events) ? data.events : []);
-      } catch (e) {
-        console.error("Error fetching events:", e);
-        setEvents([]);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
-
-  // Normalize for RBC
-  const rbcEvents = useMemo(() => {
-    const seen = new Set();
-    return (events || [])
-      .map((e) => {
-        if (!e.start) return null;
-        const start = new Date(e.start);
-        const end = e.end ? new Date(e.end) : start;
-        if (isNaN(start) || isNaN(end)) return null;
-
-        const id = `${e.title}-${start.toISOString()}`;
-        if (seen.has(id)) return null;
-        seen.add(id);
-
-        return {
-          ...e,
-          start,
-          end,
-          allDay: Boolean(e.allDay),
-          href: e.href || (e.slug ? `/events/${e.slug}` : null),
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => a.start - b.start);
-  }, [events]);
-
-  // Hover tracking (desktop only)
-  const handleMouseMove = (e, event) => {
-    if (isMobile) return;
-
-    const tooltipWidth = 280;
-    const tooltipHeight = 200;
-    const padding = 16;
-
-    const flipY = e.clientY - tooltipHeight - padding < 0;
-    const flipX = e.clientX + tooltipWidth / 2 > viewportWidth;
-
-    setCoords({ x: e.clientX, y: e.clientY, flipY, flipX });
-    setHoveredEvent(event);
-  };
+  // ✅ Hover tracking
+  const handleMouseMove = useCallback(
+    (e, event) => {
+      if (isMobile) return;
+      const tooltipWidth = 280;
+      const tooltipHeight = 200;
+      const padding = 16;
+      const flipY = e.clientY - tooltipHeight - padding < 0;
+      const flipX = e.clientX + tooltipWidth / 2 > viewportWidth;
+      setCoords({ x: e.clientX, y: e.clientY, flipY, flipX });
+      setHoveredEvent(event);
+    },
+    [isMobile, viewportWidth]
+  );
 
   const handleNavigate = useCallback((newDate) => setCurrentDate(newDate), []);
 
-  if (loading) return <div className={styles.loadingState}>Loading calendar…</div>;
-  if (!rbcEvents.length) return <div className={styles.emptyState}>No events scheduled.</div>;
+  // ✅ Custom toolbar
+  const CustomToolbar = ({ label, onNavigate }) => (
+    <div className={styles.customToolbar}>
+      <button
+        className={styles.navButton}
+        onClick={() => onNavigate("PREV")}
+        aria-label="Previous month"
+      >
+        ← Previous Month
+      </button>
 
-  // Month cell event (navigation handled by onSelectEvent)
+      <div className={styles.toolbarLabelWrap} aria-live="polite">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={label}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className={styles.toolbarLabel}
+          >
+            {label}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      <button
+        className={styles.navButton}
+        onClick={() => onNavigate("NEXT")}
+        aria-label="Next month"
+      >
+        Next Month →
+      </button>
+    </div>
+  );
+
+  // ✅ Event cell
   const EventComponent = ({ event }) => (
     <div
       className={styles.eventItem}
@@ -140,44 +160,6 @@ export default function EventsCalendar() {
     </div>
   );
 
-  // Custom toolbar with centered month + fade and pill buttons
-  const CustomToolbar = ({ label, onNavigate }) => (
-    <div className={styles.customToolbar} role="group" aria-label="Calendar navigation">
-      <button
-        type="button"
-        className={styles.navButton}
-        onClick={() => onNavigate("PREV")}
-        aria-label="Previous month"
-      >
-        ← Previous Month
-      </button>
-
-      <div className={styles.toolbarLabelWrap} aria-live="polite" aria-atomic="true">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={label}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className={styles.toolbarLabel}
-          >
-            {label}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      <button
-        type="button"
-        className={styles.navButton}
-        onClick={() => onNavigate("NEXT")}
-        aria-label="Next month"
-      >
-        Next Month →
-      </button>
-    </div>
-  );
-
   return (
     <div className={styles.calendarWrapper}>
       <div className={styles.calendarContainer}>
@@ -190,28 +172,32 @@ export default function EventsCalendar() {
           allDayAccessor="allDay"
           components={{ event: EventComponent, toolbar: CustomToolbar }}
           popup
-          views={{ month: true }}   // month-only
+          views={{ month: true }}
           view="month"
           date={currentDate}
           onNavigate={handleNavigate}
-          onSelectEvent={(event) => {
-            if (event?.href) router.push(event.href); // single-click anywhere on event
-          }}
+          onSelectEvent={(event) => event?.href && router.push(event.href)}
           showMultiDayTimes={false}
         />
       </div>
 
-      {/* Hover card as a link — click anywhere to navigate */}
+      {/* ✅ Hover card */}
       {hoveredEvent && hoveredEvent.href && !isMobile && (
         <a
-          href={hoveredEvent.href}
-          className={styles.hoverCard}
-          style={tooltipStyle}
-          onMouseLeave={() => setHoveredEvent(null)}
-        >
+  href={hoveredEvent.href}
+  className={styles.hoverCard}
+  style={tooltipStyle}
+  onClick={(e) => {
+    e.stopPropagation();        // don't bubble to calendar
+    e.preventDefault();         // stop browser from jumping
+    if (hoveredEvent?.href) router.push(hoveredEvent.href); // manual nav
+  }}
+  onMouseDown={(e) => e.stopPropagation()}
+  onMouseLeave={() => setHoveredEvent(null)}
+>
           {hoveredEvent.heroUrl && (
             <img
-              src={hoveredEvent.heroUrl}
+              src={`${hoveredEvent.heroUrl}?w=600&fit=crop&auto=format`}
               alt={hoveredEvent.title}
               className={styles.hoverImage}
             />

@@ -11,24 +11,24 @@ async function getBoardData() {
       "trustees": trustees[]->{
         name,
         role,
-        "photoUrl": photo.asset->url
+        "photoUrl": photo.asset->url + "?w=600&h=600&fit=crop&auto=format"
       },
       "trusteesEmeritus": trusteesEmeritus[]->{
         name,
         role,
-        "photoUrl": photo.asset->url
+        "photoUrl": photo.asset->url + "?w=600&h=600&fit=crop&auto=format"
       },
       "staff": staff[]->{
         name,
         role,
-        "photoUrl": photo.asset->url
+        "photoUrl": photo.asset->url + "?w=600&h=600&fit=crop&auto=format"
       }
     }
   `);
 
   const res = await fetch(
-    `https://${projectId}.api.sanity.io/v2023-10-10/data/query/${dataset}?query=${query}`,
-    { next: { revalidate } }
+    `https://${projectId}.apicdn.sanity.io/v2023-10-10/data/query/${dataset}?query=${query}`,
+    { next: { revalidate: 3600, tags: ["sanity"] } }
   );
 
   if (!res.ok) throw new Error(`Failed to fetch board data: ${res.status}`);
