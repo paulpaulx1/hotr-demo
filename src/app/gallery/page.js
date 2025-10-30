@@ -12,6 +12,7 @@ async function getGalleryImages() {
       _id,
       title,
       description,
+      category,
       "url": image.asset->url + "?w=800&auto=format"
     }
   `);
