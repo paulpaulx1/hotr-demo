@@ -22,7 +22,8 @@
     "react-dom": "19.1.0",
     "react-google-recaptcha": "^3.1.0",
     "rrule": "^2.8.1",
-    "stripe": "^19.1.0"
+    "stripe": "^19.1.0",
+    "yet-another-react-lightbox": "^3.25.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
