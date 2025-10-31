@@ -20,7 +20,12 @@ const localizer = dateFnsLocalizer({
 
 export default function EventsCalendar({ events = [] }) {
   const [hoveredEvent, setHoveredEvent] = useState(null);
-  const [coords, setCoords] = useState({ x: 0, y: 0, flipY: false, flipX: false });
+  const [coords, setCoords] = useState({
+    x: 0,
+    y: 0,
+    flipY: false,
+    flipX: false,
+  });
   const [isMobile, setIsMobile] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(1024);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -45,27 +50,68 @@ export default function EventsCalendar({ events = [] }) {
   // ✅ Normalize + sort events
   const rbcEvents = useMemo(() => {
     const seen = new Set();
-    return (events || [])
-      .map((e) => {
-        if (!e.start) return null;
-        const start = new Date(e.start);
-        const end = e.end ? new Date(e.end) : start;
-        if (isNaN(start) || isNaN(end)) return null;
 
-        const id = `${e.title}-${start.toISOString()}`;
-        if (seen.has(id)) return null;
+    // Helper: expand recurrence (supports "weekly", "monthly", "daily")
+    const expandRecurrence = (event) => {
+      if (!event.recurrence || !event.recurrence.frequency) return [event];
+
+      const instances = [];
+      const freq = event.recurrence.frequency.toLowerCase();
+      const interval = event.recurrence.interval || 1;
+      const count = event.recurrence.count || 10; // limit to avoid infinite loops
+
+      const start = new Date(event.start);
+      const end = new Date(event.end || event.start);
+      for (let i = 0; i < count; i++) {
+        const newStart = new Date(start);
+        const newEnd = new Date(end);
+
+        if (freq === "daily") {
+          newStart.setDate(start.getDate() + i * interval);
+          newEnd.setDate(end.getDate() + i * interval);
+        } else if (freq === "weekly") {
+          newStart.setDate(start.getDate() + i * 7 * interval);
+          newEnd.setDate(end.getDate() + i * 7 * interval);
+        } else if (freq === "monthly") {
+          newStart.setMonth(start.getMonth() + i * interval);
+          newEnd.setMonth(end.getMonth() + i * interval);
+        }
+
+        instances.push({
+          ...event,
+          start: newStart,
+          end: newEnd,
+        });
+      }
+      return instances;
+    };
+
+    // Build full event list
+    const expanded = [];
+    (events || []).forEach((e) => {
+      if (!e.start) return;
+      const baseStart = new Date(e.start);
+      const baseEnd = e.end ? new Date(e.end) : baseStart;
+      if (isNaN(baseStart) || isNaN(baseEnd)) return;
+
+      const base = {
+        ...e,
+        start: baseStart,
+        end: baseEnd,
+        allDay: !!e.allDay,
+        href: e.href || (e.slug ? `/events/${e.slug}` : null),
+      };
+
+      const series = expandRecurrence(base);
+      series.forEach((evt) => {
+        const id = `${evt.title}-${evt.start.toISOString()}`;
+        if (seen.has(id)) return;
         seen.add(id);
+        expanded.push(evt);
+      });
+    });
 
-        return {
-          ...e,
-          start,
-          end,
-          allDay: !!e.allDay,
-          href: e.href || (e.slug ? `/events/${e.slug}` : null),
-        };
-      })
-      .filter(Boolean)
-      .sort((a, b) => a.start - b.start);
+    return expanded.sort((a, b) => a.start - b.start);
   }, [events]);
 
   // ✅ Tooltip positioning
@@ -154,7 +200,10 @@ export default function EventsCalendar({ events = [] }) {
       <div className={styles.eventTitle}>{event.title}</div>
       {event.start && (
         <div className={styles.eventTime}>
-          {event.start.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
+          {event.start.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })}
         </div>
       )}
     </div>
@@ -184,17 +233,17 @@ export default function EventsCalendar({ events = [] }) {
       {/* ✅ Hover card */}
       {hoveredEvent && hoveredEvent.href && !isMobile && (
         <a
-  href={hoveredEvent.href}
-  className={styles.hoverCard}
-  style={tooltipStyle}
-  onClick={(e) => {
-    e.stopPropagation();        // don't bubble to calendar
-    e.preventDefault();         // stop browser from jumping
-    if (hoveredEvent?.href) router.push(hoveredEvent.href); // manual nav
-  }}
-  onMouseDown={(e) => e.stopPropagation()}
-  onMouseLeave={() => setHoveredEvent(null)}
->
+          href={hoveredEvent.href}
+          className={styles.hoverCard}
+          style={tooltipStyle}
+          onClick={(e) => {
+            e.stopPropagation(); // don't bubble to calendar
+            e.preventDefault(); // stop browser from jumping
+            if (hoveredEvent?.href) router.push(hoveredEvent.href); // manual nav
+          }}
+          onMouseDown={(e) => e.stopPropagation()}
+          onMouseLeave={() => setHoveredEvent(null)}
+        >
           {hoveredEvent.heroUrl && (
             <img
               src={`${hoveredEvent.heroUrl}?w=600&fit=crop&auto=format`}
