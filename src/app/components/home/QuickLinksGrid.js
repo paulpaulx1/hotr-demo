@@ -34,7 +34,7 @@ export default function QuickLinksGrid() {
     {
       title: 'GALLERY',
       image: '/images/gallery-card.jpg',
-      link: 'about/gallery',
+      link: 'gallery',
       description: 'Explore our historic space',
     },
     {
@@ -46,7 +46,7 @@ export default function QuickLinksGrid() {
     {
       title: 'CONTACT US',
       image: '/images/contact-card.jpg',
-      link: '/candle',
+      link: '/contact',
       description: 'Get in touch',
     },
     {

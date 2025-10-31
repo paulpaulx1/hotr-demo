@@ -20,7 +20,7 @@ export default function HeroCarousel({ slides = [] }) {
     if (!slides.length || !isAutoAdvancing) return;
     const id = setInterval(
       () => setCurrent((i) => (i + 1) % slides.length),
-      5000
+      10000
     );
     return () => clearInterval(id);
   }, [slides, isAutoAdvancing]);
