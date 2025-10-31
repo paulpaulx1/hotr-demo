@@ -10,15 +10,15 @@ import "yet-another-react-lightbox/plugins/captions.css";
 
 export default function GalleryGrid({ images }) {
   const [index, setIndex] = useState(-1);
-  console.log("images", images);
-  // Group images by category
+
+  // --- Group by category ---
   const grouped = images.reduce((acc, img) => {
     const cat = img.category || "Other";
     (acc[cat] ||= []).push(img);
     return acc;
   }, {});
 
-  // Flatten all slides for the lightbox
+  // --- Flatten for Lightbox ---
   const slides = images.map((img) => ({
     src: img.url.replace("?w=800", "?w=1600"),
     title: img.title,
@@ -28,7 +28,8 @@ export default function GalleryGrid({ images }) {
   return (
     <section className="py-24 px-6 bg-white">
       <div className="max-w-7xl mx-auto">
-        <header className="text-center mb-12">
+        {/* Header */}
+        <header className="text-center mb-16">
           <h1 className="font-serif text-4xl md:text-5xl text-slate-800 mb-3">
             Gallery
           </h1>
@@ -38,33 +39,44 @@ export default function GalleryGrid({ images }) {
           </p>
         </header>
 
+        {/* Category Sections */}
         {Object.entries(grouped).map(([category, group]) => (
-          <section key={category} className="mb-16">
-            <h2 className="font-serif text-2xl text-slate-800 mb-6 border-b border-slate-200 pb-2">
-              {category}
-            </h2>
+          <section key={category} className="mb-20">
+            {/* Centered H2 */}
+            <div className="flex justify-center mb-10">
+              <h2 className="font-serif text-2xl text-slate-800 border-b border-slate-200 pb-2 inline-block text-center">
+                {category}
+              </h2>
+            </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-              {group.map((img, i) => {
-                // Compute absolute index for the lightbox
+            {/* Fixed-size, centered grid */}
+            <div
+              className="grid justify-center gap-4"
+              style={{
+                gridTemplateColumns:
+                  group.length === 1
+                    ? "repeat(1, 360px)"
+                    : "repeat(auto-fit, 360px)",
+                gridAutoRows: "360px",
+                justifyContent: "center",
+              }}
+            >
+              {group.map((img) => {
                 const globalIndex = images.findIndex((x) => x._id === img._id);
                 return (
                   <figure
                     key={img._id}
-                    className="cursor-pointer group"
+                    className="cursor-pointer group relative overflow-hidden rounded-md bg-slate-100 w-[360px] h-[360px]"
                     onClick={() => setIndex(globalIndex)}
                   >
-                    <div className="overflow-hidden rounded-md bg-slate-100 aspect-square">
-                      <Image
-                        src={img.url}
-                        alt={img.title || "Gallery image"}
-                        width={600}
-                        height={600}
-                        className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500"
-                      />
-                    </div>
+                    <Image
+                      src={img.url}
+                      alt={img.title || "Gallery image"}
+                      fill
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
                     {img.title && (
-                      <figcaption className="mt-2 text-center text-slate-700 font-serif text-base">
+                      <figcaption className="absolute bottom-0 left-0 w-full text-center text-white text-sm bg-black/40 py-1 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition">
                         {img.title}
                       </figcaption>
                     )}
@@ -76,7 +88,7 @@ export default function GalleryGrid({ images }) {
         ))}
       </div>
 
-      {/* Universal lightbox for all images */}
+      {/* Lightbox */}
       <Lightbox
         open={index >= 0}
         close={() => setIndex(-1)}
@@ -97,7 +109,7 @@ export default function GalleryGrid({ images }) {
             padding: "4rem 0",
           },
           image: {
-            maxHeight: "80vh", // 👈 shrink slightly again (was larger)
+            maxHeight: "80vh",
             maxWidth: "85vw",
             objectFit: "contain",
           },
