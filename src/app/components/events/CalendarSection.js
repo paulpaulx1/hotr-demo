@@ -50,7 +50,7 @@ export default function CalendarSection({ initialEvents = [] }) {
             retreats, weddings, and cultural gatherings.
           </p>
           <Link
-            href="/events/host"
+            href="/visit/FAQ"
             className="inline-block px-8 py-3 bg-slate-700 hover:bg-slate-600 border-2 border-slate-700 hover:border-slate-500 text-white font-light tracking-wide transition-all duration-300 rounded-md"
           >
             Learn About Hosting
