@@ -1,6 +1,7 @@
 // src/app/page.js
 import HeroCarousel from "./components/home/HeroCarousel";
 import ModularBulletinBoard from "./components/bulletinBoard/ModularBulletin";
+import QuickLinksGrid from './components/home/QuickLinksGrid';
 import { cache } from "react";
 
 // server fetch helper (ISR)
@@ -47,6 +48,7 @@ export default async function Home() {
   return (
     <main>
       <HeroCarousel slides={slides} /> {/* pass as prop */}
+      <QuickLinksGrid />
       <ModularBulletinBoard />
       {/* <CalendarSection /> */}
     </main>
