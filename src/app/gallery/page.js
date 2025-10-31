@@ -18,8 +18,8 @@ async function getGalleryImages() {
   `);
 
   const res = await fetch(
-    `https://${projectId}.api.sanity.io/v2023-10-10/data/query/${dataset}?query=${query}`,
-    { next: { revalidate } }
+    `https://${projectId}.apicdn.sanity.io/v2023-10-10/data/query/${dataset}?query=${query}`,
+    { next: { revalidate }, tags: ["sanity"] }
   );
   const { result } = await res.json();
   return result;
