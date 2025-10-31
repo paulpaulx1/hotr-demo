@@ -1,14 +1,15 @@
 // src/app/calendar/page.js
 import CalendarSection from "../components/events/CalendarSection";
 
-export const revalidate = 86400;
+export const revalidate = 86400; // 24h ISR
 
 async function getEvents() {
   const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
   const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
 
+  // ✅ Include recurrence fields
   const query = `
-    *[_type=="event" && defined(start)] | order(start asc){
+    *[_type == "event" && defined(start)] | order(start asc) {
       _id,
       title,
       "slug": slug.current,
@@ -17,7 +18,15 @@ async function getEvents() {
       allDay,
       location,
       description,
-      "heroUrl": coalesce(heroImage.asset->url, gallery[0].asset->url)
+      "heroUrl": coalesce(heroImage.asset->url, gallery[0].asset->url),
+      recurrence {
+        isRecurring,
+        frequency,
+        interval,
+        daysOfWeek,
+        count,
+        until
+      }
     }
   `;
 
@@ -30,7 +39,6 @@ async function getEvents() {
   });
 
   if (!res.ok) throw new Error(`Sanity fetch failed: ${res.status}`);
-
   const { result } = await res.json();
   return result || [];
 }

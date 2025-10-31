@@ -48,45 +48,68 @@ export default function EventsCalendar({ events = [] }) {
   }, []);
 
   // ✅ Normalize + sort events
+  // ✅ Normalize + expand recurring events based on Sanity schema
   const rbcEvents = useMemo(() => {
     const seen = new Set();
 
-    // Helper: expand recurrence (supports "weekly", "monthly", "daily")
     const expandRecurrence = (event) => {
-      if (!event.recurrence || !event.recurrence.frequency) return [event];
+      const rec = event.recurrence;
+      if (!rec?.isRecurring || !rec.frequency) return [event];
+
+      const freq = rec.frequency.toLowerCase();
+      const interval = rec.interval || 1;
+      const count = rec.count || 50; // max 50 repeats safeguard
+      const until = rec.until ? new Date(rec.until) : null;
+      const daysOfWeek = rec.daysOfWeek || [];
 
       const instances = [];
-      const freq = event.recurrence.frequency.toLowerCase();
-      const interval = event.recurrence.interval || 1;
-      const count = event.recurrence.count || 10; // limit to avoid infinite loops
-
       const start = new Date(event.start);
-      const end = new Date(event.end || event.start);
+      const end = event.end ? new Date(event.end) : new Date(event.start);
+
+      // daily, weekly, monthly, yearly
       for (let i = 0; i < count; i++) {
-        const newStart = new Date(start);
-        const newEnd = new Date(end);
+        const nextStart = new Date(start);
+        const nextEnd = new Date(end);
 
         if (freq === "daily") {
-          newStart.setDate(start.getDate() + i * interval);
-          newEnd.setDate(end.getDate() + i * interval);
+          nextStart.setDate(start.getDate() + i * interval);
+          nextEnd.setDate(end.getDate() + i * interval);
         } else if (freq === "weekly") {
-          newStart.setDate(start.getDate() + i * 7 * interval);
-          newEnd.setDate(end.getDate() + i * 7 * interval);
+          // generate for selected days or default to same weekday
+          const baseWeekday = start.getDay();
+          const activeDays = daysOfWeek.length
+            ? daysOfWeek.map((d) =>
+                ["SU", "MO", "TU", "WE", "TH", "FR", "SA"].indexOf(d)
+              )
+            : [baseWeekday];
+          activeDays.forEach((day) => {
+            const next = new Date(start);
+            const weekOffset = i * interval * 7;
+            next.setDate(start.getDate() + weekOffset + (day - baseWeekday));
+            const nextE = new Date(next);
+            nextE.setTime(next.getTime() + (end - start));
+            if (!until || next <= until) {
+              instances.push({ ...event, start: next, end: nextE });
+            }
+          });
+          continue;
         } else if (freq === "monthly") {
-          newStart.setMonth(start.getMonth() + i * interval);
-          newEnd.setMonth(end.getMonth() + i * interval);
+          nextStart.setMonth(start.getMonth() + i * interval);
+          nextEnd.setMonth(end.getMonth() + i * interval);
+        } else if (freq === "yearly") {
+          nextStart.setFullYear(start.getFullYear() + i * interval);
+          nextEnd.setFullYear(end.getFullYear() + i * interval);
         }
 
-        instances.push({
-          ...event,
-          start: newStart,
-          end: newEnd,
-        });
+        if (!until || nextStart <= until) {
+          instances.push({ ...event, start: nextStart, end: nextEnd });
+        }
       }
+
       return instances;
     };
 
-    // Build full event list
+    // expand all events
     const expanded = [];
     (events || []).forEach((e) => {
       if (!e.start) return;
@@ -105,9 +128,10 @@ export default function EventsCalendar({ events = [] }) {
       const series = expandRecurrence(base);
       series.forEach((evt) => {
         const id = `${evt.title}-${evt.start.toISOString()}`;
-        if (seen.has(id)) return;
-        seen.add(id);
-        expanded.push(evt);
+        if (!seen.has(id)) {
+          seen.add(id);
+          expanded.push(evt);
+        }
       });
     });
 
