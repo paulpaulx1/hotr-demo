@@ -39,6 +39,13 @@ export default function FacilitiesPage() {
       height: "22.85",
       name: "Reception Room",
     },
+    {
+      x: "45.88",
+      y: "75.12",
+      width: "8.55",
+      height: "20.30",
+      name: "Vestibule",
+    },
   ];
 
   // Second floor room data
