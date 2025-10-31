@@ -15,10 +15,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "House of the Redeemer | Episcopal Church in Historic Vanderbilt Mansion | Carnegie Hill NYC",
-  description: "Join our welcoming Episcopal community in a stunning historic Vanderbilt mansion on Carnegie Hill. Sunday services, weddings, cultural events & spiritual guidance in Manhattan.",
+  title:
+    'House of the Redeemer | Episcopal Church in Historic Vanderbilt Mansion | Carnegie Hill NYC',
+  description:
+    'Join our welcoming Episcopal community in a stunning historic Vanderbilt mansion on Carnegie Hill. Sunday services, weddings, cultural events & spiritual guidance in Manhattan.',
   icons: {
-    icon: "/favicon.png", // your slate logo
+    icon: [
+      { url: '/hotr-slate-logo.png', type: 'image/png' },
+      { url: '/hotr-slate-logo.png', sizes: '16x16', type: 'image/x-icon' },
+    ],
+    apple: '/hotr-slate-logo.png',
   },
 };
 

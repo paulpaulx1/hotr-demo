@@ -36,7 +36,7 @@ const MainNavigation = () => {
       dropdown: true,
       items: [
         { label: "Hosting Events & Retreats", href: "/hosting-events" },
-        { label: "FAQ", href: "/visit/FAQ" },
+        { label: "FAQ", href: "/visit/faq" },
         { label: "TV & Film", href: "/filmandtv" },
       ],
     },
