@@ -24,7 +24,7 @@ export default function GalleryGrid({ images }) {
     title: img.title,
     description: img.description,
   }));
-
+  console.log('slides',slides);
   return (
     <section className='py-24 px-6 bg-white'>
       <div className='max-w-[1400px] mx-auto'>
