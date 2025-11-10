@@ -21,6 +21,7 @@ async function getBoardData() {
       "staff": staff[]->{
         name,
         role,
+        email,
         "photoUrl": photo.asset->url + "?w=600&h=600&fit=crop&auto=format"
       }
     }
@@ -191,12 +192,23 @@ export default async function BoardPage() {
                       </svg>
                     </div>
                   )}
+
                   <h4 className="font-medium text-slate-900 text-lg mb-1">
                     {m.name}
                   </h4>
-                  <p className="text-[#6b2f2a] text-sm font-medium">
-                    {m.role}
-                  </p>
+                  {m.role && (
+                    <p className="text-[#6b2f2a] text-sm font-medium mb-2">
+                      {m.role}
+                    </p>
+                  )}
+                  {m.email && (
+                    <a
+                      href={`mailto:${m.email}`}
+                      className="text-sm text-slate-600 hover:text-[#6b2f2a] underline transition-colors"
+                    >
+                      {m.email}
+                    </a>
+                  )}
                 </div>
               ))}
             </div>
