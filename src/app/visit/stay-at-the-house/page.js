@@ -51,8 +51,9 @@ export default function StayAtTheHousePage() {
             Booking Information
           </h2>
           <p className="text-slate-700 mb-6 leading-relaxed">
-            Once you've reviewed our booking and check-in requirements (below)
-            and decide to pursue a booking, please call the office directly at{" "}
+            Once you&rsquo;ve reviewed our booking and check-in requirements
+            (below) and decide to pursue a booking, please call the office
+            directly at{" "}
             <a
               href="tel:2122890399"
               className="text-[#6b2f2a] hover:underline"
@@ -62,11 +63,12 @@ export default function StayAtTheHousePage() {
             to place a deposit and secure a room.
           </p>
           <p className="text-slate-700 mb-6 leading-relaxed">
-            We suggest that new inquirers check our website — including the{" "}
+            We suggest that new inquirers check our website &mdash; including
+            the{" "}
             <a href="/faq" className="text-[#6b2f2a] hover:underline">
               FAQ section
             </a>{" "}
-            — to learn more about the House and its mission.
+            &mdash; to learn more about the House and its mission.
           </p>
         </div>
       </div>
@@ -78,7 +80,7 @@ export default function StayAtTheHousePage() {
             Guest Requirements
           </h2>
           <ul className="text-slate-700 space-y-3 leading-relaxed list-disc list-inside">
-            <li>Arrivals must be between 10 am – 5 pm, Monday–Friday.</li>
+            <li>Arrivals must be between 10 am &ndash; 5 pm, Monday&ndash;Friday.</li>
             <li>Guests must be able to walk stairs with ease.</li>
             <li>No guests under 16 years of age.</li>
             <li>The House cannot accept package deliveries for guests.</li>
@@ -91,7 +93,7 @@ export default function StayAtTheHousePage() {
       <div className="bg-[#fbf9f7] py-16">
         <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-6 text-center">
-            Deposits & Payments
+            Deposits &amp; Payments
           </h2>
           <p className="text-slate-700 mb-4 leading-relaxed">
             A <strong>25% deposit</strong> is required upon making a reservation,
@@ -102,10 +104,10 @@ export default function StayAtTheHousePage() {
             Effective <strong>January 2, 2026</strong>, room rates will be:
           </p>
           <ul className="text-slate-700 mb-4 space-y-2 leading-relaxed">
-            <li>Single – shared bath · $155 per night</li>
-            <li>Single – private bath · $170 per night</li>
-            <li>Double – shared bath · $185 per night</li>
-            <li>Double – private bath · $210 per night</li>
+            <li>Single &ndash; shared bath &middot; $155 per night</li>
+            <li>Single &ndash; private bath &middot; $170 per night</li>
+            <li>Double &ndash; shared bath &middot; $185 per night</li>
+            <li>Double &ndash; private bath &middot; $210 per night</li>
           </ul>
           <p className="text-slate-700 leading-relaxed">
             A <strong>3% surcharge</strong> applies to all credit card
@@ -137,7 +139,7 @@ export default function StayAtTheHousePage() {
             </a>{" "}
             for booking inquiries.
           </p>
-          <p className="text-slate-500 italic">— House Staff</p>
+          <p className="text-slate-500 italic">&mdash; House Staff</p>
         </div>
       </div>
     </main>
