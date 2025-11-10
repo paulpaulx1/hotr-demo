@@ -4,14 +4,24 @@ import Footer from "./components/footer/Footer";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
+import { Inter } from "next/font/google";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+});
+
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 
 export const metadata = {
   title:
-    "House of the Redeemer | Episcopal Church in Historic Vanderbilt Mansion | Carnegie Hill NYC",
+    "House of the Redeemer | Episcopal Church in Historic Fabbri Home | Carnegie Hill NYC",
   description:
-    "Join our welcoming Episcopal community in a stunning historic Vanderbilt mansion on Carnegie Hill. Sunday services, weddings, cultural events & spiritual guidance in Manhattan.",
+    "Join our welcoming Episcopal community in a stunning historic Fabbri Home on Carnegie Hill. Sunday services, weddings, cultural events & spiritual guidance in Manhattan.",
   icons: {
     icon: [
       { url: "/hotr-slate-logo.png", type: "image/png" },
@@ -24,7 +34,7 @@ export const metadata = {
     url: "https://www.houseoftheredeemer.org",
     title: "House of the Redeemer",
     description:
-      "An Episcopal church and retreat house in a historic Vanderbilt mansion on the Upper East Side of Manhattan.",
+      "An Episcopal church and retreat house in Edith and Ernesto Fabbri's historic home on the Upper East Side of Manhattan.",
     images: [{ url: "/hotr-slate-logo.png" }],
   },
   twitter: {
@@ -43,7 +53,7 @@ export default function RootLayout({ children }) {
     name: "House of the Redeemer",
     alternateName: "The House of the Redeemer Episcopal Church",
     description:
-      "An Episcopal church and retreat house located in a historic Vanderbilt mansion on Manhattan’s Upper East Side. Offering worship, programs, and cultural gatherings since 1914.",
+      "An Episcopal church and retreat house located in Edith and Ernesto Fabbri's historic home on Manhattan’s Upper East Side. Offering worship, programs, and cultural gatherings since 1914.",
     url: "https://www.houseoftheredeemer.org",
     telephone: "+1-212-289-0399",
     isAccessibleForFree: true,
@@ -88,13 +98,13 @@ export default function RootLayout({ children }) {
     ],
     containedInPlace: {
       "@type": "Place",
-      name: "Historic Vanderbilt Mansion, Carnegie Hill",
+      name: "Historic Fabbri Home, Carnegie Hill",
     },
     keywords: [
       "Episcopal church",
       "Upper East Side",
       "Carnegie Hill",
-      "Vanderbilt mansion",
+      "Fabbri Home",
       "retreat house",
       "worship services",
       "New York City",
@@ -103,7 +113,7 @@ export default function RootLayout({ children }) {
   };
 
   return (
-    <html lang="en">
+    <html lang="en" className={inter.className}>
       <head>
         {/* ✅ Server-rendered JSON-LD injected here */}
         <script

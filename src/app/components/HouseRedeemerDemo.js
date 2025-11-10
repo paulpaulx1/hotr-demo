@@ -6,12 +6,12 @@ import { ChevronLeft, ChevronRight, Menu, X } from 'lucide-react';
 const SEOHead = () => {
   useEffect(() => {
     // Update document title
-    document.title = "House of the Redeemer | Episcopal Church in Historic Vanderbilt Mansion | Carnegie Hill NYC";
+    document.title = "House of the Redeemer | Episcopal Church in Historic Fabbri Home | Carnegie Hill NYC";
 
     // Create or update meta tags
     const metaTags = [
-      { name: "description", content: "Join our welcoming Episcopal community in a stunning historic Vanderbilt mansion on Carnegie Hill. Sunday services, weddings, cultural events & spiritual guidance in Manhattan." },
-      { name: "keywords", content: "Episcopal church NYC, Carnegie Hill church, Vanderbilt mansion, Manhattan church, Sunday service, wedding venue NYC, historic church, Episcopal community, spiritual guidance, Upper East Side church" },
+      { name: "description", content: "Join our welcoming Episcopal community in a stunning historic Fabbri Home on Carnegie Hill. Sunday services, weddings, cultural events & spiritual guidance in Manhattan." },
+      { name: "keywords", content: "Episcopal church NYC, Carnegie Hill church, Fabbri Home, Manhattan church, Sunday service, wedding venue NYC, historic church, Episcopal community, spiritual guidance, Upper East Side church" },
       { name: "author", content: "House of the Redeemer" },
       { name: "robots", content: "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" },
       { name: "googlebot", content: "index, follow" },
@@ -24,7 +24,7 @@ const SEOHead = () => {
       // Open Graph tags
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "House of the Redeemer" },
-      { property: "og:title", content: "House of the Redeemer | Episcopal Church in Historic Vanderbilt Mansion" },
+      { property: "og:title", content: "House of the Redeemer | Episcopal Church in Historic Fabbri Home" },
       { property: "og:description", content: "Experience worship in one of Manhattan's most beautiful historic spaces. Join our welcoming Episcopal community on Carnegie Hill for Sunday services, weddings, and cultural events." },
       { property: "og:image", content: "https://www.houseoftheredeemer.org/wp-content/uploads/house-of-the-redeemer_entry1-768x512.jpg" },
       { property: "og:image:width", content: "1200" },
@@ -37,7 +37,7 @@ const SEOHead = () => {
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:site", content: "@houseredeemer" },
       { name: "twitter:creator", content: "@houseredeemer" },
-      { name: "twitter:title", content: "House of the Redeemer | Episcopal Church in Historic Vanderbilt Mansion" },
+      { name: "twitter:title", content: "House of the Redeemer | Episcopal Church in Historic Fabbri Home" },
       { name: "twitter:description", content: "Experience worship in one of Manhattan's most beautiful historic spaces. Join our welcoming Episcopal community on Carnegie Hill." },
       { name: "twitter:image", content: "https://www.houseoftheredeemer.org/wp-content/uploads/house-of-the-redeemer_entry1-768x512.jpg" },
       { name: "twitter:image:alt", content: "Historic entrance of House of the Redeemer Episcopal Church" }
@@ -71,7 +71,7 @@ const SEOHead = () => {
       "@context": "https://schema.org",
       "@type": "Church",
       "name": "House of the Redeemer",
-      "description": "A welcoming Episcopal community in a historic Vanderbilt mansion on Carnegie Hill, offering worship services, cultural events, and spiritual guidance in Manhattan.",
+      "description": "A welcoming Episcopal community in Edith and Ernesto Fabbri's historic home on Carnegie Hill, offering worship services, cultural events, and spiritual guidance in Manhattan.",
       "url": "https://www.houseoftheredeemer.org",
       "image": "https://www.houseoftheredeemer.org/wp-content/uploads/house-of-the-redeemer_entry1-768x512.jpg",
       "address": {
@@ -97,7 +97,7 @@ const SEOHead = () => {
       ],
       "containsPlace": {
         "@type": "HistoricBuilding",
-        "name": "Vanderbilt Mansion",
+        "name": "Fabbri Home",
         "description": "Historic mansion converted to Episcopal church and cultural center",
         "architect": "Warren and Wetmore"
       },
@@ -128,7 +128,7 @@ const SEOHead = () => {
             "itemOffered": {
               "@type": "Service", 
               "name": "Wedding Ceremonies",
-              "description": "Sacred wedding ceremonies in historic Vanderbilt mansion"
+              "description": "Sacred wedding ceremonies in historic Fabbri Home"
             }
           },
           {
@@ -299,7 +299,7 @@ const HeroCarousel = () => {
       image: "https://www.houseoftheredeemer.org/wp-content/uploads/house-of-the-redeemer_entry1-768x512.jpg",
       title: "Worship • Community • Renewal",
       services: ["Sunday Services", "Cultural Events", "Spiritual Guidance"],
-      description: "A welcoming Episcopal community in a historic Vanderbilt mansion on Carnegie Hill"
+      description: "A welcoming Episcopal community in Edith and Ernesto Fabbri's historic home on Carnegie Hill"
     },
     {
       image: "https://www.houseoftheredeemer.org/wp-content/uploads/house-of-the-redeemer_library5-1024x683.jpg",
@@ -433,7 +433,7 @@ const HeroCarousel = () => {
       {/* Historic Project Info (desktop only) */}
       <div className="absolute bottom-8 left-8 z-20 text-white max-w-xs hidden lg:block">
         <h3 className="font-serif text-xl font-medium mb-2">Historic Sanctuary</h3>
-        <p className="text-white/80 text-sm mb-4 font-light">Vanderbilt Mansion</p>
+        <p className="text-white/80 text-sm mb-4 font-light">Fabbri Home</p>
         <a
           href="#about"
           className="text-white/90 hover:text-white cursor-pointer text-sm font-light border-b border-white/30 hover:border-white transition-all duration-300 hover:-translate-y-0.5"
@@ -451,7 +451,7 @@ const AboutSection = () => {
     {
       title: "Historic Setting",
       description:
-        "Our sacred space occupies a beautifully preserved Vanderbilt mansion, offering a unique blend of architectural grandeur and intimate worship experience in the heart of Manhattan."
+        "Our sacred space occupies a beautifully preserved Fabbri Home, offering a unique blend of architectural grandeur and intimate worship experience in the heart of Manhattan."
     },
     {
       title: "Episcopal Tradition",

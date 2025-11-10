@@ -112,9 +112,9 @@ export default function HeroCarousel({ slides = [] }) {
                   >
                     {s.services.map((service, idx) => (
                       <React.Fragment key={service}>
-                        <span className='text-white/95'>{service}</span>
+                        <span className='text-white/95 font-semibold text-xl'>{service}</span>
                         {idx < s.services.length - 1 && (
-                          <span className='text-white/60 ml-6 md:ml-12'>|</span>
+                          <span className='text-white/60 ml-6 md:ml-12 font-semibold'>|</span>
                         )}
                       </React.Fragment>
                     ))}
@@ -124,7 +124,7 @@ export default function HeroCarousel({ slides = [] }) {
                 {/* description */}
                 {s.description && (
                   <p
-                    className={`text-xl md:text-2xl font-light max-w-3xl mx-auto mb-12 text-white/90 leading-relaxed transition-all duration-700 ${
+                    className={`text-l md:text-xl font-light max-w-3xl mx-auto mb-12 text-white/90 leading-relaxed transition-all duration-700 ${
                       active
                         ? 'opacity-100 translate-y-0'
                         : 'opacity-0 translate-y-8'
@@ -181,7 +181,7 @@ export default function HeroCarousel({ slides = [] }) {
           Historic Sanctuary
         </h3>
         <p className='text-white/80 text-sm mb-4 font-light'>
-          Vanderbilt Mansion
+          Fabbri Home
         </p>
         <Link
           href='/contact'
