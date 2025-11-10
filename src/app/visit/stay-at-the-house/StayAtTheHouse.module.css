@@ -1,0 +1,82 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-serif, Georgia, serif);
+  color: #334155;
+  line-height: 1.6;
+  background-color: #fff;
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  height: 45vh;
+  min-height: 300px;
+  overflow: hidden;
+}
+
+.heroImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+}
+
+.title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  font-weight: 400;
+  opacity: 0.9;
+}
+
+/* Sections */
+.section {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem;
+}
+
+.section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1e293b;
+  margin-bottom: 0.75rem;
+}
+
+/* Scoped element selectors */
+.section ul {
+  margin: 0.75rem 0 1rem 1.25rem;
+  padding: 0;
+}
+
+.section a {
+  color: #0b4b91;
+  text-decoration: underline;
+}
+
+.section .rates {
+  list-style: none;
+  margin-top: 0.5rem;
+}
+
+.signature {
+  margin-top: 1rem;
+  font-style: italic;
+  color: #475569;
+  text-align: right;
+}

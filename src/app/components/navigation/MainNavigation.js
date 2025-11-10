@@ -38,6 +38,7 @@ const MainNavigation = () => {
         { label: "Hosting Events & Retreats", href: "/hosting-events" },
         { label: "FAQ", href: "/visit/faq" },
         { label: "TV & Film", href: "/filmandtv" },
+        { label: "Stay at the House", href: "/visit/stay-at-the-house" },
       ],
     },
     { label: "Calendar", href: "/calendar", dropdown: false },
