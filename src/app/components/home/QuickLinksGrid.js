@@ -5,14 +5,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 const defaultCards = [
-  { title: 'WELCOME', image: '/images/welcome-card.jpg', link: '/about/history', description: 'Learn about our community' },
-  { title: 'MASS TIMES', image: '/images/mass-times-card.jpg', link: '/worship', description: 'Service schedules' },
-  { title: 'GIVING', image: '/images/giving-card.jpg', link: '/give', description: 'Support our mission' },
-  { title: 'CALENDAR', image: '/images/volunteer-card.jpg', link: '/calendar', description: 'Join us in community' },
-  { title: 'GALLERY', image: '/images/gallery-card.jpg', link: '/gallery', description: 'Explore our historic space' },
-  { title: 'TV & FILM', image: '/images/tvfilm-card.jpg', link: '/filmandtv', description: 'Film at House of the Redeemer' },
-  { title: 'CONTACT US', image: '/images/contact-card.jpg', link: '/contact', description: 'Get in touch' },
-  { title: 'HOSTING EVENTS', image: '/images/tour-card.jpg', link: '/hosting-events', description: 'Plan your next gathering' },
+  { title: 'Welcome', image: '/images/welcome-card.jpg', link: '/about/history', description: 'Learn about our community' },
+  { title: 'Mass Times', image: '/images/mass-times-card.jpg', link: '/worship', description: 'Service schedules' },
+  { title: 'Giving', image: '/images/giving-card.jpg', link: '/give', description: 'Support our mission' },
+  { title: 'Calendar', image: '/images/volunteer-card.jpg', link: '/calendar', description: 'Join us in community' },
+  { title: 'Gallery', image: '/images/gallery-card.jpg', link: '/gallery', description: 'Explore our historic space' },
+  { title: 'TV & Film', image: '/images/tvfilm-card.jpg', link: '/filmandtv', description: 'Film at House of the Redeemer' },
+  { title: 'Contact Us', image: '/images/contact-card.jpg', link: '/contact', description: 'Get in touch' },
+  { title: 'Hosting Events', image: '/images/tour-card.jpg', link: '/hosting-events', description: 'Plan your next gathering' },
 ];
 
 export default function QuickLinksGrid() {
@@ -85,7 +85,7 @@ export default function QuickLinksGrid() {
 
               {/* Text */}
               <div className="relative z-10 h-full flex flex-col justify-end p-5 text-center">
-                <h3 className="font-serif text-xl md:text-2xl text-white font-light tracking-wide mb-2 leading-snug min-h-[2.8rem] flex items-end justify-center">
+                <h3 style={{ fontFamily: 'Georgia, serif' }} className="text-xl md:text-2xl text-white font-light tracking-wide mb-2 leading-snug min-h-[2.8rem] flex items-end justify-center">
                   {card.title}
                 </h3>
                 <p className="text-white/80 text-sm leading-snug min-h-[2.5rem] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
