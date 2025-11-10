@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 const defaultCards = [
   { title: 'Welcome', image: '/images/welcome-card.jpg', link: '/about/history', description: 'Learn about our community' },
-  { title: 'Mass Times', image: '/images/mass-times-card.jpg', link: '/worship', description: 'Service schedules' },
+  { title: 'Prayer Times', image: '/images/mass-times-card.jpg', link: '/worship', description: 'Service schedules' },
   { title: 'Giving', image: '/images/giving-card.jpg', link: '/give', description: 'Support our mission' },
   { title: 'Calendar', image: '/images/volunteer-card.jpg', link: '/calendar', description: 'Join us in community' },
   { title: 'Gallery', image: '/images/gallery-card.jpg', link: '/gallery', description: 'Explore our historic space' },
