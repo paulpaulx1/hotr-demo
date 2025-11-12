@@ -39,14 +39,12 @@ export default function FabbriPage() {
         <h2 className={styles.subhead}>Programs &amp; Events</h2>
         <p>
           Often a place of silence and meditation, the House of the Redeemer is
-          also a place of music and verse, and varied programs. To many, the
-          House is where insights and ideas are originated and shared in a
-          beautiful and unique setting. Please see the{" "}
+          also a place of music and theatrical performances. Please see the{" "}
           <Link href="/calendar" className="text-slate-800 underline">
             Calendar
           </Link>{" "}
           for information about upcoming programs and events at the House. You
-          can buy tickets for our upcoming concerts on{" "}
+          can buy tickets for our upcoming concerts and performances on{" "}
           <Link
             href="https://www.eventbrite.com/o/house-of-the-redeemer-16945185970"
             target="_blank"
