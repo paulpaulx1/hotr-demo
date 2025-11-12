@@ -67,11 +67,74 @@ export default async function BoardPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/50 flex items-center">
           <div className="max-w-7xl mx-auto px-6 text-center text-white">
             <h1 className="font-serif text-4xl md:text-5xl font-medium mb-4">
-              Staff & Board of Trustees 
+              Staff & Board of Trustees
             </h1>
           </div>
         </div>
       </div>
+
+      <section className="bg-slate-50 py-16">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
+            <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
+              Staff
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {staff.map((m) => (
+                <div
+                  key={m.name}
+                  className="bg-white p-6 rounded-md shadow-sm border border-slate-200 hover:border-[#6b2f2a] transition-colors text-center"
+                >
+                  {m.photoUrl ? (
+                    <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-4">
+                      <Image
+                        src={m.photoUrl}
+                        alt={m.name}
+                        width={64}
+                        height={64}
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 bg-[#6b2f2a] rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg
+                        className="w-8 h-8 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                        />
+                      </svg>
+                    </div>
+                  )}
+
+                  <h4 className="font-medium text-slate-900 text-lg mb-1">
+                    {m.name}
+                  </h4>
+                  {m.role && (
+                    <p className="text-[#6b2f2a] text-sm font-medium mb-2">
+                      {m.role}
+                    </p>
+                  )}
+                  {m.email && (
+                    <a
+                      href={`mailto:${m.email}`}
+                      className="text-sm text-slate-600 hover:text-[#6b2f2a] underline transition-colors"
+                    >
+                      {m.email}
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Trustees */}
       <section className="bg-slate-50 py-16">
@@ -150,68 +213,6 @@ export default async function BoardPage() {
       </section>
 
       {/* Staff */}
-      <section className="bg-slate-50 py-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
-            <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
-              Staff
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {staff.map((m) => (
-                <div
-                  key={m.name}
-                  className="bg-white p-6 rounded-md shadow-sm border border-slate-200 hover:border-[#6b2f2a] transition-colors text-center"
-                >
-                  {m.photoUrl ? (
-                    <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mb-4">
-                      <Image
-                        src={m.photoUrl}
-                        alt={m.name}
-                        width={64}
-                        height={64}
-                        className="object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-16 h-16 bg-[#6b2f2a] rounded-full flex items-center justify-center mx-auto mb-4">
-                      <svg
-                        className="w-8 h-8 text-white"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                        />
-                      </svg>
-                    </div>
-                  )}
-
-                  <h4 className="font-medium text-slate-900 text-lg mb-1">
-                    {m.name}
-                  </h4>
-                  {m.role && (
-                    <p className="text-[#6b2f2a] text-sm font-medium mb-2">
-                      {m.role}
-                    </p>
-                  )}
-                  {m.email && (
-                    <a
-                      href={`mailto:${m.email}`}
-                      className="text-sm text-slate-600 hover:text-[#6b2f2a] underline transition-colors"
-                    >
-                      {m.email}
-                    </a>
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* Contact CTA */}
       <section className="bg-[#fbf9f7] py-16 text-center">
