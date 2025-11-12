@@ -65,10 +65,7 @@ export default function FabbriPage() {
           Redeemer, offering exciting and creative programs played by the finest
           artists. Past performances have included the world-renowned artists
           Stanley Drucker, clarinetist; Andre Emelianoff, cellist; and Carol
-          Wincenc, flutist. Pianist and Artistic Director of the series, Andrew
-          Armstrong, praised by the <em>New York Times</em> for playing that
-          &ldquo;danced and glittered deliciously,&rdquo; frequently joins the
-          performances.
+          Wincenc, flutist.
         </p>
 
         <p>
@@ -91,16 +88,6 @@ export default function FabbriPage() {
       </section>
 
       {/* CTA */}
-      <div className="mt-12 text-center">
-        <Link
-          href="https://www.fabbrichamberconcerts.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block bg-slate-800 hover:bg-slate-900 text-white font-medium py-3 px-6 rounded-md transition-colors"
-        >
-          Visit Official Fabbri Concerts Website
-        </Link>
-      </div>
     </main>
   );
 }
