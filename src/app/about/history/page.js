@@ -147,7 +147,7 @@ export default function HistoryPage() {
             Today, the House is guided by a Board of Trustees, with Episcopal
             priests-in-residence providing spiritual care. Daily operations are
             overseen by the House Manager and staff. Board Member Percy
-            Preston&apos;s book <em>A Place Apart</em> is available for purchase
+            Preston Jr.&apos;s book <em>A Place Apart</em> is available for purchase
             at the House.
           </p>
         </div>
