@@ -28,8 +28,8 @@ export default function HistoryPage() {
                 History &amp; Neighborhood
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed">
-                A Beaux-Arts townhouse transformed into a sanctuary for
-                reflection, retreat, and renewal.
+                A New York City–designated landmark in the Carnegie Hill
+                Historic District.
               </p>
             </div>
           </div>
@@ -146,9 +146,9 @@ export default function HistoryPage() {
           <p className="text-base sm:text-lg">
             Today, the House is guided by a Board of Trustees, with Episcopal
             priests-in-residence providing spiritual care. Daily operations are
-            overseen by the House Manager and staff. Board Member Percy
-            Preston Jr.&apos;s book <em>A Place Apart</em> is available for purchase
-            at the House.
+            overseen by the House Manager and staff. Board Member Percy Preston
+            Jr.&apos;s book <em>A Place Apart</em> is available for purchase at
+            the House.
           </p>
         </div>
       </section>
