@@ -43,7 +43,7 @@ export default function PreferredVendorsPage() {
       {/* Hero Section */}
       <div className='relative h-[400px] md:h-[750px] overflow-hidden'>
         <Image
-          src='/vendors-hero.jpg' // Replace with your actual hero image
+          src='/Courtyard_w_tables.jpg' 
           alt='Preferred Vendors - House of the Redeemer'
           fill
           className='object-cover object-center'
