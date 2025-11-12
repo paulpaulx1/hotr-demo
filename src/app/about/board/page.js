@@ -44,8 +44,11 @@ export const metadata = {
 };
 
 export default async function BoardPage() {
-  const { trustees = [], trusteesEmeritus = [], staff = [] } =
-    (await getBoardData()) || {};
+  const {
+    trustees = [],
+    trusteesEmeritus = [],
+    staff = [],
+  } = (await getBoardData()) || {};
 
   const officers = trustees.filter((t) => t.role);
   const members = trustees.filter((t) => !t.role);
@@ -66,10 +69,6 @@ export default async function BoardPage() {
             <h1 className="font-serif text-4xl md:text-5xl font-medium mb-4">
               Board of Trustees & Staff
             </h1>
-            <p className="text-lg md:text-xl text-white/90 leading-relaxed">
-              Meet the dedicated individuals who guide our mission and
-              operations at the House of the Redeemer.
-            </p>
           </div>
         </div>
       </div>
@@ -142,9 +141,7 @@ export default async function BoardPage() {
                   <h4 className="font-medium text-slate-900 text-lg mb-1">
                     {t.name}
                   </h4>
-                  {t.role && (
-                    <p className="text-slate-600 text-sm">{t.role}</p>
-                  )}
+                  {t.role && <p className="text-slate-600 text-sm">{t.role}</p>}
                 </div>
               ))}
             </div>
