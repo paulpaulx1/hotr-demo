@@ -104,7 +104,7 @@ export default function WorshipPage() {
             quiet visit to reflect, the Chapel of the Redeemer is open to all.
           </p>
           <Link
-            href="/visit/faq"
+            href="/contact"
             className="inline-block px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-md tracking-wide transition-all duration-300"
           >
             Plan Your Visit
