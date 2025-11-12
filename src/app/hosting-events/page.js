@@ -66,7 +66,7 @@ export default function HostingEventsPage() {
       <Section
         id='retreats'
         title='Retreats'
-        text="House of the Redeemer is dedicated to providing peace and serenity for those who seek 'a place apart' — the designation given to it by its donor, Edith Fabbri. The House offers unique spaces for prayer, meditation, and spiritual renewal, welcoming all to experience its tranquility."
+        text="House of the Redeemer is dedicated to providing peace and serenity for those who seek 'a place apart' — the designation given by Edith Fabbri. The House offers unique spaces for prayer, meditation, and spiritual renewal, welcoming all to experience its tranquility."
         image='/images/visiting-room.jpg'
         reverse={false}
       />
