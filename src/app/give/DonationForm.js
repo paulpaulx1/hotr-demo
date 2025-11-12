@@ -12,6 +12,7 @@ import { Loader2 } from "lucide-react";
 
 // Initialize Stripe
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+console.log('stripe promise',stripePromise);
 
 // Card Element Styling
 const CARD_ELEMENT_OPTIONS = {

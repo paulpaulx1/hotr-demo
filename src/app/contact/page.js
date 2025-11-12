@@ -146,7 +146,7 @@ export default function ContactPage() {
             Office Hours
           </h2>
           <p className='text-slate-600 mb-8'>
-            Our office is open Monday through Friday, 9:00 AM to 5:00 PM.
+            Our office is open Monday through Friday, 10:00 AM to 5:00 PM.
             <br />
             We typically respond to inquiries within 1-2 business days.
           </p>
