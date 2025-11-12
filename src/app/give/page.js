@@ -30,8 +30,7 @@ export default function DonatePage() {
               </h1>
               <p className='text-lg md:text-xl text-white/90 leading-relaxed'>
                 Your generous donation helps us continue providing a sanctuary
-                for spiritual growth, hospitality, and community programs that
-                nurture the mind, body, and spirit.
+                for spiritual growth, hospitality, and community programs.
               </p>
             </div>
           </div>
