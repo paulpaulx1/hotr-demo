@@ -100,14 +100,15 @@ export default function WorshipPage() {
             Visit the Chapel
           </h3>
           <p className="text-slate-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Whether for a moment of stillness, participation in prayer, or a
-            quiet visit to reflect, the Chapel of the Redeemer is open to all.
+            Whether for a moment of stillness or participation in personal or
+            communal prayer, the Chapel at the House of the Redeemer is open to
+            all.
           </p>
           <Link
-            href="/contact"
+            href="/calendar"
             className="inline-block px-8 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-md tracking-wide transition-all duration-300"
           >
-            Plan Your Visit
+            View Prayer Times
           </Link>
         </div>
       </section>
