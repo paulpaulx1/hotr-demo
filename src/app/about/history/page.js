@@ -29,7 +29,7 @@ export default function HistoryPage() {
               </h1>
               <p className="text-base sm:text-lg md:text-xl text-white/90 leading-relaxed">
                 A New York City–designated landmark in the Carnegie Hill
-                Historic District.
+                Historic District, built in 1916 for Edith and Ernesto Fabbri.
               </p>
             </div>
           </div>
