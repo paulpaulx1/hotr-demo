@@ -67,7 +67,7 @@ export default async function BoardPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/50 flex items-center">
           <div className="max-w-7xl mx-auto px-6 text-center text-white">
             <h1 className="font-serif text-4xl md:text-5xl font-medium mb-4">
-              Board of Trustees & Staff
+              Staff & Board of Trustees 
             </h1>
           </div>
         </div>
