@@ -1,5 +1,5 @@
 "use client";
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Mail,
@@ -40,8 +40,10 @@ const Footer = () => {
             </div>
 
             <p className="text-white/70 mb-6">
-              A spiritual center offering hospitality, programs and meeting
-              rooms in an environment which nurtures the mind, body, and spirit.
+              The House of the Redeemer, a “place apart”, based on the Episcopal
+              tradition is open to all. Housed in a land-marked building, we
+              provide hospitality through worship, spiritual renewal, and
+              cultural and community events.
             </p>
 
             <div className="flex space-x-4 mt-auto">
@@ -78,7 +80,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href='/visit/faq'
+                  href="/visit/faq"
                   className="text-white/70 hover:text-white transition-colors"
                 >
                   Visit
