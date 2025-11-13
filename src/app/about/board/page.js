@@ -79,7 +79,7 @@ export default async function BoardPage() {
             <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
               Staff
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {staff.map((m) => (
                 <div
                   key={m.name}
@@ -222,7 +222,7 @@ export default async function BoardPage() {
           </h3>
           <p className="text-slate-600 mb-6">
             Have questions or want to learn more about supporting our mission?
-            We’d love to hear from you.
+            We'd love to hear from you.
           </p>
           <a
             href="/contact"
