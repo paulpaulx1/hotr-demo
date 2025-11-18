@@ -179,14 +179,14 @@ export default function FacilitiesPage() {
       <div className="md:flex md:gap-8">
         <div className="md:w-1/2 mb-8 md:mb-0">
           {renderFloorplan(
-            "/house-of-the-redeemer_floorplan1final.jpeg",
+            "/house-of-the-redeemer_floorplan1final2.jpg",
             firstFloorRoomData,
             "First Floor"
           )}
         </div>
         <div className="md:w-1/2">
           {renderFloorplan(
-            "/house-of-the-redeemer_floorplan2final.jpeg",
+            "/house-of-the-redeemer_floorplan2final.jpg",
             secondFloorRoomData,
             "Second Floor"
           )}
