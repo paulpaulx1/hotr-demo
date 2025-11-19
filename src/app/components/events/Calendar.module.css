@@ -1,3 +1,125 @@
+/* Ensure day view events are positioned correctly */
+.calendarWrapper :global(.rbc-time-view) {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  background: white;
+}
+
+/* Time slot styling */
+.calendarWrapper :global(.rbc-time-slot) {
+  min-height: 40px;
+}
+
+.calendarWrapper :global(.rbc-timeslot-group) {
+  min-height: 80px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+/* Fix event positioning in day view - CRITICAL */
+.calendarWrapper :global(.rbc-day-slot .rbc-event) {
+  position: absolute !important;
+  height: auto !important;
+  width: calc(100% - 10px) !important;
+  left: 5px !important;
+  border-left: 3px solid #3b82f6 !important;
+  background: #dbeafe !important;
+  border-radius: 4px !important;
+  padding: 4px 8px !important;
+  overflow: visible !important;
+}
+
+.calendarWrapper :global(.rbc-day-slot .rbc-event:hover) {
+  background: #bfdbfe !important;
+  transform: none !important;
+}
+
+/* Event content in day view */
+.calendarWrapper :global(.rbc-event-content) {
+  font-size: 0.875rem;
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Time labels */
+.calendarWrapper :global(.rbc-time-content) {
+  border-top: 1px solid #e2e8f0;
+}
+
+.calendarWrapper :global(.rbc-time-header-content) {
+  border-left: 1px solid #e2e8f0;
+}
+
+.calendarWrapper :global(.rbc-day-slot) {
+  position: relative;
+}
+
+/* Current time indicator */
+.calendarWrapper :global(.rbc-current-time-indicator) {
+  background-color: #ef4444;
+  height: 2px;
+}
+
+.calendarWrapper :global(.rbc-current-time-indicator)::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: -4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #ef4444;
+}
+
+/* Responsive adjustments for day view */
+@media (max-width: 768px) {
+  .calendarWrapper :global(.rbc-time-slot) {
+    min-height: 30px;
+  }
+  
+  .calendarWrapper :global(.rbc-timeslot-group) {
+    min-height: 60px;
+  }
+  
+  .calendarWrapper :global(.rbc-day-slot .rbc-event) {
+    font-size: 0.75rem;
+    padding: 2px 6px !important;
+  }
+}
+
+
+
+
+.backToMonthButton {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #334155;
+  border: none;
+  color: white;
+  font-size: 0.875rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.backToMonthButton:hover {
+  background: #1e293b;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Ensure day view has proper styling */
+.calendarWrapper :global(.rbc-day-slot) {
+  min-height: 600px;
+}
+
+.calendarWrapper :global(.rbc-time-view) {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  background: white;
+}
+
+
 .calendarWrapper {
   background: #fff;
   border: 1px solid #e5e7eb;
@@ -125,6 +247,7 @@
   min-height: 160px !important;
   border-bottom: 1px solid #e2e8f0;
 }
+
 
 @media (max-width: 768px) {
   .calendarWrapper :global(.rbc-month-row) {

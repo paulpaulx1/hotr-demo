@@ -19,16 +19,10 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function EventsCalendar({ events = [] }) {
-  const [hoveredEvent, setHoveredEvent] = useState(null);
-  const [coords, setCoords] = useState({
-    x: 0,
-    y: 0,
-    flipY: false,
-    flipX: false,
-  });
   const [isMobile, setIsMobile] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(1024);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentView, setCurrentView] = useState('month');
   const router = useRouter();
 
   // ✅ Resize detection
@@ -138,100 +132,74 @@ export default function EventsCalendar({ events = [] }) {
     return expanded.sort((a, b) => a.start - b.start);
   }, [events]);
 
-  // ✅ Tooltip positioning
-  const tooltipStyle = useMemo(() => {
-    const offsetY = 20;
-    const offsetX = 14;
-    const tooltipWidth = 280;
-
-    let top = coords.y - offsetY;
-    let transform = "translate(-50%, -100%)";
-    if (coords.flipY) {
-      top = coords.y + offsetY;
-      transform = "translate(-50%, 0)";
-    }
-
-    const preferredLeft = coords.x + offsetX;
-    const maxLeft = viewportWidth - tooltipWidth - 24;
-    const left = coords.flipX
-      ? Math.max(12, maxLeft)
-      : Math.max(12, Math.min(preferredLeft, maxLeft));
-
-    return { top, left, transform };
-  }, [coords, viewportWidth]);
-
-  // ✅ Hover tracking
-  const handleMouseMove = useCallback(
-    (e, event) => {
-      if (isMobile) return;
-      const tooltipWidth = 280;
-      const tooltipHeight = 200;
-      const padding = 16;
-      const flipY = e.clientY - tooltipHeight - padding < 0;
-      const flipX = e.clientX + tooltipWidth / 2 > viewportWidth;
-      setCoords({ x: e.clientX, y: e.clientY, flipY, flipX });
-      setHoveredEvent(event);
-    },
-    [isMobile, viewportWidth]
-  );
-
   const handleNavigate = useCallback((newDate) => setCurrentDate(newDate), []);
 
+  const handleSelectSlot = useCallback((slotInfo) => {
+    setCurrentDate(slotInfo.start);
+    setCurrentView('day');
+  }, []);
+
   // ✅ Custom toolbar
-  const CustomToolbar = ({ label, onNavigate }) => (
-    <div className={styles.customToolbar}>
-      <button
-        className={styles.navButton}
-        onClick={() => onNavigate("PREV")}
-        aria-label="Previous month"
-      >
-        ← Previous Month
-      </button>
-
-      <div className={styles.toolbarLabelWrap} aria-live="polite">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={label}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className={styles.toolbarLabel}
-          >
-            {label}
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      <button
-        className={styles.navButton}
-        onClick={() => onNavigate("NEXT")}
-        aria-label="Next month"
-      >
-        Next Month →
-      </button>
-    </div>
-  );
-
-  // ✅ Event cell
-  const EventComponent = ({ event }) => (
-    <div
-      className={styles.eventItem}
-      onMouseEnter={(e) => handleMouseMove(e, event)}
-      onMouseMove={(e) => handleMouseMove(e, event)}
-      onMouseLeave={() => !isMobile && setHoveredEvent(null)}
+const CustomToolbar = ({ label, onNavigate, view, onView }) => (
+  <div className={styles.customToolbar}>
+    <button
+      className={styles.navButton}
+      onClick={() => onNavigate('PREV')}
+      aria-label={view === 'month' ? 'Previous month' : 'Previous day'}
     >
-      <div className={styles.eventTitle}>{event.title}</div>
-      {event.start && (
-        <div className={styles.eventTime}>
-          {event.start.toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-          })}
-        </div>
+      ← Previous {view === 'month' ? 'Month' : 'Day'}
+    </button>
+
+    <div className={styles.toolbarLabelWrap} aria-live='polite'>
+      <AnimatePresence mode='wait'>
+        <motion.div
+          key={label}
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.22, ease: 'easeOut' }}
+          className={styles.toolbarLabel}
+        >
+          {label}
+        </motion.div>
+      </AnimatePresence>
+      {/* Add view toggle button below the label */}
+      {view === 'day' && (
+        <button
+          onClick={() => onView('month')}
+          className={styles.backToMonthButton}
+          aria-label='Back to month view'
+        >
+          ← Back to Month
+        </button>
       )}
     </div>
-  );
+
+    <button
+      className={styles.navButton}
+      onClick={() => onNavigate('NEXT')}
+      aria-label={view === 'month' ? 'Next month' : 'Next day'}
+    >
+      Next {view === 'month' ? 'Month' : 'Day'} →
+    </button>
+  </div>
+);
+
+
+  // ✅ Event cell
+const EventComponent = ({ event }) => (
+  <div className={styles.eventItem}>
+    <div className={styles.eventTitle}>{event.title}</div>
+    {event.start && (
+      <div className={styles.eventTime}>
+        {event.start.toLocaleTimeString([], {
+          hour: 'numeric',
+          minute: '2-digit',
+        })}
+      </div>
+    )}
+  </div>
+);
 
   return (
     <div className={styles.calendarWrapper}>
@@ -239,59 +207,23 @@ export default function EventsCalendar({ events = [] }) {
         <Calendar
           localizer={localizer}
           events={rbcEvents}
-          startAccessor="start"
-          endAccessor="end"
-          titleAccessor="title"
-          allDayAccessor="allDay"
+          startAccessor='start'
+          endAccessor='end'
+          titleAccessor='title'
+          allDayAccessor='allDay'
           components={{ event: EventComponent, toolbar: CustomToolbar }}
           popup
-          views={{ month: true }}
-          view="month"
+          views={{ month: true, day: true }} // ✅ Enable both views
+          view={currentView} // ✅ Use state for current view
+          onView={setCurrentView} // ✅ Handle view changes
           date={currentDate}
           onNavigate={handleNavigate}
+          onSelectSlot={handleSelectSlot} // ✅ Handle day cell clicks
+          selectable // ✅ Enable slot selection
           onSelectEvent={(event) => event?.href && router.push(event.href)}
           showMultiDayTimes={false}
         />
       </div>
-
-      {/* ✅ Hover card */}
-      {hoveredEvent && hoveredEvent.href && !isMobile && (
-        <a
-          href={hoveredEvent.href}
-          className={styles.hoverCard}
-          style={tooltipStyle}
-          onClick={(e) => {
-            e.stopPropagation(); // don't bubble to calendar
-            e.preventDefault(); // stop browser from jumping
-            if (hoveredEvent?.href) router.push(hoveredEvent.href); // manual nav
-          }}
-          onMouseDown={(e) => e.stopPropagation()}
-          onMouseLeave={() => setHoveredEvent(null)}
-        >
-          {hoveredEvent.heroUrl && (
-            <img
-              src={`${hoveredEvent.heroUrl}?w=600&fit=crop&auto=format`}
-              alt={hoveredEvent.title}
-              className={styles.hoverImage}
-            />
-          )}
-          <div className={styles.hoverContent}>
-            <h4 className={styles.hoverTitle}>{hoveredEvent.title}</h4>
-            {hoveredEvent.start && (
-              <p className={styles.hoverTime}>
-                {hoveredEvent.start.toLocaleString([], {
-                  dateStyle: "long",
-                  timeStyle: "short",
-                })}
-              </p>
-            )}
-            {hoveredEvent.description && (
-              <p>{hoveredEvent.description.slice(0, 140)}…</p>
-            )}
-            <div className={styles.hoverCta}>View details →</div>
-          </div>
-        </a>
-      )}
     </div>
   );
 }
