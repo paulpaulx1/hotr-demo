@@ -22,7 +22,7 @@ export default function EventsCalendar({ events = [] }) {
   const [isMobile, setIsMobile] = useState(false);
   const [viewportWidth, setViewportWidth] = useState(1024);
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [currentView, setCurrentView] = useState('month');
+  const [currentView, setCurrentView] = useState("month");
   const router = useRouter();
 
   // ✅ Resize detection
@@ -136,70 +136,69 @@ export default function EventsCalendar({ events = [] }) {
 
   const handleSelectSlot = useCallback((slotInfo) => {
     setCurrentDate(slotInfo.start);
-    setCurrentView('day');
+    setCurrentView("day");
   }, []);
 
   // ✅ Custom toolbar
-const CustomToolbar = ({ label, onNavigate, view, onView }) => (
-  <div className={styles.customToolbar}>
-    <button
-      className={styles.navButton}
-      onClick={() => onNavigate('PREV')}
-      aria-label={view === 'month' ? 'Previous month' : 'Previous day'}
-    >
-      ← Previous {view === 'month' ? 'Month' : 'Day'}
-    </button>
+  const CustomToolbar = ({ label, onNavigate, view, onView }) => (
+    <div className={styles.customToolbar}>
+      <button
+        className={styles.navButton}
+        onClick={() => onNavigate("PREV")}
+        aria-label={view === "month" ? "Previous month" : "Previous day"}
+      >
+        ← Previous {view === "month" ? "Month" : "Day"}
+      </button>
 
-    <div className={styles.toolbarLabelWrap} aria-live='polite'>
-      <AnimatePresence mode='wait'>
-        <motion.div
-          key={label}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.22, ease: 'easeOut' }}
-          className={styles.toolbarLabel}
-        >
-          {label}
-        </motion.div>
-      </AnimatePresence>
-      {/* Add view toggle button below the label */}
-      {view === 'day' && (
-        <button
-          onClick={() => onView('month')}
-          className={styles.backToMonthButton}
-          aria-label='Back to month view'
-        >
-          ← Back to Month
-        </button>
-      )}
+      <div className={styles.toolbarLabelWrap} aria-live="polite">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={label}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className={styles.toolbarLabel}
+          >
+            {label}
+          </motion.div>
+        </AnimatePresence>
+        {/* Add view toggle button below the label */}
+        {view === "day" && (
+          <button
+            onClick={() => onView("month")}
+            className={styles.backToMonthButton}
+            aria-label="Back to month view"
+          >
+            ← Back to Month
+          </button>
+        )}
+      </div>
+
+      <button
+        className={styles.navButton}
+        onClick={() => onNavigate("NEXT")}
+        aria-label={view === "month" ? "Next month" : "Next day"}
+      >
+        Next {view === "month" ? "Month" : "Day"} →
+      </button>
     </div>
-
-    <button
-      className={styles.navButton}
-      onClick={() => onNavigate('NEXT')}
-      aria-label={view === 'month' ? 'Next month' : 'Next day'}
-    >
-      Next {view === 'month' ? 'Month' : 'Day'} →
-    </button>
-  </div>
-);
-
+  );
 
   // ✅ Event cell
-const EventComponent = ({ event }) => (
-  <div className={styles.eventItem}>
-    <div className={styles.eventTitle}>{event.title}</div>
-    {event.start && (
-      <div className={styles.eventTime}>
-        {event.start.toLocaleTimeString([], {
-          hour: 'numeric',
-          minute: '2-digit',
-        })}
-      </div>
-    )}
-  </div>
-);
+  const EventComponent = ({ event }) => (
+    <div className={styles.eventItem}>
+      <div className={styles.eventTitle}>{event.title}</div>
+      {event.start && (
+        <div className={styles.eventTime}>
+          {event.start.toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit",
+          })}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div className={styles.calendarWrapper}>
@@ -207,10 +206,10 @@ const EventComponent = ({ event }) => (
         <Calendar
           localizer={localizer}
           events={rbcEvents}
-          startAccessor='start'
-          endAccessor='end'
-          titleAccessor='title'
-          allDayAccessor='allDay'
+          startAccessor="start"
+          endAccessor="end"
+          titleAccessor="title"
+          allDayAccessor="allDay"
           components={{ event: EventComponent, toolbar: CustomToolbar }}
           popup
           views={{ month: true, day: true }} // ✅ Enable both views
@@ -222,6 +221,9 @@ const EventComponent = ({ event }) => (
           selectable // ✅ Enable slot selection
           onSelectEvent={(event) => event?.href && router.push(event.href)}
           showMultiDayTimes={false}
+          /* ⭐️ NEW: BUSINESS HOURS LIMITS */
+          min={new Date(1970, 1, 1, 6, 0)} // start day view at 6:00am
+          max={new Date(1970, 1, 1, 22, 0)} // end at 10:00pm
         />
       </div>
     </div>
