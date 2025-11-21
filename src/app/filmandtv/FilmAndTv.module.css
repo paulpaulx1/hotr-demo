@@ -1,184 +1,303 @@
-.wrapper{
-  padding:6rem 2rem;
-  max-width:1200px;
-  margin:0 auto;
-  background:#fff;
+.wrapper {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #fff;
 }
 
-.heading{
-  font-family: "Garamond", serif;
-  font-size:3.5rem;
-  text-align:center;
-  margin:0 0 1.5rem;
-  color:rgb(23, 23, 23);
-  position:relative;
-}
-.heading:after{
-  content:"";
-  position:absolute;
-  bottom:-15px;
-  left:50%;
-  transform:translateX(-50%);
-  width:80px;height:3px;background:#6b2f2a;
+.heading {
+    font-family: "Garamond", serif;
+    font-size: 3.5rem;
+    text-align: center;
+    margin: 0 0 1.5rem;
+    color: rgb(23, 23, 23);
+    position: relative;
 }
 
-.intro{
-  text-align:center;color:#555;margin:0 auto 3rem;
-  font-size:1.125rem;line-height:1.7;max-width:800px;
+.heading:after {
+    content: "";
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background: #6b2f2a;
+}
+
+.intro {
+    text-align: center;
+    color: #555;
+    margin: 0 auto 3rem;
+    font-size: 1.125rem;
+    line-height: 1.7;
+    max-width: 800px;
 }
 
 /* list container: let the page grow; no fixed height */
-.grid{
-  display:flex;flex-direction:column;gap:0;
-  padding:0; /* scrollbar removed to avoid odd overflows */
+.grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    /* scrollbar removed to avoid odd overflows */
 }
 
 /* each row */
-.card{
-  display:flex;align-items:stretch;gap:clamp(1rem,3vw,3rem);
-  padding:3rem;position:relative;transition:background .2s ease;
-  contain:layout paint; /* avoids rare shimmer on image zoom */
+.card {
+    display: flex;
+    align-items: stretch;
+    gap: clamp(1rem, 3vw, 3rem);
+    padding: 3rem;
+    position: relative;
+    transition: background .2s ease;
+    contain: layout paint;
+    /* avoids rare shimmer on image zoom */
 
 }
-.card:hover{ background:#f9f5f5; }
+
+.card:hover {
+    background: #f9f5f5;
+}
 
 /* burgundy rule between items */
-.card:after{
-  content:""; position:absolute; bottom:0; left:10%; width:80%;
-  height:2px; background:#6b2f2a; opacity:.65;
+.card:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    width: 80%;
+    height: 2px;
+    background: #6b2f2a;
+    opacity: .65;
 }
-.card:last-child:after{ display:none; }
+
+.card:last-child:after {
+    display: none;
+}
 
 /* A/B alternating */
-.card:nth-of-type(even){ flex-direction:row-reverse; }
+.card:nth-of-type(even) {
+    flex-direction: row-reverse;
+}
+
+.card:nth-of-type(even).noImage {
+    flex-direction: row;
+}
+
+
+
 
 /* media block */
-.image{
-  flex:0 1 42%;
-  max-width:520px;
-  align-self:center;
+.image {
+    flex: 0 1 42%;
+    max-width: 520px;
+    align-self: center;
 }
-.imageEl{
-  display:block; width:100%; height:auto; max-height:420px;
-  object-fit:cover; border-radius:8px;
-  box-shadow:0 5px 15px rgba(107,47,42,.15);
-  transition:transform .35s ease, box-shadow .35s ease;
+
+.imageEl {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 420px;
+    object-fit: cover;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(107, 47, 42, .15);
+    transition: transform .35s ease, box-shadow .35s ease;
 }
-.card:hover .imageEl{
-  transform:scale(1.02);
-  box-shadow:0 10px 28px rgba(107,47,42,.25);
+
+.card:hover .imageEl {
+    transform: scale(1.02);
+    box-shadow: 0 10px 28px rgba(107, 47, 42, .25);
 }
 
 /* text block */
-.text{
-  flex:1 1 0;
-  padding:0;
-  display:flex;flex-direction:column;justify-content:center;
-  min-width:0; /* allow shrinking without overflow */
-  overflow-wrap:anywhere; /* avoid word overflow */
+.text {
+    flex: 1 1 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    min-width: 0;
+    /* allow shrinking without overflow */
+    overflow-wrap: anywhere;
+    /* avoid word overflow */
 }
 
-.text h2{
-  font-family:"Garamond", serif;
-  margin:0 0 .75rem;color:#222;font-size:2.1rem;line-height:1.2;
-  position:relative;
+.text h2 {
+    font-family: "Garamond", serif;
+    margin: 0 0 .75rem;
+    color: #222;
+    font-size: 2.1rem;
+    line-height: 1.2;
+    position: relative;
 }
-.text h2:after{
-  content:""; position:absolute; bottom:-8px; left:0; width:48px; height:2px; background:#6b2f2a;
+
+.text h2:after {
+    content: "";
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 48px;
+    height: 2px;
+    background: #6b2f2a;
 }
+
 /* .card:nth-of-type(even) .text h2:after{ left:auto; right:0; } */
 
-.year{ color:#6b2f2a; font-size:1.05rem; font-weight:600; margin:.75rem 0 1rem; }
-.location{ color:#444; font-size:1.02rem; margin-top:.75rem; font-style:italic; }
-.location strong{ color:#6b2f2a; font-weight:700; font-style:normal; }
+.year {
+    color: #6b2f2a;
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin: .75rem 0 1rem;
+}
 
-.description, .notes{
-  color:#2b2f36; line-height:1.7; margin:.5rem 0;
+.location {
+    color: #444;
+    font-size: 1.02rem;
+    margin-top: .75rem;
+    font-style: italic;
+}
+
+.location strong {
+    color: #6b2f2a;
+    font-weight: 700;
+    font-style: normal;
+}
+
+.description,
+.notes {
+    color: #2b2f36;
+    line-height: 1.7;
+    margin: .5rem 0;
 }
 
 /* when there is no image, make text full width and remove the gap nicely */
 /* Full-width (no image) state */
 .noImage {
-  flex-direction: column;
-  gap: 0;
-  padding: 3rem;
+    flex-direction: column;
+    gap: 0;
+    padding: 3rem;
 }
 
 .noImage .text {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;          /* centers text nicely */
+    width: 100%;
+    max-width: 900px;
+    margin: 0;
+    /* Changed from 'margin: 0 auto' to left-align */
 }
 
 /* Hide divider line for full-width cards */
 .noImage:after {
-  display: none !important;
+    display: none !important;
 }
 
 .card:after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 5%;
-  width: 90%;
-  height: 2px;
-  background-color: #6b2f2a;
-  opacity: 0.65;
-  pointer-events: none;
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 5%;
+    width: 90%;
+    height: 2px;
+    background-color: #6b2f2a;
+    opacity: 0.65;
+    pointer-events: none;
 }
 
 /* medium screens */
-@media (max-width: 1100px){
-  .image{ flex-basis:46%; }
+@media (max-width: 1100px) {
+    .image {
+        flex-basis: 46%;
+    }
 }
-@media (max-width: 980px){
-  .heading{ font-size:3rem; }
-  .imageEl{ max-height:360px; }
+
+@media (max-width: 980px) {
+    .heading {
+        font-size: 3rem;
+    }
+
+    .imageEl {
+        max-height: 360px;
+    }
 }
 
 /* stack on small screens */
-@media (max-width: 860px){
-  .card, .card:nth-of-type(even){ flex-direction:column; }
-  .image{ flex-basis:auto; max-width:100%; }
-  .imageEl{ max-height:320px; }
-  .text h2:after{ left:0; right:auto; } /* keep underline left-aligned */
-  .card:after{ left:6%; width:88%; }
+@media (max-width: 860px) {
+
+    .card,
+    .card:nth-of-type(even) {
+        flex-direction: column;
+    }
+
+    .image {
+        flex-basis: auto;
+        max-width: 100%;
+    }
+
+    .imageEl {
+        max-height: 320px;
+    }
+
+    .text h2:after {
+        left: 0;
+        right: auto;
+    }
+
+    /* keep underline left-aligned */
+    .card:after {
+        left: 6%;
+        width: 88%;
+    }
 }
 
 /* very small */
-@media (max-width: 560px){
-  .wrapper{ padding:4rem 1rem; }
-  .heading{ font-size:2.2rem; }
-  .text h2{ font-size:1.7rem; }
-  .intro{ font-size:1rem; }
+@media (max-width: 560px) {
+    .wrapper {
+        padding: 4rem 1rem;
+    }
+
+    .heading {
+        font-size: 2.2rem;
+    }
+
+    .text h2 {
+        font-size: 1.7rem;
+    }
+
+    .intro {
+        font-size: 1rem;
+    }
 }
 
 .external {
-  margin-top: 1rem;
-  font-size: 0.95rem;
-  font-style: italic;
+    margin-top: 1rem;
+    font-size: 0.95rem;
+    font-style: italic;
 }
+
 .external .link {
-  color: #6b2f2a;
-  text-decoration: underline;
-  transition: color 0.2s ease;
+    color: #6b2f2a;
+    text-decoration: underline;
+    transition: color 0.2s ease;
 }
+
 .external .link:hover {
-  color: #3d1814;
+    color: #3d1814;
 }
 
 .noImage .text h2:after {
-  left: 0;
-  right: auto;
-  width: 40px; /* matches other cards */
+    left: 0;
+    right: auto;
+    width: 40px;
+    /* matches other cards */
 }
 
 .noImage {
-  flex-direction: column;
-  padding: 3rem;
+    flex-direction: column;
+    padding: 3rem;
 }
 
 .noImage .text {
-  width: 100%;
-  max-width: 900px;
+    width: 100%;
+    max-width: 900px;
 }
