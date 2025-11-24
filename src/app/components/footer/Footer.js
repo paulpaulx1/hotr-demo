@@ -41,7 +41,7 @@ const Footer = () => {
 
             <p className="text-white/70 mb-6">
               The House of the Redeemer, a place apart, based on the Episcopal
-              tradition is open to all. Housed in a land-marked building, we
+              tradition is open to all. Housed in a landmarked building, we
               provide hospitality through worship, spiritual renewal, and
               cultural and community events.
             </p>
@@ -96,7 +96,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/about/worship"
+                  href="/worship"
                   className="text-white/70 hover:text-white transition-colors"
                 >
                   Worship
