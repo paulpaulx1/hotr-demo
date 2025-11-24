@@ -749,6 +749,7 @@
     z-index: 4 !important;
     /* Add this - sits above time grid (z-index: 2) */
 }
+
 /* ============================================
    CLICKABLE DATE CELLS WITH HOVER BORDER
    ============================================ */

@@ -123,23 +123,15 @@ export default function StayAtTheHousePage() {
             Contact the House
           </h3>
           <p className="text-slate-700 mb-6 leading-relaxed">
-            Please email{" "}
-            <a
-              href="mailto:info@houseoftheredeemer.org"
-              className="text-[#6b2f2a] hover:underline"
-            >
-              info@houseoftheredeemer.org
-            </a>{" "}
-            or call{" "}
-            <a
-              href="tel:2122890399"
-              className="text-[#6b2f2a] hover:underline"
-            >
-              (212) 289-0399
-            </a>{" "}
-            for booking inquiries.
+            For booking inquiries and general information, please visit our contact page.
           </p>
-          <p className="text-slate-500 italic">&mdash; House Staff</p>
+          <a
+            href="/contact"
+            className="inline-block bg-[#6b2f2a] text-white px-8 py-3 rounded hover:bg-[#8b3f3a] transition-colors"
+          >
+            Get in Touch
+          </a>
+          <p className="text-slate-500 italic mt-6">&mdash; House Staff</p>
         </div>
       </div>
     </main>
