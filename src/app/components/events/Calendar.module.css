@@ -1030,3 +1030,13 @@
     text-align: center !important;
     line-height: 1.25 !important;
 }
+
+@media (max-width: 768px) {
+    .rbc-time-content {
+        flex: 1 1 auto !important;
+    }
+
+    .navButton {
+        display: none !important;
+    }
+}
