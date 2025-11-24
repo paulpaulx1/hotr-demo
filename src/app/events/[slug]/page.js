@@ -15,7 +15,7 @@ async function getEvent(slug) {
   const GROQ = `
     *[_type=="event" && slug.current==$slug][0]{
       _id, title, "slug": slug.current, start, end, allDay, location,
-      description, recurrence,
+      description, recurrence,   featured,
       "heroUrl": coalesce(heroImage.asset->url, gallery[0].asset->url),
       "images": gallery[].asset->url
     }

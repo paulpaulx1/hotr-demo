@@ -16,6 +16,7 @@ async function getEvents() {
       start,
       end,
       allDay,
+      featured,
       location,
       description,
       "heroUrl": coalesce(heroImage.asset->url, gallery[0].asset->url),

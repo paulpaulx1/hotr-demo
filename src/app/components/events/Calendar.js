@@ -2,7 +2,14 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import { format, parse, startOfWeek, getDay } from "date-fns";
+import {
+  format,
+  parse,
+  startOfWeek,
+  getDay,
+  startOfDay,
+  isSameDay,
+} from "date-fns";
 import { enUS } from "date-fns/locale";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -41,8 +48,7 @@ export default function EventsCalendar({ events = [] }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ✅ Normalize + sort events
-  // ✅ Normalize + expand recurring events based on Sanity schema
+  // ✅ Normalize + expand recurring events
   const rbcEvents = useMemo(() => {
     const seen = new Set();
 
@@ -52,7 +58,7 @@ export default function EventsCalendar({ events = [] }) {
 
       const freq = rec.frequency.toLowerCase();
       const interval = rec.interval || 1;
-      const count = rec.count || 50; // max 50 repeats safeguard
+      const count = rec.count || 50;
       const until = rec.until ? new Date(rec.until) : null;
       const daysOfWeek = rec.daysOfWeek || [];
 
@@ -60,7 +66,6 @@ export default function EventsCalendar({ events = [] }) {
       const start = new Date(event.start);
       const end = event.end ? new Date(event.end) : new Date(event.start);
 
-      // daily, weekly, monthly, yearly
       for (let i = 0; i < count; i++) {
         const nextStart = new Date(start);
         const nextEnd = new Date(end);
@@ -69,7 +74,6 @@ export default function EventsCalendar({ events = [] }) {
           nextStart.setDate(start.getDate() + i * interval);
           nextEnd.setDate(end.getDate() + i * interval);
         } else if (freq === "weekly") {
-          // generate for selected days or default to same weekday
           const baseWeekday = start.getDay();
           const activeDays = daysOfWeek.length
             ? daysOfWeek.map((d) =>
@@ -103,7 +107,6 @@ export default function EventsCalendar({ events = [] }) {
       return instances;
     };
 
-    // expand all events
     const expanded = [];
     (events || []).forEach((e) => {
       if (!e.start) return;
@@ -132,6 +135,44 @@ export default function EventsCalendar({ events = [] }) {
     return expanded.sort((a, b) => a.start - b.start);
   }, [events]);
 
+  // ✅ Create event count map (for "+X more" display)
+  const eventCountByDay = useMemo(() => {
+    const map = new Map();
+    rbcEvents.forEach((event) => {
+      const dayKey = startOfDay(event.start).toISOString();
+      if (!map.has(dayKey)) {
+        map.set(dayKey, []);
+      }
+      map.get(dayKey).push(event);
+    });
+    return map;
+  }, [rbcEvents]);
+
+  // ✅ Filter events for display: prefer featured, one per day in month view
+  const displayEvents = useMemo(() => {
+    if (currentView === "day") {
+      return rbcEvents;
+    }
+
+    // Month view: pick one event per day (prefer featured)
+    const uniqueByDay = new Map();
+
+    rbcEvents.forEach((event) => {
+      const dayKey = startOfDay(event.start).toISOString();
+      const existing = uniqueByDay.get(dayKey);
+
+      // If no event yet, or this one is featured and existing isn't, use this one
+      if (!existing || (event.featured && !existing.featured)) {
+        uniqueByDay.set(dayKey, {
+          ...event,
+          _dayKey: dayKey, // Store for later lookup
+        });
+      }
+    });
+
+    return Array.from(uniqueByDay.values());
+  }, [rbcEvents, currentView]);
+
   const handleNavigate = useCallback((newDate) => setCurrentDate(newDate), []);
 
   const handleSelectSlot = useCallback((slotInfo) => {
@@ -139,16 +180,139 @@ export default function EventsCalendar({ events = [] }) {
     setCurrentView("day");
   }, []);
 
+  // ✅ Date cell hover effect
+  // ✅ Date cell hover effect
+  useEffect(() => {
+    if (currentView !== "month") return;
+
+    const handleHover = (e) => {
+      let dayBg = null;
+
+      // Case 1: Hovering the day-bg directly
+      if (e.target.classList.contains("rbc-day-bg")) {
+        dayBg = e.target;
+      }
+      // Case 2: Hovering a date cell
+      else if (e.target.closest(".rbc-date-cell")) {
+        const dateCell = e.target.closest(".rbc-date-cell");
+        const monthRow = dateCell.closest(".rbc-month-row");
+        if (!monthRow) return;
+
+        const rowContent = monthRow.querySelector(".rbc-row-content");
+        if (!rowContent) return;
+        const dateCells = Array.from(
+          rowContent.querySelectorAll(".rbc-date-cell")
+        );
+        const cellIndex = dateCells.indexOf(dateCell);
+
+        const rowBg = monthRow.querySelector(".rbc-row-bg");
+        if (!rowBg) return;
+        const dayBgs = Array.from(rowBg.querySelectorAll(".rbc-day-bg"));
+        dayBg = dayBgs[cellIndex];
+      }
+      // Case 3: Hovering an event
+      else if (e.target.closest(".rbc-event")) {
+        const event = e.target.closest(".rbc-event");
+        const monthRow = event.closest(".rbc-month-row");
+        if (!monthRow) return;
+
+        const rowContent = monthRow.querySelector(".rbc-row-content");
+        if (!rowContent) return;
+
+        // Find which cell contains this event
+        const eventWrapper = event.closest(".rbc-row-segment");
+        const allSegments = Array.from(
+          rowContent.querySelectorAll(".rbc-row-segment")
+        );
+        const cellIndex = allSegments.indexOf(eventWrapper);
+
+        const rowBg = monthRow.querySelector(".rbc-row-bg");
+        if (!rowBg) return;
+        const dayBgs = Array.from(rowBg.querySelectorAll(".rbc-day-bg"));
+        dayBg = dayBgs[cellIndex];
+      }
+
+      if (dayBg && !dayBg.classList.contains("rbc-today")) {
+        dayBg.style.boxShadow = "inset 0 0 0 2px #1e293b";
+        dayBg.style.borderRadius = "0.45rem";
+      }
+    };
+
+    const handleLeave = (e) => {
+      let dayBg = null;
+
+      // Case 1: Leaving the day-bg directly
+      if (e.target.classList.contains("rbc-day-bg")) {
+        dayBg = e.target;
+      }
+      // Case 2: Leaving a date cell
+      else if (e.target.closest(".rbc-date-cell")) {
+        const dateCell = e.target.closest(".rbc-date-cell");
+        const monthRow = dateCell.closest(".rbc-month-row");
+        if (!monthRow) return;
+
+        const rowContent = monthRow.querySelector(".rbc-row-content");
+        if (!rowContent) return;
+        const dateCells = Array.from(
+          rowContent.querySelectorAll(".rbc-date-cell")
+        );
+        const cellIndex = dateCells.indexOf(dateCell);
+
+        const rowBg = monthRow.querySelector(".rbc-row-bg");
+        if (!rowBg) return;
+        const dayBgs = Array.from(rowBg.querySelectorAll(".rbc-day-bg"));
+        dayBg = dayBgs[cellIndex];
+      }
+      // Case 3: Leaving an event
+      else if (e.target.closest(".rbc-event")) {
+        const event = e.target.closest(".rbc-event");
+        const monthRow = event.closest(".rbc-month-row");
+        if (!monthRow) return;
+
+        const rowContent = monthRow.querySelector(".rbc-row-content");
+        if (!rowContent) return;
+
+        const eventWrapper = event.closest(".rbc-row-segment");
+        const allSegments = Array.from(
+          rowContent.querySelectorAll(".rbc-row-segment")
+        );
+        const cellIndex = allSegments.indexOf(eventWrapper);
+
+        const rowBg = monthRow.querySelector(".rbc-row-bg");
+        if (!rowBg) return;
+        const dayBgs = Array.from(rowBg.querySelectorAll(".rbc-day-bg"));
+        dayBg = dayBgs[cellIndex];
+      }
+
+      if (dayBg && !dayBg.classList.contains("rbc-today")) {
+        dayBg.style.boxShadow = "";
+      }
+    };
+
+    const calendar = document.querySelector(".rbc-month-view");
+    if (!calendar) return;
+
+    calendar.addEventListener("mouseover", handleHover);
+    calendar.addEventListener("mouseout", handleLeave);
+
+    return () => {
+      calendar.removeEventListener("mouseover", handleHover);
+      calendar.removeEventListener("mouseout", handleLeave);
+    };
+  }, [currentView]);
+
   // ✅ Custom toolbar
   const CustomToolbar = ({ label, onNavigate, view, onView }) => (
     <div className={styles.customToolbar}>
-      <button
-        className={styles.navButton}
-        onClick={() => onNavigate("PREV")}
-        aria-label={view === "month" ? "Previous month" : "Previous day"}
-      >
-        ← Previous {view === "month" ? "Month" : "Day"}
-      </button>
+      {!isMobile && (
+        <button
+          className={styles.navButton}
+          onClick={() => onNavigate("PREV")}
+          aria-label={view === "month" ? "Previous month" : "Previous day"}
+        >
+          ← Previous {view === "month" ? "Month" : "Day"}
+        </button>
+      )}
 
       <div className={styles.toolbarLabelWrap} aria-live="polite">
         <AnimatePresence mode="wait">
@@ -163,7 +327,6 @@ export default function EventsCalendar({ events = [] }) {
             {label}
           </motion.div>
         </AnimatePresence>
-        {/* Add view toggle button below the label */}
         {view === "day" && (
           <button
             onClick={() => onView("month")}
@@ -175,55 +338,81 @@ export default function EventsCalendar({ events = [] }) {
         )}
       </div>
 
-      <button
-        className={styles.navButton}
-        onClick={() => onNavigate("NEXT")}
-        aria-label={view === "month" ? "Next month" : "Next day"}
-      >
-        Next {view === "month" ? "Month" : "Day"} →
-      </button>
-    </div>
-  );
-
-  // ✅ Event cell
-  const EventComponent = ({ event }) => (
-    <div className={styles.eventItem}>
-      <div className={styles.eventTitle}>{event.title}</div>
-      {event.start && (
-        <div className={styles.eventTime}>
-          {event.start.toLocaleTimeString([], {
-            hour: "numeric",
-            minute: "2-digit",
-          })}
-        </div>
+      {!isMobile && (
+        <button
+          className={styles.navButton}
+          onClick={() => onNavigate("NEXT")}
+          aria-label={view === "month" ? "Next month" : "Next day"}
+        >
+          Next {view === "month" ? "Month" : "Day"} →
+        </button>
       )}
     </div>
   );
+
+  // ✅ Event cell with "+X more" indicator
+  const EventComponent = ({ event }) => {
+    if (currentView === "day") {
+      return (
+        <div className={styles.eventItem}>
+          <div className={styles.eventTitle}>{event.title}</div>
+          {event.start && (
+            <div className={styles.eventTime}>
+              {event.start.toLocaleTimeString([], {
+                hour: "numeric",
+                minute: "2-digit",
+              })}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // Month view: show event + count
+    const dayKey = event._dayKey || startOfDay(event.start).toISOString();
+    const allEventsOnDay = eventCountByDay.get(dayKey) || [];
+    const additionalCount = allEventsOnDay.length - 1;
+
+    return (
+      <div className={styles.eventItem}>
+        <div className={styles.eventTitle}>{event.title}</div>
+        {additionalCount > 0 && (
+          <div className={styles.moreEvents}>+{additionalCount} more</div>
+        )}
+      </div>
+    );
+  };
 
   return (
     <div className={styles.calendarWrapper}>
       <div className={styles.calendarContainer}>
         <Calendar
           localizer={localizer}
-          events={rbcEvents}
+          events={displayEvents}
           startAccessor="start"
           endAccessor="end"
           titleAccessor="title"
           allDayAccessor="allDay"
           components={{ event: EventComponent, toolbar: CustomToolbar }}
-          popup
-          views={{ month: true, day: true }} // ✅ Enable both views
-          view={currentView} // ✅ Use state for current view
-          onView={setCurrentView} // ✅ Handle view changes
+          popup={false}
+          views={{ month: true, day: true }}
+          view={currentView}
+          onView={setCurrentView}
           date={currentDate}
           onNavigate={handleNavigate}
-          onSelectSlot={handleSelectSlot} // ✅ Handle day cell clicks
-          selectable // ✅ Enable slot selection
-          onSelectEvent={(event) => event?.href && router.push(event.href)}
+          onSelectSlot={handleSelectSlot}
+          selectable
+          onSelectEvent={(event) => {
+            if (currentView === "month") {
+              setCurrentDate(event.start);
+              setCurrentView("day");
+            } else if (event?.href) {
+              router.push(event.href);
+            }
+          }}
           showMultiDayTimes={false}
-          /* ⭐️ NEW: BUSINESS HOURS LIMITS */
-          min={new Date(1970, 1, 1, 6, 0)} // start day view at 6:00am
-          max={new Date(1970, 1, 1, 22, 0)} // end at 10:00pm
+          min={new Date(1970, 1, 1, 6, 0)}
+          max={new Date(1970, 1, 1, 22, 0)}
         />
       </div>
     </div>
