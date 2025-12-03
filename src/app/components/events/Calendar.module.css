@@ -54,7 +54,8 @@
     border-radius: 9999px;
     cursor: pointer;
     box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
-    transition: transform 0.08s ease, box-shadow 0.15s ease, background-color 0.15s ease;
+    transition: transform 0.08s ease, box-shadow 0.15s ease,
+        background-color 0.15s ease;
 }
 
 .navButton:hover {
@@ -159,6 +160,7 @@
     border-bottom: none;
 }
 
+
 /* ============================================
    CLICKABLE DATE CELLS
    ============================================ */
@@ -240,6 +242,61 @@
 }
 
 /* ============================================
+   POPUP OVERLAY (RBC PORTAL, "+N more")
+   ============================================ */
+:global(.rbc-overlay) {
+    background: white !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 0.75rem !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15) !important;
+    animation: popupFadeIn 0.15s ease-out;
+    min-width: 260px !important;
+    z-index: 9999 !important;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+:global(.rbc-overlay .rbc-event) {
+    background: #f8fafc !important;
+    border: 1px solid #d1d5db !important;
+    border-radius: 0.375rem !important;
+    padding: 0.5rem 0.75rem !important;
+    margin-bottom: 0.5rem !important;
+    cursor: pointer !important;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+:global(.rbc-overlay .rbc-event:hover) {
+    background: #e2e8f0 !important;
+    transform: translateX(3px);
+}
+
+:global(.rbc-overlay .rbc-event-content) {
+    color: #1e293b !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    margin-bottom: 0.15rem !important;
+    white-space: normal !important;
+}
+
+:global(.rbc-overlay .rbc-event-time) {
+    font-size: 0.8rem !important;
+    color: #64748b !important;
+    font-style: italic;
+}
+
+/* ============================================
    DAY VIEW STRUCTURE
    ============================================ */
 .calendarWrapper :global(.rbc-time-view) {
@@ -312,40 +369,62 @@
 }
 
 /* ============================================
-   DAY VIEW EVENTS
+   DAY VIEW EVENTS — HYBRID C STYLE
+   (Let RBC handle top/left/width/height)
    ============================================ */
 .calendarWrapper :global(.rbc-day-slot .rbc-event) {
-    position: absolute !important;
-    height: auto !important;
-    width: calc(100% - 10px) !important;
-    left: 5px !important;
-    background: #e0edff !important;
+    /* no manual top/left/width overrides! */
+    box-sizing: border-box;
+    background: #eaf2ff !important;
+    /* soft blue */
     border-left: 4px solid #334155 !important;
-    border: 1px solid #cbd5e1 !important;
+    /* strong slate accent */
+    border: 1px solid #d0d7e1 !important;
+    /* light slate border */
     border-radius: 0.35rem !important;
-    padding: 6px 10px 4px 10px !important;
-    color: #1e293b !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    overflow: visible !important;
+
+    padding: 6px 6px !important;
+
     display: flex !important;
     flex-direction: column;
-    align-items: center !important;
     justify-content: center !important;
+    align-items: center !important;
     text-align: center !important;
-    line-height: 1.25 !important;
+
+    color: #1e293b !important;
+    overflow: visible !important;
+    white-space: normal !important;
+    line-height: 1.2 !important;
+
+    margin-left: 4px !important;
+    margin-right: 4px !important;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
 .calendarWrapper :global(.rbc-day-slot .rbc-event:hover) {
-    background: #d5e7ff !important;
-    transform: translateX(2px);
+    background: #e6f0ff !important;
 }
 
-.calendarWrapper :global(.rbc-day-slot .rbc-event .rbc-event-content) {
-    font-size: 0.85rem !important;
+/* Event title */
+.calendarWrapper :global(.rbc-day-slot .rbc-event .rbc-event-content),
+.calendarWrapper :global(.Calendar-module__eventTitle) {
+    font-size: 0.8rem !important;
     font-weight: 600 !important;
     color: #1f2937 !important;
     text-align: center !important;
-    line-height: 1.25 !important;
+    margin-bottom: 2px !important;
+    line-height: 1.2 !important;
+}
+
+/* Event time */
+.calendarWrapper :global(.Calendar-module__eventTime),
+.calendarWrapper :global(.rbc-day-slot .rbc-event-time) {
+    font-size: 0.7rem !important;
+    color: #64748b !important;
+    /* slate-500 */
+    font-style: italic;
+    text-align: center !important;
+    line-height: 1.15 !important;
 }
 
 /* ============================================
@@ -436,135 +515,6 @@
     font-size: 0.8125rem;
     color: #475569;
     line-height: 1.5;
-}
-
-/* ============================================
-   POPUP OVERLAY (RBC PORTAL)
-   ============================================ */
-:global(.rbc-overlay) {
-    background: white !important;
-    border: 1px solid #e2e8f0 !important;
-    padding: 0.75rem !important;
-    border-radius: 0.5rem !important;
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.15) !important;
-    animation: popupFadeIn 0.15s ease-out;
-    min-width: 260px !important;
-    z-index: 9999 !important;
-}
-
-@keyframes popupFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-4px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-:global(.rbc-overlay .rbc-event) {
-    background: #f8fafc !important;
-    border: 1px solid #d1d5db !important;
-    border-radius: 0.375rem !important;
-    padding: 0.5rem 0.75rem !important;
-    margin-bottom: 0.5rem !important;
-    cursor: pointer !important;
-    transition: background 0.15s ease, transform 0.15s ease;
-}
-
-:global(.rbc-overlay .rbc-event:hover) {
-    background: #e2e8f0 !important;
-    transform: translateX(3px);
-}
-
-:global(.rbc-overlay .rbc-event-content) {
-    color: #1e293b !important;
-    font-weight: 600 !important;
-    font-size: 0.9rem !important;
-    margin-bottom: 0.15rem !important;
-    white-space: normal !important;
-}
-
-:global(.rbc-overlay .rbc-event-time) {
-    font-size: 0.8rem !important;
-    color: #64748b !important;
-    font-style: italic;
-}
-
-/* ============================================
-   HOVER CARD (DESKTOP ONLY)
-   ============================================ */
-.hoverCard {
-    position: fixed;
-    z-index: 2000;
-    background: white;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-    border-radius: 0.5rem;
-    width: 280px;
-    overflow: hidden;
-    transition: opacity 0.2s ease;
-    pointer-events: auto;
-    animation: fadeIn 0.15s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -90%);
-    }
-
-    to {
-        opacity: 1;
-        transform: translate(-50%, -100%);
-    }
-}
-
-.hoverImage {
-    width: 100%;
-    height: 110px;
-    object-fit: cover;
-}
-
-.hoverContent {
-    padding: 0.75rem 1rem;
-}
-
-.hoverContent h4 {
-    font-weight: 600;
-    color: #0f172a;
-    margin-bottom: 0.25rem;
-}
-
-.hoverTime {
-    font-style: italic;
-    color: #64748b;
-    margin-bottom: 0.25rem;
-}
-
-.hoverContent p {
-    font-size: 0.8rem;
-    color: #475569;
-}
-
-.hoverCard::after {
-    content: "";
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    bottom: -8px;
-    border-width: 8px 8px 0 8px;
-    border-style: solid;
-    border-color: white transparent transparent transparent;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.hoverCard[data-flip="true"]::after {
-    top: -8px;
-    bottom: auto;
-    border-width: 0 8px 8px 8px;
-    border-color: transparent transparent white transparent;
 }
 
 /* ============================================
@@ -668,7 +618,7 @@
 
     .calendarWrapper :global(.rbc-day-slot .rbc-event) {
         font-size: 0.75rem;
-        padding: 2px 6px !important;
+        padding: 4px 4px !important;
     }
 
     /* Agenda view */
@@ -715,10 +665,6 @@
         font-size: 0.75rem;
     }
 
-    .hoverCard {
-        display: none;
-    }
-
     .loadingState,
     .emptyState {
         padding: 1.5rem;
@@ -726,43 +672,6 @@
     }
 }
 
-.calendarWrapper :global(.rbc-day-slot .rbc-event) {
-    position: absolute !important;
-    height: auto !important;
-    width: calc(100% - 10px) !important;
-    left: 5px !important;
-    background: #e0edff !important;
-    border-left: 4px solid #334155 !important;
-    border: 1px solid #cbd5e1 !important;
-    border-radius: 0.35rem !important;
-    padding: 6px 10px 4px 10px !important;
-    color: #1e293b !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    overflow: hidden !important;
-    /* Changed from visible */
-    display: flex !important;
-    flex-direction: column;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    line-height: 1.25 !important;
-    z-index: 4 !important;
-    /* Add this - sits above time grid (z-index: 2) */
-}
-
-/* ============================================
-   CLICKABLE DATE CELLS WITH HOVER BORDER
-   ============================================ */
-/* ============================================
-   CLICKABLE DATE CELLS WITH HOVER BORDER
-   ============================================ */
-.calendarWrapper :global(.rbc-day-bg) {
-    cursor: pointer;
-    transition: box-shadow 0.2s ease;
-    border-radius: 0.45rem;
-}
-
-.calendarWrapper :global(.rbc-date-cell) {
-    cursor: pointer;
-    padding: 0.75rem !important;
+.eventTime {
+    display: none !important;
 }

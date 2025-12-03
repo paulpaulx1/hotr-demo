@@ -32,6 +32,20 @@ export default function EventsCalendar({ events = [] }) {
   const [currentView, setCurrentView] = useState("month");
   const router = useRouter();
 
+  useEffect(() => {
+    console.group("📅 RAW EVENTS FROM SANITY");
+    events.forEach((e, i) => {
+      console.log(`#${i + 1}`, {
+        title: e.title,
+        start_raw: e.start,
+        end_raw: e.end,
+        start_iso: new Date(e.start).toISOString(),
+        end_iso: new Date(e.end).toISOString(),
+      });
+    });
+    console.groupEnd();
+  }, [events]);
+
   // ✅ Resize detection
   useEffect(() => {
     let timeout;
@@ -47,6 +61,21 @@ export default function EventsCalendar({ events = [] }) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  function normalizeEventTimes(events) {
+    return events.map((e) => {
+      const start = new Date(e.start);
+      const end = new Date(e.end);
+
+      // remove seconds + milliseconds
+      start.setSeconds(0);
+      start.setMilliseconds(0);
+      end.setSeconds(0);
+      end.setMilliseconds(0);
+
+      return { ...e, start, end };
+    });
+  }
 
   // ✅ Normalize + expand recurring events
   const rbcEvents = useMemo(() => {
@@ -388,7 +417,7 @@ export default function EventsCalendar({ events = [] }) {
       <div className={styles.calendarContainer}>
         <Calendar
           localizer={localizer}
-          events={displayEvents}
+          events={normalizeEventTimes(displayEvents)}
           startAccessor="start"
           endAccessor="end"
           titleAccessor="title"
@@ -413,6 +442,7 @@ export default function EventsCalendar({ events = [] }) {
           showMultiDayTimes={false}
           min={new Date(1970, 1, 1, 6, 0)}
           max={new Date(1970, 1, 1, 22, 0)}
+          dayLayoutAlgorithm="no-overlap"
         />
       </div>
     </div>
