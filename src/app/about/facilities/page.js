@@ -186,7 +186,7 @@ export default function FacilitiesPage() {
         </div>
         <div className="md:w-1/2">
           {renderFloorplan(
-            "/house-of-the-redeemer_floorplan2final.jpg",
+            "/house-of-the-redeemer_floorplan2finalCL.jpeg",
             secondFloorRoomData,
             "Second Floor"
           )}
