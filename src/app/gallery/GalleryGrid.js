@@ -40,42 +40,46 @@ export default function GalleryGrid({ images }) {
         </header>
 
         {/* Category Sections */}
-        {Object.entries(grouped).map(([category, group]) => (
-          <section key={category} className='mb-20'>
-            {/* Centered H2 */}
-            <div className='flex justify-center mb-10'>
-              <h2 className='font-serif text-2xl text-slate-800 border-b border-slate-200 pb-2 inline-block text-center'>
-                {category}
-              </h2>
-            </div>
+        {Object.entries(grouped)
+          .sort(([a], [b]) => a.localeCompare(b))
+          .map(([category, group]) => (
+            <section key={category} className='mb-20'>
+              {/* Centered H2 */}
+              <div className='flex justify-center mb-10'>
+                <h2 className='font-serif text-2xl text-slate-800 border-b border-slate-200 pb-2 inline-block text-center'>
+                  {category}
+                </h2>
+              </div>
 
-            {/* 3-column grid with reduced spacing */}
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2'>
-              {group.map((img) => {
-                const globalIndex = images.findIndex((x) => x._id === img._id);
-                return (
-                  <figure
-                    key={img._id}
-                    className='cursor-pointer group relative overflow-hidden rounded-md bg-slate-100 aspect-square'
-                    onClick={() => setIndex(globalIndex)}
-                  >
-                    <Image
-                      src={img.url}
-                      alt={img.title || 'Gallery image'}
-                      fill
-                      className='object-cover transition-transform duration-500 group-hover:scale-105'
-                    />
-                    {img.title && (
-                      <figcaption className='absolute bottom-0 left-0 w-full text-center text-white text-sm bg-black/40 py-1 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition'>
-                        {img.title}
-                      </figcaption>
-                    )}
-                  </figure>
-                );
-              })}
-            </div>
-          </section>
-        ))}
+              {/* 3-column grid with reduced spacing */}
+              <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2'>
+                {group.map((img) => {
+                  const globalIndex = images.findIndex(
+                    (x) => x._id === img._id
+                  );
+                  return (
+                    <figure
+                      key={img._id}
+                      className='cursor-pointer group relative overflow-hidden rounded-md bg-slate-100 aspect-square'
+                      onClick={() => setIndex(globalIndex)}
+                    >
+                      <Image
+                        src={img.url}
+                        alt={img.title || 'Gallery image'}
+                        fill
+                        className='object-cover transition-transform duration-500 group-hover:scale-105'
+                      />
+                      {img.title && (
+                        <figcaption className='absolute bottom-0 left-0 w-full text-center text-white text-sm bg-black/40 py-1 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition'>
+                          {img.title}
+                        </figcaption>
+                      )}
+                    </figure>
+                  );
+                })}
+              </div>
+            </section>
+          ))}
       </div>
 
       {/* Lightbox */}
