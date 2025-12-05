@@ -2,14 +2,7 @@
 
 import React, { useMemo, useState, useCallback, useEffect } from "react";
 import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-import {
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  startOfDay,
-  isSameDay,
-} from "date-fns";
+import { format, parse, startOfWeek, getDay, startOfDay } from "date-fns";
 import { enUS } from "date-fns/locale";
 import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
@@ -17,6 +10,7 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 import styles from "./Calendar.module.css";
 
 const locales = { "en-US": enUS };
+
 const localizer = dateFnsLocalizer({
   format,
   parse,
@@ -27,11 +21,11 @@ const localizer = dateFnsLocalizer({
 
 export default function EventsCalendar({ events = [] }) {
   const [isMobile, setIsMobile] = useState(false);
-  const [viewportWidth, setViewportWidth] = useState(1024);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [currentView, setCurrentView] = useState("month");
   const router = useRouter();
 
+  // 🔍 Debug log events once
   useEffect(() => {
     console.group("📅 RAW EVENTS FROM SANITY");
     events.forEach((e, i) => {
@@ -46,15 +40,13 @@ export default function EventsCalendar({ events = [] }) {
     console.groupEnd();
   }, [events]);
 
-  // ✅ Resize detection
+  // 📱 Mobile detection
   useEffect(() => {
     let timeout;
     const handleResize = () => {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
-        const w = window.innerWidth;
-        setViewportWidth(w);
-        setIsMobile(w < 768);
+        setIsMobile(window.innerWidth < 768);
       }, 100);
     };
     handleResize();
@@ -62,12 +54,12 @@ export default function EventsCalendar({ events = [] }) {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  function normalizeEventTimes(events) {
-    return events.map((e) => {
+  // Normalise event times (strip seconds/ms so RBC overlaps behave)
+  function normalizeEventTimes(list) {
+    return list.map((e) => {
       const start = new Date(e.start);
       const end = new Date(e.end);
 
-      // remove seconds + milliseconds
       start.setSeconds(0);
       start.setMilliseconds(0);
       end.setSeconds(0);
@@ -77,7 +69,7 @@ export default function EventsCalendar({ events = [] }) {
     });
   }
 
-  // ✅ Normalize + expand recurring events
+  // 🔁 Expand recurrence + normalise base events
   const rbcEvents = useMemo(() => {
     const seen = new Set();
 
@@ -93,7 +85,7 @@ export default function EventsCalendar({ events = [] }) {
 
       const instances = [];
       const start = new Date(event.start);
-      const end = event.end ? new Date(event.end) : new Date(event.start);
+      const end = new Date(event.end);
 
       for (let i = 0; i < count; i++) {
         const nextStart = new Date(start);
@@ -109,12 +101,14 @@ export default function EventsCalendar({ events = [] }) {
                 ["SU", "MO", "TU", "WE", "TH", "FR", "SA"].indexOf(d)
               )
             : [baseWeekday];
+
           activeDays.forEach((day) => {
             const next = new Date(start);
             const weekOffset = i * interval * 7;
             next.setDate(start.getDate() + weekOffset + (day - baseWeekday));
             const nextE = new Date(next);
             nextE.setTime(next.getTime() + (end - start));
+
             if (!until || next <= until) {
               instances.push({ ...event, start: next, end: nextE });
             }
@@ -139,14 +133,11 @@ export default function EventsCalendar({ events = [] }) {
     const expanded = [];
     (events || []).forEach((e) => {
       if (!e.start) return;
-      const baseStart = new Date(e.start);
-      const baseEnd = e.end ? new Date(e.end) : baseStart;
-      if (isNaN(baseStart) || isNaN(baseEnd)) return;
 
       const base = {
         ...e,
-        start: baseStart,
-        end: baseEnd,
+        start: new Date(e.start),
+        end: e.end ? new Date(e.end) : new Date(e.start),
         allDay: !!e.allDay,
         href: e.href || (e.slug ? `/events/${e.slug}` : null),
       };
@@ -164,173 +155,46 @@ export default function EventsCalendar({ events = [] }) {
     return expanded.sort((a, b) => a.start - b.start);
   }, [events]);
 
-  // ✅ Create event count map (for "+X more" display)
+  // 📊 Map: day ISO -> all events that day (for “+X more”)
   const eventCountByDay = useMemo(() => {
     const map = new Map();
     rbcEvents.forEach((event) => {
-      const dayKey = startOfDay(event.start).toISOString();
-      if (!map.has(dayKey)) {
-        map.set(dayKey, []);
-      }
-      map.get(dayKey).push(event);
+      const key = startOfDay(event.start).toISOString();
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push(event);
     });
     return map;
   }, [rbcEvents]);
 
-  // ✅ Filter events for display: prefer featured, one per day in month view
+  // 🗓 Month view: show one event per day (prefer featured)
   const displayEvents = useMemo(() => {
-    if (currentView === "day") {
-      return rbcEvents;
-    }
+    if (currentView === "day") return rbcEvents;
 
-    // Month view: pick one event per day (prefer featured)
     const uniqueByDay = new Map();
 
     rbcEvents.forEach((event) => {
       const dayKey = startOfDay(event.start).toISOString();
       const existing = uniqueByDay.get(dayKey);
 
-      // If no event yet, or this one is featured and existing isn't, use this one
       if (!existing || (event.featured && !existing.featured)) {
-        uniqueByDay.set(dayKey, {
-          ...event,
-          _dayKey: dayKey, // Store for later lookup
-        });
+        uniqueByDay.set(dayKey, { ...event, _dayKey: dayKey });
       }
     });
 
     return Array.from(uniqueByDay.values());
   }, [rbcEvents, currentView]);
 
-  const handleNavigate = useCallback((newDate) => setCurrentDate(newDate), []);
+  // 🔁 Basic navigation
+  const handleNavigate = useCallback((newDate) => {
+    setCurrentDate(newDate);
+  }, []);
 
   const handleSelectSlot = useCallback((slotInfo) => {
     setCurrentDate(slotInfo.start);
     setCurrentView("day");
   }, []);
 
-  // ✅ Date cell hover effect
-  // ✅ Date cell hover effect
-  useEffect(() => {
-    if (currentView !== "month") return;
-
-    const handleHover = (e) => {
-      let dayBg = null;
-
-      // Case 1: Hovering the day-bg directly
-      if (e.target.classList.contains("rbc-day-bg")) {
-        dayBg = e.target;
-      }
-      // Case 2: Hovering a date cell
-      else if (e.target.closest(".rbc-date-cell")) {
-        const dateCell = e.target.closest(".rbc-date-cell");
-        const monthRow = dateCell.closest(".rbc-month-row");
-        if (!monthRow) return;
-
-        const rowContent = monthRow.querySelector(".rbc-row-content");
-        if (!rowContent) return;
-        const dateCells = Array.from(
-          rowContent.querySelectorAll(".rbc-date-cell")
-        );
-        const cellIndex = dateCells.indexOf(dateCell);
-
-        const rowBg = monthRow.querySelector(".rbc-row-bg");
-        if (!rowBg) return;
-        const dayBgs = Array.from(rowBg.querySelectorAll(".rbc-day-bg"));
-        dayBg = dayBgs[cellIndex];
-      }
-      // Case 3: Hovering an event
-      else if (e.target.closest(".rbc-event")) {
-        const event = e.target.closest(".rbc-event");
-        const monthRow = event.closest(".rbc-month-row");
-        if (!monthRow) return;
-
-        const rowContent = monthRow.querySelector(".rbc-row-content");
-        if (!rowContent) return;
-
-        // Find which cell contains this event
-        const eventWrapper = event.closest(".rbc-row-segment");
-        const allSegments = Array.from(
-          rowContent.querySelectorAll(".rbc-row-segment")
-        );
-        const cellIndex = allSegments.indexOf(eventWrapper);
-
-        const rowBg = monthRow.querySelector(".rbc-row-bg");
-        if (!rowBg) return;
-        const dayBgs = Array.from(rowBg.querySelectorAll(".rbc-day-bg"));
-        dayBg = dayBgs[cellIndex];
-      }
-
-      if (dayBg && !dayBg.classList.contains("rbc-today")) {
-        dayBg.style.boxShadow = "inset 0 0 0 2px #1e293b";
-        dayBg.style.borderRadius = "0.45rem";
-      }
-    };
-
-    const handleLeave = (e) => {
-      let dayBg = null;
-
-      // Case 1: Leaving the day-bg directly
-      if (e.target.classList.contains("rbc-day-bg")) {
-        dayBg = e.target;
-      }
-      // Case 2: Leaving a date cell
-      else if (e.target.closest(".rbc-date-cell")) {
-        const dateCell = e.target.closest(".rbc-date-cell");
-        const monthRow = dateCell.closest(".rbc-month-row");
-        if (!monthRow) return;
-
-        const rowContent = monthRow.querySelector(".rbc-row-content");
-        if (!rowContent) return;
-        const dateCells = Array.from(
-          rowContent.querySelectorAll(".rbc-date-cell")
-        );
-        const cellIndex = dateCells.indexOf(dateCell);
-
-        const rowBg = monthRow.querySelector(".rbc-row-bg");
-        if (!rowBg) return;
-        const dayBgs = Array.from(rowBg.querySelectorAll(".rbc-day-bg"));
-        dayBg = dayBgs[cellIndex];
-      }
-      // Case 3: Leaving an event
-      else if (e.target.closest(".rbc-event")) {
-        const event = e.target.closest(".rbc-event");
-        const monthRow = event.closest(".rbc-month-row");
-        if (!monthRow) return;
-
-        const rowContent = monthRow.querySelector(".rbc-row-content");
-        if (!rowContent) return;
-
-        const eventWrapper = event.closest(".rbc-row-segment");
-        const allSegments = Array.from(
-          rowContent.querySelectorAll(".rbc-row-segment")
-        );
-        const cellIndex = allSegments.indexOf(eventWrapper);
-
-        const rowBg = monthRow.querySelector(".rbc-row-bg");
-        if (!rowBg) return;
-        const dayBgs = Array.from(rowBg.querySelectorAll(".rbc-day-bg"));
-        dayBg = dayBgs[cellIndex];
-      }
-
-      if (dayBg && !dayBg.classList.contains("rbc-today")) {
-        dayBg.style.boxShadow = "";
-      }
-    };
-
-    const calendar = document.querySelector(".rbc-month-view");
-    if (!calendar) return;
-
-    calendar.addEventListener("mouseover", handleHover);
-    calendar.addEventListener("mouseout", handleLeave);
-
-    return () => {
-      calendar.removeEventListener("mouseover", handleHover);
-      calendar.removeEventListener("mouseout", handleLeave);
-    };
-  }, [currentView]);
-
-  // ✅ Custom toolbar
+  // ✨ Custom toolbar
   const CustomToolbar = ({ label, onNavigate, view, onView }) => (
     <div className={styles.customToolbar}>
       {!isMobile && (
@@ -356,6 +220,7 @@ export default function EventsCalendar({ events = [] }) {
             {label}
           </motion.div>
         </AnimatePresence>
+
         {view === "day" && (
           <button
             onClick={() => onView("month")}
@@ -379,25 +244,26 @@ export default function EventsCalendar({ events = [] }) {
     </div>
   );
 
-  // ✅ Event cell with "+X more" indicator
-  const EventComponent = ({ event }) => {
-    if (currentView === "day") {
-      return (
-        <div className={styles.eventItem}>
-          <div className={styles.eventTitle}>{event.title}</div>
-          {event.start && (
-            <div className={styles.eventTime}>
-              {event.start.toLocaleTimeString([], {
-                hour: "numeric",
-                minute: "2-digit",
-              })}
-            </div>
-          )}
-        </div>
-      );
-    }
+  // 🟦 Day view event: single inline line “time – time: title”
+  const DayEventComponent = ({ event }) => {
+    const start = event.start.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
+    const end = event.end.toLocaleTimeString([], {
+      hour: "numeric",
+      minute: "2-digit",
+    });
 
-    // Month view: show event + count
+    return (
+      <span>
+        {start} – {end}: {event.title}
+      </span>
+    );
+  };
+
+  // 🟧 Month view event: title + “+X more”
+  const MonthEventComponent = ({ event }) => {
     const dayKey = event._dayKey || startOfDay(event.start).toISOString();
     const allEventsOnDay = eventCountByDay.get(dayKey) || [];
     const additionalCount = allEventsOnDay.length - 1;
@@ -422,7 +288,11 @@ export default function EventsCalendar({ events = [] }) {
           endAccessor="end"
           titleAccessor="title"
           allDayAccessor="allDay"
-          components={{ event: EventComponent, toolbar: CustomToolbar }}
+          components={{
+            month: { event: MonthEventComponent },
+            day: { event: DayEventComponent },
+            toolbar: CustomToolbar,
+          }}
           popup={false}
           views={{ month: true, day: true }}
           view={currentView}
