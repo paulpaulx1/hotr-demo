@@ -88,7 +88,7 @@ export async function POST(request) {
 
     const transporter = createTransporter();
 
-    const DESTINATION = "paulmneenan@gmail.com"; // 👈 for now, send everything here
+    const DESTINATION = "info@houseoftheredeemer.org"; // 👈 for now, send everything here
 
     const emailHtml = `
       <h2>New Contact Form Submission</h2>
@@ -122,7 +122,7 @@ export async function POST(request) {
 
       // What SMTP actually uses for MAIL FROM / RCPT TO:
       envelope: {
-        from: SMTP_USER,    // MUST be the DreamHost mailbox
+        from: SMTP_USER, // MUST be the DreamHost mailbox
         to: DESTINATION,
       },
     });
