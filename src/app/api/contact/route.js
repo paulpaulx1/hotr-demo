@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 export async function POST(request) {
   try {
@@ -15,95 +16,98 @@ export async function POST(request) {
       recaptchaToken,
     } = await request.json();
 
-    // Verify reCAPTCHA
-    if (!process.env.RECAPTCHA_SECRET_KEY) {
-      console.error("RECAPTCHA_SECRET_KEY is not defined");
+    // -----------------------------
+    // 1) VERIFY RECAPTCHA
+    // -----------------------------
+    const recaptchaSecret = process.env.RECAPTCHA_SECRET_KEY;
+    if (!recaptchaSecret) {
       return NextResponse.json(
-        { error: "Verification system configuration error" },
+        { error: "Server misconfiguration: RECATCHA key missing" },
         { status: 500 }
       );
     }
 
     const recaptchaResponse = await fetch(
-      `https://www.google.com/recaptcha/api/siteverify`,
+      "https://www.google.com/recaptcha/api/siteverify",
       {
         method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: `secret=${recaptchaSecret}&response=${recaptchaToken}`,
       }
     );
 
     const recaptchaData = await recaptchaResponse.json();
 
-    if (!recaptchaData.success || recaptchaData.score < 0.5) {
+    if (!recaptchaData.success) {
       return NextResponse.json(
         { error: "reCAPTCHA verification failed" },
         { status: 400 }
       );
     }
 
-    // Format interests for email
+    // -----------------------------
+    // 2) FORMAT INTERESTS
+    // -----------------------------
+    const interestLabels = {
+      groupRetreat: "Holding a group retreat at the House",
+      overnight: "Staying overnight at the House",
+      rentSpace: "Renting space for an event",
+      filmPhoto: "Film & photography",
+      other: "Other",
+    };
+
     const selectedInterests = Object.entries(interests)
-      .filter(([_, value]) => value === true)
-      .map(([key, _]) => {
-        const interestMap = {
-          groupRetreat: "Holding a group retreat at the House",
-          overnight: "Staying overnight at the House",
-          rentSpace: "Renting space at the House for my event",
-          filmPhoto: "Film & photography at the House",
-          other: "Other",
-        };
-        return interestMap[key] || key;
-      })
+      .filter(([_, v]) => v)
+      .map(([k]) => interestLabels[k])
       .join(", ");
 
-    // Here you would typically send an email using a service like SendGrid, Resend, or Nodemailer
-    // For now, we'll just log the data and return success
-    console.log("Contact form submission:", {
-      name: `${firstName} ${lastName}`,
-      email,
-      phone,
-      heardAbout,
-      hasStayed,
-      isAffiliated,
-      interests: selectedInterests,
-      message,
+    // -----------------------------
+    // 3) SMTP TRANSPORT (DreamHost)
+    // -----------------------------
+    const transporter = nodemailer.createTransport({
+      host: "mail.houseoftheredeemer.org",
+      port: 465,
+      secure: true,
+      auth: {
+        user: process.env.HOTR_SMTP_USER, // contact@houseoftheredeemer.org
+        pass: process.env.HOTR_SMTP_PASS,
+      },
     });
 
-    // Example with Resend (you'd need to install and configure it)
-    /*
-    const { Resend } = require('resend');
-    const resend = new Resend(process.env.RESEND_API_KEY);
-
-    await resend.emails.send({
-      from: 'noreply@houseoftheredeemer.org',
-      to: 'info@houseoftheredeemer.org',
+    // -----------------------------
+    // 4) SEND EMAIL
+    // -----------------------------
+    await transporter.sendMail({
+      from: `"House of the Redeemer" <${process.env.HOTR_SMTP_USER}>`,
+      to: "paulmneenan@gmail.com", // Nancy or staff inbox
       subject: `New Contact Form Submission from ${firstName} ${lastName}`,
+      replyTo: email,
       html: `
-        <h2>New Contact Form Submission</h2>
+        <h2>New Inquiry from the Website</h2>
+
         <p><strong>Name:</strong> ${firstName} ${lastName}</p>
         <p><strong>Email:</strong> ${email}</p>
         <p><strong>Phone:</strong> ${phone}</p>
-        <p><strong>How they heard about us:</strong> ${heardAbout}</p>
-        <p><strong>Has stayed before:</strong> ${hasStayed ? 'Yes' : 'No'}</p>
-        <p><strong>Affiliated with church/non-profit:</strong> ${isAffiliated ? 'Yes' : 'No'}</p>
-        <p><strong>Interested in:</strong> ${selectedInterests}</p>
+        <p><strong>How they heard about the House:</strong> ${heardAbout}</p>
+        <p><strong>Stayed before:</strong> ${hasStayed ? "Yes" : "No"}</p>
+        <p><strong>Affiliated with church/non-profit:</strong> ${isAffiliated ? "Yes" : "No"}</p>
+        <p><strong>Interests:</strong> ${selectedInterests}</p>
+
+        <hr />
+
         <p><strong>Message:</strong></p>
-        <p>${message}</p>
+        <p>${message.replace(/\n/g, "<br/>")}</p>
       `,
     });
-    */
 
     return NextResponse.json({
       success: true,
-      message: "Contact form submitted successfully",
+      message: "Message sent successfully.",
     });
-  } catch (error) {
-    console.error("Error processing contact form:", error);
+  } catch (err) {
+    console.error("Contact API Error:", err);
     return NextResponse.json(
-      { error: error.message || "Failed to process contact form" },
+      { error: "Server error while sending message." },
       { status: 500 }
     );
   }
