@@ -65,12 +65,12 @@ export async function POST(request) {
     // 3) SMTP TRANSPORT (DreamHost)
     // -----------------------------
     const transporter = nodemailer.createTransport({
-      host: "mail.houseoftheredeemer.org",
+      host: "smtp.dreamhost.com",
       port: 465,
       secure: true,
       auth: {
-        user: process.env.HOTR_SMTP_USER, // contact@houseoftheredeemer.org
-        pass: process.env.HOTR_SMTP_PASS,
+        user: process.env.SMTP_USER, // contact@houseoftheredeemer.org
+        pass: process.env.SMTP_PASS,
       },
     });
 
