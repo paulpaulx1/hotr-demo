@@ -113,7 +113,7 @@ export default function ContactForm() {
       }
 
       setSuccessMessage(
-        "Thank you for contacting us! We&apos;ll get back to you within 1-2 business days."
+        "Thank you for contacting us! We'll get back to you within 1-2 business days."
       );
 
       // Reset form
