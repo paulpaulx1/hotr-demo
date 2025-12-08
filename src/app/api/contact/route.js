@@ -85,7 +85,7 @@ export async function POST(request) {
 
     const transporter = createTransporter();
 
-    const DESTINATION = "paulmneenan@gmail.com";
+    const DESTINATION = "info@houseoftheredeemer.org";
 
     const emailHtml = `
       <h2>New Contact Form Submission</h2>
