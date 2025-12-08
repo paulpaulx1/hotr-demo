@@ -2,9 +2,9 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
-// Grab env vars at module scope so Next actually includes them
-const SMTP_USER = process.env.SMTP_USER; // contact@houseoftheredeemer.org
-const SMTP_PASS = process.env.SMTP_PASS; // mailbox password
+// ✅ Gmail credentials from Vercel
+const SMTP_USER = process.env.SMTP_USER; // pax.pmn.1987@gmail.com
+const SMTP_PASS = process.env.SMTP_PASS; // Gmail App Password
 
 function createTransporter() {
   if (!SMTP_USER || !SMTP_PASS) {
@@ -12,17 +12,14 @@ function createTransporter() {
     throw new Error("Email configuration error");
   }
 
+  // ✅ Gmail SMTP Transport
   return nodemailer.createTransport({
-    host: "smtp.dreamhost.com",
+    host: "smtp.gmail.com",
     port: 465,
     secure: true,
     auth: {
       user: SMTP_USER,
       pass: SMTP_PASS,
-    },
-    // DreamHost cert is for *.dreamhost.com, this keeps Node from freaking out
-    tls: {
-      rejectUnauthorized: false,
     },
   });
 }
@@ -88,7 +85,8 @@ export async function POST(request) {
 
     const transporter = createTransporter();
 
-    const DESTINATION = "paulmneenan@gmail.com"; // 👈 for now, send everything here
+    // ✅ Test inbox
+    const DESTINATION = "paulmneenan@gmail.com";
 
     const emailHtml = `
       <h2>New Contact Form Submission</h2>
@@ -107,22 +105,25 @@ export async function POST(request) {
       <p>${message?.replace(/\n/g, "<br/>")}</p>
     `;
 
-    // For debugging in Vercel logs
+    // ✅ Debug verification in Vercel logs
     console.log("SMTP_USER seen by server:", SMTP_USER);
 
     const info = await transporter.sendMail({
-      // What shows up in Natasha's inbox "from" line:
+      // ✅ FROM your Gmail
       from: `"House of the Redeemer" <${SMTP_USER}>`,
-      // Where the email actually goes (for now)
+
+      // ✅ TO your test inbox
       to: DESTINATION,
-      // So you can just hit "reply" and respond to the person:
+
+      // ✅ Reply goes to the actual form submitter
       replyTo: email,
+
       subject: `New Contact Form Submission from ${firstName} ${lastName}`,
       html: emailHtml,
 
-      // What SMTP actually uses for MAIL FROM / RCPT TO:
+      // ✅ Proper envelope for Gmail SMTP
       envelope: {
-        from: SMTP_USER, // MUST be the DreamHost mailbox
+        from: SMTP_USER,
         to: DESTINATION,
       },
     });
