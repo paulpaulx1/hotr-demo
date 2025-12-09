@@ -32,7 +32,7 @@ export default function ContactForm() {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
     if (type === "checkbox" && name.startsWith("interest-")) {
       const interestKey = name.replace("interest-", "");
       setFormData((prev) => ({
@@ -65,22 +65,26 @@ export default function ContactForm() {
     if (!formData.lastName.trim()) return "Last name is required";
     if (!formData.email.trim()) return "Email is required";
     if (!formData.phone.trim()) return "Phone number is required";
-    if (!formData.heardAbout.trim()) return "Please tell us how you heard about us";
-    
+    if (!formData.heardAbout.trim())
+      return "Please tell us how you heard about us";
+
     // Check if at least one interest is selected
-    const hasInterest = Object.values(formData.interests).some(val => val === true);
+    const hasInterest = Object.values(formData.interests).some(
+      (val) => val === true
+    );
     if (!hasInterest) return "Please select at least one area of interest";
-    
+
     if (!formData.message.trim()) return "Please provide a message";
-    if (privacyAccepted !== "yes") return "You must accept the Privacy Policy to continue";
+    if (privacyAccepted !== "yes")
+      return "You must accept the Privacy Policy to continue";
     if (!recaptchaToken) return "Please complete the reCAPTCHA verification";
-    
+
     return null;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const validationError = validateForm();
     if (validationError) {
       setErrorMessage(validationError);
@@ -109,9 +113,9 @@ export default function ContactForm() {
       }
 
       setSuccessMessage(
-        "Thank you for contacting us! We&apos;ll get back to you within 1-2 business days."
+        "Thank you for contacting us! We'll get back to you within 1-2 business days."
       );
-      
+
       // Reset form
       setFormData({
         firstName: "",
@@ -177,11 +181,6 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Error Message */}
-      {errorMessage && (
-        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md">
-          {errorMessage}
-        </div>
-      )}
 
       {/* Personal Information */}
       <div>
@@ -267,7 +266,8 @@ export default function ContactForm() {
             htmlFor="heardAbout"
             className="block text-sm font-medium text-slate-700 mb-1"
           >
-            How did you hear about House of the Redeemer? <span className="text-red-500">*</span>
+            How did you hear about House of the Redeemer?{" "}
+            <span className="text-red-500">*</span>
           </label>
           <select
             id="heardAbout"
@@ -294,7 +294,7 @@ export default function ContactForm() {
         <h3 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200">
           Your Experience
         </h3>
-        
+
         <div className="space-y-3">
           <div className="flex items-start">
             <input
@@ -306,7 +306,8 @@ export default function ContactForm() {
               className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
             />
             <label htmlFor="hasStayed" className="ml-3 text-sm text-slate-700">
-              Have you stayed at the House or held a retreat or event here before?
+              Have you stayed at the House or held a retreat or event here
+              before?
             </label>
           </div>
 
@@ -319,7 +320,10 @@ export default function ContactForm() {
               onChange={handleInputChange}
               className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
             />
-            <label htmlFor="isAffiliated" className="ml-3 text-sm text-slate-700">
+            <label
+              htmlFor="isAffiliated"
+              className="ml-3 text-sm text-slate-700"
+            >
               Are you affiliated with a church or a non-profit?
             </label>
           </div>
@@ -331,7 +335,7 @@ export default function ContactForm() {
         <h3 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200">
           What are you interested in? <span className="text-red-500">*</span>
         </h3>
-        
+
         <div className="space-y-3">
           <div className="flex items-start">
             <input
@@ -342,7 +346,10 @@ export default function ContactForm() {
               onChange={handleInputChange}
               className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
             />
-            <label htmlFor="interest-groupRetreat" className="ml-3 text-sm text-slate-700">
+            <label
+              htmlFor="interest-groupRetreat"
+              className="ml-3 text-sm text-slate-700"
+            >
               Holding a group retreat at the House
             </label>
           </div>
@@ -356,7 +363,10 @@ export default function ContactForm() {
               onChange={handleInputChange}
               className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
             />
-            <label htmlFor="interest-overnight" className="ml-3 text-sm text-slate-700">
+            <label
+              htmlFor="interest-overnight"
+              className="ml-3 text-sm text-slate-700"
+            >
               Staying overnight at the House
             </label>
           </div>
@@ -370,7 +380,10 @@ export default function ContactForm() {
               onChange={handleInputChange}
               className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
             />
-            <label htmlFor="interest-rentSpace" className="ml-3 text-sm text-slate-700">
+            <label
+              htmlFor="interest-rentSpace"
+              className="ml-3 text-sm text-slate-700"
+            >
               Renting space at the House for my event
             </label>
           </div>
@@ -384,7 +397,10 @@ export default function ContactForm() {
               onChange={handleInputChange}
               className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
             />
-            <label htmlFor="interest-filmPhoto" className="ml-3 text-sm text-slate-700">
+            <label
+              htmlFor="interest-filmPhoto"
+              className="ml-3 text-sm text-slate-700"
+            >
               Film &amp; photography at the House
             </label>
           </div>
@@ -398,7 +414,10 @@ export default function ContactForm() {
               onChange={handleInputChange}
               className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
             />
-            <label htmlFor="interest-other" className="ml-3 text-sm text-slate-700">
+            <label
+              htmlFor="interest-other"
+              className="ml-3 text-sm text-slate-700"
+            >
               Other (please indicate below)
             </label>
           </div>
@@ -437,7 +456,8 @@ export default function ContactForm() {
       {/* Privacy Policy Agreement */}
       <div>
         <h3 className="text-sm font-medium text-slate-900 mb-3">
-          Before submitting this form, please review and acknowledge that you accept our Privacy Policy <span className="text-red-500">*</span>
+          Before submitting this form, please review and acknowledge that you
+          accept our Privacy Policy <span className="text-red-500">*</span>
         </h3>
         <p className="text-sm text-slate-700 mb-3">
           I have read and accept the{" "}
@@ -463,7 +483,10 @@ export default function ContactForm() {
               className="h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300"
               required
             />
-            <label htmlFor="privacy-yes" className="ml-2 text-sm text-slate-700">
+            <label
+              htmlFor="privacy-yes"
+              className="ml-2 text-sm text-slate-700"
+            >
               Yes
             </label>
           </div>
@@ -483,6 +506,12 @@ export default function ContactForm() {
           </div>
         </div>
       </div>
+
+      {errorMessage && (
+        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md">
+          {errorMessage}
+        </div>
+      )}
 
       {/* Submit Button */}
       <div className="pt-4">
