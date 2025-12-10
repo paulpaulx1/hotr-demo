@@ -51,17 +51,20 @@ export default async function BoardPage() {
   } = (await getBoardData()) || {};
 
   const officers = trustees.filter((t) => t.role);
-  const members = trustees.filter((t) => !t.role);
+  const members = trustees
+    .filter((t) => !t.role)
+    .slice()
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-slate-50">
       {/* Hero */}
-      <div className="relative h-[400px] md:h-[750px] overflow-hidden">
+      <div className="relative h-[400px] md:h-[750px] overflow-hidden bg-black">
         <Image
           src="/board-hero.jpg"
           alt="Board of Trustees & Staff - House of the Redeemer"
           fill
-          className="object-cover object-center"
+          className="object-cover object-center opacity-90"
           priority
         />
         <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/50 flex items-center">
@@ -73,13 +76,14 @@ export default async function BoardPage() {
         </div>
       </div>
 
-      <section className="bg-slate-50 py-16">
+      {/* Staff */}
+      <section className="py-16">
         <div className="max-w-6xl mx-auto px-6">
           <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
             <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
               Staff
             </h2>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {staff.map((m) => (
                 <div
                   key={m.name}
@@ -136,21 +140,72 @@ export default async function BoardPage() {
         </div>
       </section>
 
-      {/* Trustees */}
-      <section className="bg-slate-50 py-16">
+      {/* Trustees (Officers + Members) */}
+      <section className="py-16">
         <div className="max-w-6xl mx-auto px-6">
           <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
             <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
-              Trustees
+              Board of Trustees
             </h2>
 
             {/* Officers */}
-            <div className="mb-10">
-              <h3 className="text-lg font-medium text-slate-900 mb-4">
-                Officers
-              </h3>
+            {officers.length > 0 && (
+              <div className="mb-10">
+                <h3 className="text-lg font-semibold text-slate-900 mb-4">
+                  Officers
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {officers.map((t) => (
+                    <div
+                      key={t.name}
+                      className="bg-white p-5 rounded-md shadow-sm border border-slate-200 hover:border-[#6b2f2a] transition-colors"
+                    >
+                      <h4 className="font-medium text-slate-900 text-lg mb-1">
+                        {t.name}
+                      </h4>
+                      {t.role && (
+                        <p className="text-[#6b2f2a] text-sm font-medium">
+                          {t.role}
+                        </p>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Members */}
+            {members.length > 0 && (
+              <div>
+                <h3 className="text-lg font-semibold text-slate-900 mb-4">
+                  Members
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {members.map((t) => (
+                    <div
+                      key={t.name}
+                      className="bg-white p-4 rounded-md shadow-sm border border-slate-200 hover:border-[#6b2f2a] transition-colors"
+                    >
+                      <p className="font-medium text-slate-900">{t.name}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* Trustees Emeritus */}
+      {trusteesEmeritus.length > 0 && (
+        <section className="py-16">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
+              <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
+                Trustees Emeritus
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {officers.map((t) => (
+                {trusteesEmeritus.map((t) => (
                   <div
                     key={t.name}
                     className="bg-white p-5 rounded-md shadow-sm border border-slate-200 hover:border-[#6b2f2a] transition-colors"
@@ -159,60 +214,15 @@ export default async function BoardPage() {
                       {t.name}
                     </h4>
                     {t.role && (
-                      <p className="text-[#6b2f2a] text-sm font-medium">
-                        {t.role}
-                      </p>
+                      <p className="text-slate-600 text-sm">{t.role}</p>
                     )}
                   </div>
                 ))}
               </div>
             </div>
-
-            {/* Members */}
-            <div>
-              <h3 className="text-lg font-medium text-slate-900 mb-4">
-                Members
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {members.map((t) => (
-                  <div
-                    key={t.name}
-                    className="bg-white p-4 rounded-md shadow-sm border border-slate-200 hover:border-[#6b2f2a] transition-colors"
-                  >
-                    <p className="font-medium text-slate-900">{t.name}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
-        </div>
-      </section>
-
-      {/* Trustees Emeritus */}
-      <section className="bg-slate-50 py-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
-            <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
-              Trustees Emeritus
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {trusteesEmeritus.map((t) => (
-                <div
-                  key={t.name}
-                  className="bg-slate-50 p-5 rounded-md shadow-sm border border-slate-200 hover:border-[#6b2f2a] transition-colors"
-                >
-                  <h4 className="font-medium text-slate-900 text-lg mb-1">
-                    {t.name}
-                  </h4>
-                  {t.role && <p className="text-slate-600 text-sm">{t.role}</p>}
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Staff */}
+        </section>
+      )}
 
       {/* Contact CTA */}
       <section className="bg-[#fbf9f7] py-16 text-center">
