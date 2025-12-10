@@ -40,7 +40,7 @@ const Footer = () => {
             </div>
 
             <p className="text-white/70 mb-6">
-              The House of the Redeemer, a place apart, based on the Episcopal
+              The House of the Redeemer, a place apart, based in the Episcopal
               tradition is open to all. Housed in a landmarked building, we
               provide hospitality through worship, spiritual renewal, and
               cultural and community events.
