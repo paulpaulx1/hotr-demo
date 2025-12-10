@@ -43,6 +43,42 @@ export const metadata = {
     "Meet the Board of Trustees and Staff of the House of the Redeemer who guide our mission and operations.",
 };
 
+// 🔠 Helper: sort by last name
+function sortByLastName<T extends { name?: string }>(a: T, b: T) {
+  const lastA = (a.name || "")
+    .trim()
+    .split(" ")
+    .slice(-1)[0];
+  const lastB = (b.name || "")
+    .trim()
+    .split(" ")
+    .slice(-1)[0];
+  return lastA.localeCompare(lastB);
+}
+
+// 🎚 Helper: officers by role priority, then last name
+function sortOfficersByRoleAndLastName<
+  T extends { name?: string; role?: string }
+>(a: T, b: T) {
+  const roleOrder: Record<string, number> = {
+    President: 1,
+    "Vice President": 2,
+    Treasurer: 3,
+    Secretary: 4,
+  };
+
+  const rankA =
+    a.role && roleOrder[a.role] !== undefined ? roleOrder[a.role] : 999;
+  const rankB =
+    b.role && roleOrder[b.role] !== undefined ? roleOrder[b.role] : 999;
+
+  // First by role priority
+  if (rankA !== rankB) return rankA - rankB;
+
+  // Then by last name within the same role
+  return sortByLastName(a, b);
+}
+
 export default async function BoardPage() {
   const {
     trustees = [],
@@ -50,11 +86,20 @@ export default async function BoardPage() {
     staff = [],
   } = (await getBoardData()) || {};
 
-  const officers = trustees.filter((t) => t.role);
+  // 🧑‍💼 Officers = trustees with a role, sorted by role priority then last name
+  const officers = trustees
+    .filter((t) => t.role)
+    .slice()
+    .sort(sortOfficersByRoleAndLastName);
+
+  // 👥 Members = trustees with no role, sorted by last name
   const members = trustees
     .filter((t) => !t.role)
     .slice()
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort(sortByLastName);
+
+  // 🎓 Trustees Emeritus sorted by last name
+  const emeritusSorted = trusteesEmeritus.slice().sort(sortByLastName);
 
   return (
     <main className="min-h-screen bg-slate-50">
@@ -197,7 +242,7 @@ export default async function BoardPage() {
       </section>
 
       {/* Trustees Emeritus */}
-      {trusteesEmeritus.length > 0 && (
+      {emeritusSorted.length > 0 && (
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-6">
             <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
@@ -205,7 +250,7 @@ export default async function BoardPage() {
                 Trustees Emeritus
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {trusteesEmeritus.map((t) => (
+                {emeritusSorted.map((t) => (
                   <div
                     key={t.name}
                     className="bg-white p-5 rounded-md shadow-sm border border-slate-200 hover:border-[#6b2f2a] transition-colors"
