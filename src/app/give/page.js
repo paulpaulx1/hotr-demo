@@ -29,8 +29,11 @@ export default function DonatePage() {
                 Support Our Mission
               </h1>
               <p className="text-lg md:text-xl text-white/90 leading-relaxed">
-                Your generous donation helps us provide a sanctuary for
-                spiritual growth, hospitality, and community programs.
+                The House of the Redeemer was founded on an act of generosity.
+                In 1949, Edith Shepard Fabbri deeded her home to be used as a
+                retreat house in perpetuity. Today, the House relies on the
+                generosity of its donors, benefactors, and friends to sustain
+                its mission of hospitality, spiritual renewal, and programming.
               </p>
             </div>
           </div>
@@ -46,8 +49,8 @@ export default function DonatePage() {
                 Make a Donation
               </h2>
               <p className="text-slate-600">
-                Your donations directly support our ongoing restoration
-                projects.
+                Your donations directly support the House’s mission and ongoing
+                restoration.
               </p>
             </div>
 
@@ -82,7 +85,8 @@ export default function DonatePage() {
                 Preserve History
               </h3>
               <p className="text-slate-600">
-                Help maintain our historic 1917 Italian Renaissance mansion
+                Your gift helps preserve our historic 1917 home and the art and
+                furnishings it holds.
               </p>
             </div>
             <div className="text-center">
@@ -95,7 +99,8 @@ export default function DonatePage() {
                 Support Programs
               </h3>
               <p className="text-slate-600">
-                Enable concerts, retreats, and spiritual programs
+                Your generosity makes concerts, lectures, and spiritual programs
+                possible.
               </p>
             </div>
             <div className="text-center">
@@ -105,10 +110,11 @@ export default function DonatePage() {
                 </span>
               </div>
               <h3 className="text-xl font-medium text-[#6b2f2a] mb-2">
-                Welcome All
+                Extend Hospitality
               </h3>
               <p className="text-slate-600">
-                Provide hospitality and sanctuary to our community
+                Your support keeps guest rooms accessible for retreatants, those
+                receiving medical care, and their families.
               </p>
             </div>
           </div>
