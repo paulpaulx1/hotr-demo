@@ -42,7 +42,7 @@ export default async function FilmAndTvPage() {
         filmmakers seeking timeless New York interiors.
       </p>
 
-      <div className={styles.grid}>
+      {/* <div className={styles.grid}>
         {films.map((f) => {
           const hasImage = Boolean(f.thumb);
           return (
@@ -96,7 +96,7 @@ export default async function FilmAndTvPage() {
             </article>
           );
         })}
-      </div>
+      </div> */}
     </main>
   );
 }
