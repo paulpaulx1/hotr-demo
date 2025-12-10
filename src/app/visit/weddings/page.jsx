@@ -48,7 +48,7 @@ export default function WeddingsPage() {
         <p className="mb-6">
           Please see{" "}
           <Link
-            href="/facilities"
+            href="/about/facilities"
             className="text-[#6b2f2a] hover:underline font-semibold"
           >
             Spaces &amp; Facilities
