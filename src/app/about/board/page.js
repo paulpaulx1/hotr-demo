@@ -32,7 +32,7 @@ async function getBoardData() {
     { next: { revalidate: 3600, tags: ["sanity"] } }
   );
 
-  if (!res.ok) throw new Error("Failed to fetch board data");
+  if (!res.ok) throw new Error(`Failed to fetch board data: ${res.status}`);
   const { result } = await res.json();
   return result || {};
 }
@@ -43,11 +43,32 @@ export const metadata = {
     "Meet the Board of Trustees and Staff of the House of the Redeemer who guide our mission and operations.",
 };
 
-// 🔤 SORTING HELPER — Last Name Sort
+// 🔠 Helper: sort by last name
 function sortByLastName(a, b) {
-  const lastA = a.name.trim().split(" ").slice(-1)[0];
-  const lastB = b.name.trim().split(" ").slice(-1)[0];
+  const lastA = (a.name || "").trim().split(" ").slice(-1)[0];
+  const lastB = (b.name || "").trim().split(" ").slice(-1)[0];
   return lastA.localeCompare(lastB);
+}
+
+// 🎚 Helper: officers by role priority, then last name
+function sortOfficersByRoleAndLastName(a, b) {
+  const roleOrder = {
+    President: 1,
+    "Vice President": 2,
+    Treasurer: 3,
+    Secretary: 4,
+  };
+
+  const rankA =
+    a.role && roleOrder[a.role] !== undefined ? roleOrder[a.role] : 999;
+  const rankB =
+    b.role && roleOrder[b.role] !== undefined ? roleOrder[b.role] : 999;
+
+  // First by role priority
+  if (rankA !== rankB) return rankA - rankB;
+
+  // Then by last name within the same role
+  return sortByLastName(a, b);
 }
 
 export default async function BoardPage() {
@@ -57,24 +78,24 @@ export default async function BoardPage() {
     staff = [],
   } = (await getBoardData()) || {};
 
-  // Officers = has role
+  // 🧑‍💼 Officers = trustees with a role, sorted by role priority then last name
   const officers = trustees
     .filter((t) => t.role)
     .slice()
-    .sort(sortByLastName);
+    .sort(sortOfficersByRoleAndLastName);
 
-  // Members = no role
+  // 👥 Members = trustees with no role, sorted by last name
   const members = trustees
     .filter((t) => !t.role)
     .slice()
     .sort(sortByLastName);
 
-  // Trustees Emeritus
+  // 🎓 Trustees Emeritus sorted by last name
   const emeritusSorted = trusteesEmeritus.slice().sort(sortByLastName);
 
   return (
     <main className="min-h-screen bg-slate-50">
-      {/* HERO */}
+      {/* Hero */}
       <div className="relative h-[400px] md:h-[750px] overflow-hidden bg-black">
         <Image
           src="/board-hero.jpg"
@@ -92,14 +113,13 @@ export default async function BoardPage() {
         </div>
       </div>
 
-      {/* STAFF */}
+      {/* Staff */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-6">
           <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
             <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
               Staff
             </h2>
-
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {staff.map((m) => (
                 <div
@@ -137,13 +157,11 @@ export default async function BoardPage() {
                   <h4 className="font-medium text-slate-900 text-lg mb-1">
                     {m.name}
                   </h4>
-
                   {m.role && (
                     <p className="text-[#6b2f2a] text-sm font-medium mb-2">
                       {m.role}
                     </p>
                   )}
-
                   {m.email && (
                     <a
                       href={`mailto:${m.email}`}
@@ -159,7 +177,7 @@ export default async function BoardPage() {
         </div>
       </section>
 
-      {/* TRUSTEES */}
+      {/* Trustees (Officers + Members) */}
       <section className="py-16">
         <div className="max-w-6xl mx-auto px-6">
           <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
@@ -173,7 +191,6 @@ export default async function BoardPage() {
                 <h3 className="text-lg font-semibold text-slate-900 mb-4">
                   Officers
                 </h3>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {officers.map((t) => (
                     <div
@@ -183,9 +200,11 @@ export default async function BoardPage() {
                       <h4 className="font-medium text-slate-900 text-lg mb-1">
                         {t.name}
                       </h4>
-                      <p className="text-[#6b2f2a] text-sm font-medium">
-                        {t.role}
-                      </p>
+                      {t.role && (
+                        <p className="text-[#6b2f2a] text-sm font-medium">
+                          {t.role}
+                        </p>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -198,7 +217,6 @@ export default async function BoardPage() {
                 <h3 className="text-lg font-semibold text-slate-900 mb-4">
                   Members
                 </h3>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {members.map((t) => (
                     <div
@@ -215,7 +233,7 @@ export default async function BoardPage() {
         </div>
       </section>
 
-      {/* TRUSTEES EMERITUS */}
+      {/* Trustees Emeritus */}
       {emeritusSorted.length > 0 && (
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-6">
@@ -223,7 +241,6 @@ export default async function BoardPage() {
               <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
                 Trustees Emeritus
               </h2>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {emeritusSorted.map((t) => (
                   <div
@@ -233,7 +250,6 @@ export default async function BoardPage() {
                     <h4 className="font-medium text-slate-900 text-lg mb-1">
                       {t.name}
                     </h4>
-
                     {t.role && (
                       <p className="text-slate-600 text-sm">{t.role}</p>
                     )}
@@ -245,7 +261,7 @@ export default async function BoardPage() {
         </section>
       )}
 
-      {/* CTA */}
+      {/* Contact CTA */}
       <section className="bg-[#fbf9f7] py-16 text-center">
         <div className="max-w-4xl mx-auto px-6">
           <h3 className="font-serif text-2xl font-medium text-[#6b2f2a] mb-4">
@@ -253,7 +269,7 @@ export default async function BoardPage() {
           </h3>
           <p className="text-slate-600 mb-6">
             Have questions or want to learn more about supporting our mission?
-            We’d love to hear from you.
+            We&apos;d love to hear from you.
           </p>
           <a
             href="/contact"
