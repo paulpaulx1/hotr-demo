@@ -1,9 +1,8 @@
-// app/api/contact/route.js
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
 // ✅ Gmail credentials from Vercel
-const SMTP_USER = process.env.SMTP_USER; // pax.pmn.1987@gmail.com
+const SMTP_USER = process.env.SMTP_USER; // e.g. pax.pmn.1987@gmail.com
 const SMTP_PASS = process.env.SMTP_PASS; // Gmail App Password
 
 function createTransporter() {
@@ -12,7 +11,6 @@ function createTransporter() {
     throw new Error("Email configuration error");
   }
 
-  // ✅ Gmail SMTP Transport
   return nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -37,6 +35,13 @@ export async function POST(request) {
       interests,
       message,
       recaptchaToken,
+
+      // ✅ NEW fields
+      affiliationOrg,
+      affiliationLocation,
+      stayedDetails,
+      requestedDates,
+      groupSize,
     } = await request.json();
 
     // --- reCAPTCHA verification ---
@@ -48,6 +53,13 @@ export async function POST(request) {
       );
     }
 
+    if (!recaptchaToken) {
+      return NextResponse.json(
+        { error: "Missing reCAPTCHA token" },
+        { status: 400 }
+      );
+    }
+
     const recaptchaResponse = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
       {
@@ -55,13 +67,15 @@ export async function POST(request) {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`,
+        body: `secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${encodeURIComponent(
+          recaptchaToken
+        )}`,
       }
     );
 
     const recaptchaData = await recaptchaResponse.json();
 
-    if (!recaptchaData.success || recaptchaData.action === "error") {
+    if (!recaptchaData.success) {
       return NextResponse.json(
         { error: "reCAPTCHA verification failed" },
         { status: 400 }
@@ -84,43 +98,58 @@ export async function POST(request) {
       .join(", ");
 
     const transporter = createTransporter();
-
     const DESTINATION = "info@houseoftheredeemer.org";
 
     const emailHtml = `
       <h2>New Contact Form Submission</h2>
+
+      <h3>Contact</h3>
       <p><strong>Name:</strong> ${firstName} ${lastName}</p>
       <p><strong>Email:</strong> ${email}</p>
       <p><strong>Phone:</strong> ${phone}</p>
       <p><strong>How they heard about us:</strong> ${heardAbout}</p>
+
+      <h3>Experience</h3>
       <p><strong>Has stayed before:</strong> ${hasStayed ? "Yes" : "No"}</p>
+      ${
+        hasStayed
+          ? `<p><strong>Stayed details:</strong> ${stayedDetails || "—"}</p>`
+          : ""
+      }
+
       <p><strong>Affiliated with church/non-profit:</strong> ${
         isAffiliated ? "Yes" : "No"
       }</p>
+      ${
+        isAffiliated
+          ? `<p><strong>Affiliation:</strong> ${
+              affiliationOrg || "—"
+            } (${affiliationLocation || "—"})</p>`
+          : ""
+      }
+
+      <h3>Interests</h3>
       <p><strong>Interested in:</strong> ${
         selectedInterests || "Not specified"
       }</p>
-      <p><strong>Message:</strong></p>
-      <p>${message?.replace(/\n/g, "<br/>")}</p>
+
+      <h3>Scheduling</h3>
+      <p><strong>Requested dates:</strong> ${requestedDates || "—"}</p>
+      <p><strong>Group size:</strong> ${groupSize || "—"}</p>
+
+      <h3>Message</h3>
+      <p>${(message || "").replace(/\n/g, "<br/>")}</p>
     `;
 
     // ✅ Debug verification in Vercel logs
     console.log("SMTP_USER seen by server:", SMTP_USER);
 
     const info = await transporter.sendMail({
-      // ✅ FROM your Gmail
       from: `"House of the Redeemer" <${SMTP_USER}>`,
-
-      // ✅ TO your test inbox
       to: DESTINATION,
-
-      // ✅ Reply goes to the actual form submitter
       replyTo: email,
-
       subject: `New Contact Form Submission from ${firstName} ${lastName}`,
       html: emailHtml,
-
-      // ✅ Proper envelope for Gmail SMTP
       envelope: {
         from: SMTP_USER,
         to: DESTINATION,

@@ -46,30 +46,42 @@ export default function StayAtTheHousePage() {
 
       {/* Booking Section */}
       <div className="bg-[#fbf9f7] py-16">
-        <div className="max-w-3xl mx-auto px-6">
-          <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-6 text-center">
-            Booking Information
-          </h2>
-          <p className="text-slate-700 mb-6 leading-relaxed">
-            Once you&rsquo;ve reviewed our booking and check-in requirements
-            (below) and decide to pursue a booking, please call the office
-            directly at{" "}
-            <a
-              href="tel:2122890399"
-              className="text-[#6b2f2a] hover:underline"
-            >
-              (212) 289-0399
-            </a>{" "}
-            to place a deposit and secure a room.
-          </p>
-          <p className="text-slate-700 mb-6 leading-relaxed">
-            We suggest that new inquirers check our website &mdash; including
-            the{" "}
-            <a href="/faq" className="text-[#6b2f2a] hover:underline">
-              FAQ section
-            </a>{" "}
-            &mdash; to learn more about the House and its mission.
-          </p>
+        <div className="bg-[#fbf9f7] py-16">
+          <div className="max-w-3xl mx-auto px-6">
+            <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-6 text-center">
+              Booking Information
+            </h2>
+
+            <p className="text-slate-700 mb-6 leading-relaxed">
+              To begin the booking process, please submit an inquiry through our{" "}
+              <a href="/contact" className="text-[#6b2f2a] hover:underline">
+                contact form
+              </a>{" "}
+              before calling the office. This ensures our staff has your
+              information on file and can assist you more efficiently.
+            </p>
+
+            <p className="text-slate-700 mb-6 leading-relaxed">
+              Once you&rsquo;ve submitted the form, you may call the office
+              directly at{" "}
+              <a
+                href="tel:2122890399"
+                className="text-[#6b2f2a] hover:underline"
+              >
+                (212) 289-0399
+              </a>{" "}
+              to place a deposit and secure a room.
+            </p>
+
+            <p className="text-slate-700 mb-6 leading-relaxed">
+              We also encourage new inquirers to review our website &mdash;
+              including the{" "}
+              <a href="/faq" className="text-[#6b2f2a] hover:underline">
+                FAQ section
+              </a>{" "}
+              &mdash; to learn more about the House and its mission.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -80,7 +92,9 @@ export default function StayAtTheHousePage() {
             Guest Requirements
           </h2>
           <ul className="text-slate-700 space-y-3 leading-relaxed list-disc list-inside">
-            <li>Arrivals must be between 10 am &ndash; 5 pm, Monday&ndash;Friday.</li>
+            <li>
+              Arrivals must be between 10 am &ndash; 5 pm, Monday&ndash;Friday.
+            </li>
             <li>Guests must be able to walk stairs with ease.</li>
             <li>No guests under 16 years of age.</li>
             <li>The House cannot accept package deliveries for guests.</li>
@@ -96,8 +110,8 @@ export default function StayAtTheHousePage() {
             Deposits &amp; Payments
           </h2>
           <p className="text-slate-700 mb-4 leading-relaxed">
-            A <strong>25% deposit</strong> is required upon making a reservation,
-            with the balance due upon check-in. The deposit is{" "}
+            A <strong>25% deposit</strong> is required upon making a
+            reservation, with the balance due upon check-in. The deposit is{" "}
             <strong>non-refundable and non-transferable</strong>.
           </p>
           <p className="text-slate-700 mb-4 leading-relaxed">
@@ -123,7 +137,8 @@ export default function StayAtTheHousePage() {
             Contact the House
           </h3>
           <p className="text-slate-700 mb-6 leading-relaxed">
-            For booking inquiries and general information, please visit our contact page.
+            For booking inquiries and general information, please visit our
+            contact page.
           </p>
           <a
             href="/contact"

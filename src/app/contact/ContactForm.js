@@ -21,6 +21,14 @@ export default function ContactForm() {
       filmPhoto: false,
       other: false,
     },
+
+    // ✅ NEW fields
+    affiliationOrg: "",
+    affiliationLocation: "",
+    stayedDetails: "",
+    requestedDates: "",
+    groupSize: "",
+
     message: "",
   });
 
@@ -53,6 +61,7 @@ export default function ContactForm() {
         [name]: value,
       }));
     }
+
     setErrorMessage("");
   };
 
@@ -73,6 +82,32 @@ export default function ContactForm() {
       (val) => val === true
     );
     if (!hasInterest) return "Please select at least one area of interest";
+
+    // Conditional requirements
+    if (formData.isAffiliated) {
+      if (!formData.affiliationOrg.trim())
+        return "Please tell us what church or organization you’re affiliated with";
+      if (!formData.affiliationLocation.trim())
+        return "Please tell us where that organization is located";
+    }
+
+    if (formData.hasStayed) {
+      if (!formData.stayedDetails.trim())
+        return "Please tell us when you stayed and what retreat/event it was";
+    }
+
+    const wantsScheduling =
+      formData.interests.groupRetreat ||
+      formData.interests.overnight ||
+      formData.interests.rentSpace ||
+      formData.interests.filmPhoto;
+
+    if (wantsScheduling) {
+      if (!formData.requestedDates.trim())
+        return "Please tell us what dates you are interested in";
+      if (!formData.groupSize.trim())
+        return "Please tell us approximately how many people";
+    }
 
     if (!formData.message.trim()) return "Please provide a message";
     if (privacyAccepted !== "yes")
@@ -97,9 +132,7 @@ export default function ContactForm() {
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...formData,
           recaptchaToken,
@@ -132,12 +165,18 @@ export default function ContactForm() {
           filmPhoto: false,
           other: false,
         },
+
+        affiliationOrg: "",
+        affiliationLocation: "",
+        stayedDetails: "",
+        requestedDates: "",
+        groupSize: "",
+
         message: "",
       });
+
       setPrivacyAccepted("");
-      if (recaptchaRef.current) {
-        recaptchaRef.current.reset();
-      }
+      if (recaptchaRef.current) recaptchaRef.current.reset();
       setRecaptchaToken(null);
     } catch (error) {
       setErrorMessage(error.message || "An error occurred. Please try again.");
@@ -178,15 +217,27 @@ export default function ContactForm() {
     );
   }
 
+  const wantsScheduling =
+    formData.interests.groupRetreat ||
+    formData.interests.overnight ||
+    formData.interests.rentSpace ||
+    formData.interests.filmPhoto;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Error Message */}
+      {errorMessage && (
+        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md">
+          {errorMessage}
+        </div>
+      )}
 
       {/* Personal Information */}
       <div>
         <h3 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200">
           Your Information
         </h3>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label
@@ -205,6 +256,7 @@ export default function ContactForm() {
               required
             />
           </div>
+
           <div>
             <label
               htmlFor="lastName"
@@ -242,6 +294,7 @@ export default function ContactForm() {
               required
             />
           </div>
+
           <div>
             <label
               htmlFor="phone"
@@ -311,6 +364,23 @@ export default function ContactForm() {
             </label>
           </div>
 
+          {formData.hasStayed && (
+            <div className="ml-7">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                When did you stay, and what retreat/event?{" "}
+                <span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="stayedDetails"
+                value={formData.stayedDetails}
+                onChange={handleInputChange}
+                className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                placeholder="e.g. June 2023 — Diocesan retreat"
+              />
+            </div>
+          )}
+
           <div className="flex items-start">
             <input
               type="checkbox"
@@ -327,6 +397,38 @@ export default function ContactForm() {
               Are you affiliated with a church or a non-profit?
             </label>
           </div>
+
+          {formData.isAffiliated && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-7">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Church / organization <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="affiliationOrg"
+                  value={formData.affiliationOrg}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                  placeholder="e.g. St. Mark’s Church / ABC Nonprofit"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Location <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="affiliationLocation"
+                  value={formData.affiliationLocation}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+                  placeholder="City, State"
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -337,91 +439,78 @@ export default function ContactForm() {
         </h3>
 
         <div className="space-y-3">
-          <div className="flex items-start">
-            <input
-              type="checkbox"
-              id="interest-groupRetreat"
-              name="interest-groupRetreat"
-              checked={formData.interests.groupRetreat}
-              onChange={handleInputChange}
-              className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
-            />
-            <label
-              htmlFor="interest-groupRetreat"
-              className="ml-3 text-sm text-slate-700"
-            >
-              Holding a group retreat at the House
+          {[
+            ["groupRetreat", "Holding a group retreat at the House"],
+            ["overnight", "Staying overnight at the House"],
+            ["rentSpace", "Renting space at the House for my event"],
+            ["filmPhoto", "Film & photography at the House"],
+            ["other", "Other (please indicate below)"],
+          ].map(([key, label]) => (
+            <div className="flex items-start" key={key}>
+              <input
+                type="checkbox"
+                id={`interest-${key}`}
+                name={`interest-${key}`}
+                checked={formData.interests[key]}
+                onChange={handleInputChange}
+                className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
+              />
+              <label
+                htmlFor={`interest-${key}`}
+                className="ml-3 text-sm text-slate-700"
+              >
+                {label}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Scheduling Details (free text) */}
+      <div>
+        <h3 className="text-lg font-medium text-slate-900 mb-4 pb-2 border-b border-slate-200">
+          Scheduling Details
+          {wantsScheduling && <span className="text-red-500"> *</span>}
+        </h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              What dates are you interested in?
+              {wantsScheduling && <span className="text-red-500"> *</span>}
             </label>
+            <input
+              type="text"
+              name="requestedDates"
+              value={formData.requestedDates}
+              onChange={handleInputChange}
+              className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+              placeholder="e.g. Feb 12–14, or any weekend in March"
+            />
           </div>
 
-          <div className="flex items-start">
-            <input
-              type="checkbox"
-              id="interest-overnight"
-              name="interest-overnight"
-              checked={formData.interests.overnight}
-              onChange={handleInputChange}
-              className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
-            />
-            <label
-              htmlFor="interest-overnight"
-              className="ml-3 text-sm text-slate-700"
-            >
-              Staying overnight at the House
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              How many people?
+              {wantsScheduling && <span className="text-red-500"> *</span>}
             </label>
-          </div>
-
-          <div className="flex items-start">
             <input
-              type="checkbox"
-              id="interest-rentSpace"
-              name="interest-rentSpace"
-              checked={formData.interests.rentSpace}
+              type="text"
+              name="groupSize"
+              value={formData.groupSize}
               onChange={handleInputChange}
-              className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
+              className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent"
+              placeholder="e.g. 2, 8–10, ~25"
             />
-            <label
-              htmlFor="interest-rentSpace"
-              className="ml-3 text-sm text-slate-700"
-            >
-              Renting space at the House for my event
-            </label>
-          </div>
-
-          <div className="flex items-start">
-            <input
-              type="checkbox"
-              id="interest-filmPhoto"
-              name="interest-filmPhoto"
-              checked={formData.interests.filmPhoto}
-              onChange={handleInputChange}
-              className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
-            />
-            <label
-              htmlFor="interest-filmPhoto"
-              className="ml-3 text-sm text-slate-700"
-            >
-              Film &amp; photography at the House
-            </label>
-          </div>
-
-          <div className="flex items-start">
-            <input
-              type="checkbox"
-              id="interest-other"
-              name="interest-other"
-              checked={formData.interests.other}
-              onChange={handleInputChange}
-              className="mt-1 h-4 w-4 text-slate-900 focus:ring-slate-900 border-slate-300 rounded"
-            />
-            <label
-              htmlFor="interest-other"
-              className="ml-3 text-sm text-slate-700"
-            >
-              Other (please indicate below)
-            </label>
           </div>
         </div>
+
+        {!wantsScheduling && (
+          <p className="text-xs text-slate-500 mt-2">
+            (Optional unless you’re requesting a stay, retreat, event rental, or
+            film/photo.)
+          </p>
+        )}
       </div>
 
       {/* Message */}
@@ -437,7 +526,7 @@ export default function ContactForm() {
           name="message"
           value={formData.message}
           onChange={handleInputChange}
-          rows="6"
+          rows={6}
           className="w-full px-4 py-2 border border-slate-300 rounded-md focus:ring-2 focus:ring-slate-900 focus:border-transparent resize-vertical"
           placeholder="Please provide details about your inquiry..."
           required
@@ -490,6 +579,7 @@ export default function ContactForm() {
               Yes
             </label>
           </div>
+
           <div className="flex items-center">
             <input
               type="radio"
@@ -506,12 +596,6 @@ export default function ContactForm() {
           </div>
         </div>
       </div>
-
-      {errorMessage && (
-        <div className="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-md">
-          {errorMessage}
-        </div>
-      )}
 
       {/* Submit Button */}
       <div className="pt-4">
