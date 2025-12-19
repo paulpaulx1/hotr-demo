@@ -159,30 +159,29 @@ const Footer = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="pt-6 border-t border-white/10 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-white/60 text-sm mb-4 md:mb-0">
-            &copy; {currentYear} House of the Redeemer. All rights reserved.
-          </p>
-          <div className="flex space-x-6 text-sm">
-            <Link
-              href="/privacy"
-              className="text-white/60 hover:text-white transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            {/* <Link
-              href="/terms"
-              className="text-white/60 hover:text-white transition-colors"
-            >
-              Terms of Service
-            </Link>
-            <Link
-              href="/accessibility"
-              className="text-white/60 hover:text-white transition-colors"
-            >
-              Accessibility
-            </Link> */}
+        {/* Bottom Section */}
+        <div className="pt-6 border-t border-white/10">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-white/60 text-sm text-center md:text-left">
+              &copy; {currentYear} House of the Redeemer. All rights reserved.
+            </p>
+
+            <div className="flex space-x-6 text-sm">
+              <Link
+                href="/privacy"
+                className="text-white/60 hover:text-white transition-colors"
+              >
+                Privacy Policy
+              </Link>
+            </div>
           </div>
+
+          {/* Photography Credits */}
+          <p className="mt-4 text-white/50 text-sm leading-relaxed text-center md:text-left max-w-4xl">
+            Photography credits: We are grateful to the photographers whose work
+            appears throughout this site — Brandon Harris, Kara Flannery,
+            Marquis Perkins, Gary Sapolin, and Jonathan Wallen.
+          </p>
         </div>
       </div>
     </footer>
