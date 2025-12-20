@@ -533,9 +533,9 @@
     margin-top: 0.5rem;
   }
 
-  .navButton {
+  /* .navButton {
     display: none !important;
-  }
+  } */
 
   .calendarWrapper :global(.rbc-toolbar) {
     margin-bottom: 0.75rem;

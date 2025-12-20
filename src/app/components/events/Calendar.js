@@ -195,54 +195,71 @@ export default function EventsCalendar({ events = [] }) {
   }, []);
 
   // ✨ Custom toolbar
-  const CustomToolbar = ({ label, onNavigate, view, onView }) => (
-    <div className={styles.customToolbar}>
-      {!isMobile && (
+  // ✨ Custom toolbar
+  const CustomToolbar = ({ label, onNavigate, view, onView }) => {
+    const isDay = view === "day";
+
+    return (
+      <div className={styles.customToolbar}>
+        {/* Prev */}
         <button
+          type="button"
           className={styles.navButton}
           onClick={() => onNavigate("PREV")}
-          aria-label={view === "month" ? "Previous month" : "Previous day"}
+          aria-label={isDay ? "Previous day" : "Previous month"}
         >
-          ← Previous {view === "month" ? "Month" : "Day"}
+          <span className={styles.navButtonIcon} aria-hidden="true">
+            ←
+          </span>
+          <span className={styles.navButtonText}>
+            Previous {isDay ? "Day" : "Month"}
+          </span>
         </button>
-      )}
 
-      <div className={styles.toolbarLabelWrap} aria-live="polite">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={label}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className={styles.toolbarLabel}
-          >
-            {label}
-          </motion.div>
-        </AnimatePresence>
+        {/* Label + Back to Month */}
+        <div className={styles.toolbarLabelWrap} aria-live="polite">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={label}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.22, ease: "easeOut" }}
+              className={styles.toolbarLabel}
+            >
+              {label}
+            </motion.div>
+          </AnimatePresence>
 
-        {view === "day" && (
-          <button
-            onClick={() => onView("month")}
-            className={styles.backToMonthButton}
-            aria-label="Back to month view"
-          >
-            ← Back to Month
-          </button>
-        )}
-      </div>
+          {isDay && (
+            <button
+              type="button"
+              onClick={() => onView("month")}
+              className={styles.backToMonthButton}
+              aria-label="Back to month view"
+            >
+              ← Back to Month
+            </button>
+          )}
+        </div>
 
-      {!isMobile && (
+        {/* Next */}
         <button
+          type="button"
           className={styles.navButton}
           onClick={() => onNavigate("NEXT")}
-          aria-label={view === "month" ? "Next month" : "Next day"}
+          aria-label={isDay ? "Next day" : "Next month"}
         >
-          Next {view === "month" ? "Month" : "Day"} →
+          <span className={styles.navButtonText}>
+            Next {isDay ? "Day" : "Month"}
+          </span>
+          <span className={styles.navButtonIcon} aria-hidden="true">
+            →
+          </span>
         </button>
-      )}
-    </div>
-  );
+      </div>
+    );
+  };
 
   // 🟦 Day view event: single inline line “time – time: title”
   const DayEventComponent = ({ event }) => {
