@@ -1,0 +1,111 @@
+/* QuickLinksGrid.module.css */
+.section {
+  width: 100%;
+  background-color: #1e293b;
+  padding: 4rem 1.5rem;
+}
+
+.container {
+  max-width: 90rem;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.5rem;
+  justify-items: center;
+}
+
+.card {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  cursor: pointer;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background: #0f172a;
+}
+
+/* THIS fixes warping + keeps it looking “photo-like” */
+.image {
+  object-fit: cover;
+  object-position: center;
+  transform: translateZ(0); /* reduces shimmer on scaling in some browsers */
+  transition: transform 0.6s ease;
+}
+
+.card:hover .image {
+  transform: scale(1.05);
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.85) 0%,
+    rgba(0, 0, 0, 0.25) 60%,
+    transparent 100%
+  );
+  z-index: 1;
+  transition: background 0.3s ease;
+}
+
+.card:hover .overlay {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.9) 0%,
+    rgba(0, 0, 0, 0.35) 60%,
+    transparent 100%
+  );
+}
+
+.content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  z-index: 2;
+  text-align: center;
+}
+
+.title {
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  font-weight: 300;
+  color: white;
+  margin-bottom: 0.5rem;
+  letter-spacing: 0.025em;
+}
+
+.description {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.card:hover .description {
+  opacity: 1;
+}
+
+@media (min-width: 768px) {
+  .title {
+    font-size: 1.75rem;
+  }
+}
