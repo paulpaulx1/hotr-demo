@@ -54,7 +54,7 @@ function formatRecurrence(recur) {
           FR: "Friday",
           SA: "Saturday",
           SU: "Sunday",
-        }[d])
+        })[d]
     )
     .filter(Boolean);
 
@@ -140,12 +140,14 @@ export default async function EventPage({ params }) {
       month: "long",
       day: "numeric",
       year: "numeric",
+      timeZone: "America/New_York", // Add this
     });
 
   const formatTime = (date) =>
     date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
+      timeZone: "America/New_York", // Add this
     });
 
   return (
