@@ -25,10 +25,10 @@ export default function DonatePage() {
         <div className='absolute inset-0 bg-gradient-to-r from-slate-900/90 via-slate-900/70 to-slate-900/50 flex items-center'>
           <div className='max-w-7xl mx-auto px-6 w-full flex justify-center items-center"'>
             <div className='max-w-2xl text-whit mt-24'>
-              <h1 className='font-serif text-4xl md:text-5xl font-medium mb-4 tracking-wide flex justify-center items-center text-white'>
+              <h1 className='font-serif text-3xl md:text-5xl font-medium mb-4 tracking-wide flex justify-center items-center text-white'>
                 Support Our Mission
               </h1>
-              <p className='text-md md:text-xl text-white/90 leading-relaxed'>
+              <p className='text-md md:text-xl text-white/90 leading-relaxed pb-[24]'>
                 The House of the Redeemer was founded on an act of generosity.
                 In 1949, Edith Shepard Fabbri deeded her home to be used as a
                 retreat house in perpetuity. Today, the House relies on the
