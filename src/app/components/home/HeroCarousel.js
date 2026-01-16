@@ -20,7 +20,7 @@ export default function HeroCarousel({ slides = [] }) {
     if (!slides.length || !isAutoAdvancing) return;
     const id = setInterval(
       () => setCurrent((i) => (i + 1) % slides.length),
-      10000
+      10000,
     );
     return () => clearInterval(id);
   }, [slides, isAutoAdvancing]);
@@ -90,7 +90,7 @@ export default function HeroCarousel({ slides = [] }) {
 
             {/* --- text content --- */}
             <div className='relative z-20 flex items-center justify-center h-full text-center text-white px-6'>
-              <div className='max-w-6xl mx-auto'>
+              <div className='max-w-6xl mx-auto mt-24'>
                 <h1
                   className={`font-serif text-5xl md:text-7xl mb-8 transition-all duration-700 ${
                     active
@@ -104,7 +104,7 @@ export default function HeroCarousel({ slides = [] }) {
                 {/* services row (if any) */}
                 {s.services?.length > 0 && (
                   <div
-                    className={`flex flex-wrap justify-center gap-6 md:gap-12 text-lg md:text-xl font-light tracking-wide mb-8 transition-all duration-700 ${
+                    className={`flex flex-wrap justify-center gap-3 md:gap-6 text-base md:text-lg font-light tracking-wide mb-8 transition-all duration-700 ${
                       active
                         ? 'opacity-100 translate-y-0'
                         : 'opacity-0 translate-y-8'
@@ -112,9 +112,13 @@ export default function HeroCarousel({ slides = [] }) {
                   >
                     {s.services.map((service, idx) => (
                       <React.Fragment key={service}>
-                        <span className='text-white/95 font-semibold text-xl'>{service}</span>
+                        <span className='text-white/95 font-semibold'>
+                          {service}
+                        </span>
                         {idx < s.services.length - 1 && (
-                          <span className='text-white/60 ml-6 md:ml-12 font-semibold'>|</span>
+                          <span className='text-white/60 hidden md:inline font-semibold'>
+                            |
+                          </span>
                         )}
                       </React.Fragment>
                     ))}
@@ -180,9 +184,7 @@ export default function HeroCarousel({ slides = [] }) {
         <h3 className='font-serif text-xl font-medium mb-2'>
           Historic Sanctuary
         </h3>
-        <p className='text-white/80 text-sm mb-4 font-light'>
-          Fabbri Home
-        </p>
+        <p className='text-white/80 text-sm mb-4 font-light'>Fabbri Home</p>
         <Link
           href='/contact'
           className='text-white/90 hover:text-white text-sm font-light border-b border-white/30 hover:border-white transition-all duration-300 hover:-translate-y-0.5 inline-block'
