@@ -82,10 +82,17 @@ export default function EventsCalendar({ events = [] }) {
       const count = rec.count || 50;
       const until = rec.until ? new Date(rec.until) : null;
       const daysOfWeek = rec.daysOfWeek || [];
+      const exdates = (rec.exdates || []).map((d) => startOfDay(new Date(d))); // <- normalize to day
 
       const instances = [];
       const start = new Date(event.start);
       const end = new Date(event.end);
+
+      // Helper to check if a date is excluded
+      const isExcluded = (date) => {
+        const dayKey = startOfDay(date).getTime();
+        return exdates.some((exdate) => exdate.getTime() === dayKey);
+      };
 
       for (let i = 0; i < count; i++) {
         const nextStart = new Date(start);
@@ -109,7 +116,8 @@ export default function EventsCalendar({ events = [] }) {
             const nextE = new Date(next);
             nextE.setTime(next.getTime() + (end - start));
 
-            if (!until || next <= until) {
+            if ((!until || next <= until) && !isExcluded(next)) {
+              // <- check here
               instances.push({ ...event, start: next, end: nextE });
             }
           });
@@ -122,7 +130,8 @@ export default function EventsCalendar({ events = [] }) {
           nextEnd.setFullYear(end.getFullYear() + i * interval);
         }
 
-        if (!until || nextStart <= until) {
+        if ((!until || nextStart <= until) && !isExcluded(nextStart)) {
+          // <- and here
           instances.push({ ...event, start: nextStart, end: nextEnd });
         }
       }

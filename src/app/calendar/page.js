@@ -26,7 +26,8 @@ async function getEvents() {
         interval,
         daysOfWeek,
         count,
-        until
+        until,
+        exdates
       }
     }
   `;

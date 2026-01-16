@@ -92,13 +92,13 @@ export default function QuickLinksGrid() {
         if (!projectId || !dataset) return;
 
         const query = encodeURIComponent(`
-          *[_type == "quickLink"]{
-            link,
-            title,
-            description,
-            "imageUrl": image.asset->url
-          }
-        `);
+  *[_type == "quickLink"]{
+    link,
+    title,
+    description,
+    "imageUrl": image.asset->url + "?w=800&auto=format"
+  }
+`);
 
         const url = `https://${projectId}.apicdn.sanity.io/v2023-10-10/data/query/${dataset}?query=${query}`;
         const res = await fetch(url);
@@ -143,9 +143,7 @@ export default function QuickLinksGrid() {
                   src={card.image}
                   alt={card.title}
                   fill
-                  className={styles.image}
-                  // IMPORTANT: cap to your real max card width so Next requests enough pixels
-                  sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 400px"
+                  sizes="(max-width: 768px) 90vw, 400px"
                   quality={99}
                 />
                 <div className={styles.overlay} />
