@@ -38,7 +38,7 @@ const MainNavigation = () => {
         { label: "Weddings & Special Events", href: "/visit/weddings" },
         { label: "Nonprofit Events", href: "/visit/nonprofit-events" },
         { label: "FAQ", href: "/visit/faq" },
-        // { label: "TV & Film", href: "/filmandtv" },
+        { label: "TV & Film", href: "/visit/filmandtv" },
         { label: "Stay at the House", href: "/visit/stay-at-the-house" },
       ],
     },

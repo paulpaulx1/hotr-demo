@@ -12,6 +12,7 @@
     margin: 0 0 1.5rem;
     color: rgb(23, 23, 23);
     position: relative;
+    margin-top:30px;
 }
 
 .heading:after {
