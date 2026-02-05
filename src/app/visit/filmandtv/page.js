@@ -7,16 +7,18 @@ export default async function FilmAndTvPage() {
     <main className={styles.wrapper}>
       <h1 className={styles.heading}>Film &amp; Television at the House</h1>
       
-      <p className={styles.intro}>
-        The House of the Redeemer is a historic building on the Upper East Side 
-        of Manhattan available for film, television, and photography projects. 
-        Located just off Fifth Avenue and within walking distance of Central Park, 
-        the House offers a quiet, private setting with multiple interior spaces 
-        and an enclosed courtyard.
-      </p>
+      <div className={styles.introSection}>
+        <p className={styles.intro}>
+          The House of the Redeemer is a historic building on the Upper East Side 
+          of Manhattan available for film, television, and photography projects. 
+          Located just off Fifth Avenue and within walking distance of Central Park, 
+          the House offers a quiet, private setting with multiple interior spaces 
+          and an enclosed courtyard.
+        </p>
+      </div>
 
       <div className={styles.grid}>
-        <section className={`${styles.card} ${styles.noImage}`}>
+        <section className={`${styles.card} ${styles.noImage} ${styles.creamBg}`}>
           <div className={styles.text}>
             <p className={styles.description}>
               Productions are often drawn to the House for its distinctive 
@@ -32,24 +34,24 @@ export default async function FilmAndTvPage() {
             <p className={styles.description}>
               Filming and photo shoots may take place in several areas of the House, including:
             </p>
-            <ul className={styles.description} style={{marginLeft: '1.5rem', marginTop: '1rem'}}>
-              <li style={{marginBottom: '0.5rem'}}>
+            <ul className={styles.spaceList}>
+              <li>
                 <strong>Library</strong> – A two-story, wood-paneled library with a piano and historic European character
               </li>
-              <li style={{marginBottom: '0.5rem'}}>
+              <li>
                 <strong>Refectory</strong> – A large room suitable for wider shots or group scenes
               </li>
-              <li style={{marginBottom: '0.5rem'}}>
+              <li>
                 <strong>Reception Room</strong> – A formal salon-style interior suitable for smaller scenes or gatherings
               </li>
-              <li style={{marginBottom: '0.5rem'}}>
+              <li>
                 <strong>Courtyard</strong> – A private outdoor space that can provide exterior looks or a controlled outdoor environment
               </li>
             </ul>
           </div>
         </section>
 
-        <section className={`${styles.card} ${styles.noImage}`}>
+        <section className={`${styles.card} ${styles.noImage} ${styles.creamBg}`}>
           <div className={styles.text}>
             <h2>Near Central Park</h2>
             <p className={styles.description}>
@@ -85,7 +87,7 @@ export default async function FilmAndTvPage() {
           </div>
         </section>
 
-        <section className={`${styles.card} ${styles.noImage}`}>
+        <section className={`${styles.card} ${styles.noImage} ${styles.creamBg}`}>
           <div className={styles.text}>
             <h2>Working with Productions</h2>
             <p className={styles.description}>
@@ -105,7 +107,6 @@ export default async function FilmAndTvPage() {
               <a 
                 href="mailto:info@houseoftheredeemer.org"
                 className={styles.link}
-                style={{color: '#6b2f2a', textDecoration: 'underline'}}
               >
                 info@houseoftheredeemer.org
               </a>

@@ -1,7 +1,7 @@
 .wrapper {
-    padding: 6rem 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
+    padding: 6rem 2rem 0;
+    max-width: 100%;
+    margin: 0;
     background: #fff;
 }
 
@@ -12,7 +12,8 @@
     margin: 0 0 1.5rem;
     color: rgb(23, 23, 23);
     position: relative;
-    margin-top:30px;
+    padding: 3rem 2rem 2rem;
+    background: #fff;
 }
 
 .heading:after {
@@ -26,10 +27,17 @@
     background: #6b2f2a;
 }
 
+.introSection {
+    background: #fff;
+    padding: 2rem 2rem 4rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
 .intro {
     text-align: center;
     color: #555;
-    margin: 0 auto 3rem;
+    margin: 0 auto;
     font-size: 1.125rem;
     line-height: 1.7;
     max-width: 800px;
@@ -41,7 +49,6 @@
     flex-direction: column;
     gap: 0;
     padding: 0;
-    /* scrollbar removed to avoid odd overflows */
 }
 
 /* each row */
@@ -49,16 +56,23 @@
     display: flex;
     align-items: stretch;
     gap: clamp(1rem, 3vw, 3rem);
-    padding: 3rem;
+    padding: 4rem;
     position: relative;
     transition: background .2s ease;
     contain: layout paint;
-    /* avoids rare shimmer on image zoom */
+    background: #fff;
+}
 
+.creamBg {
+    background: #fbf9f7 !important;
 }
 
 .card:hover {
     background: #f9f5f5;
+}
+
+.creamBg:hover {
+    background: #f5f0eb !important;
 }
 
 /* burgundy rule between items */
@@ -85,9 +99,6 @@
 .card:nth-of-type(even).noImage {
     flex-direction: row;
 }
-
-
-
 
 /* media block */
 .image {
@@ -120,9 +131,9 @@
     flex-direction: column;
     justify-content: center;
     min-width: 0;
-    /* allow shrinking without overflow */
     overflow-wrap: anywhere;
-    /* avoid word overflow */
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .text h2 {
@@ -143,8 +154,6 @@
     height: 2px;
     background: #6b2f2a;
 }
-
-/* .card:nth-of-type(even) .text h2:after{ left:auto; right:0; } */
 
 .year {
     color: #6b2f2a;
@@ -173,19 +182,32 @@
     margin: .5rem 0;
 }
 
-/* when there is no image, make text full width and remove the gap nicely */
+.spaceList {
+    margin: 1.5rem 0 0 1.5rem;
+    color: #2b2f36;
+    line-height: 1.7;
+}
+
+.spaceList li {
+    margin-bottom: 1rem;
+}
+
+.spaceList strong {
+    color: #6b2f2a;
+    font-weight: 600;
+}
+
 /* Full-width (no image) state */
 .noImage {
     flex-direction: column;
     gap: 0;
-    padding: 3rem;
+    padding: 4rem;
 }
 
 .noImage .text {
     width: 100%;
     max-width: 900px;
-    margin: 0;
-    /* Changed from 'margin: 0 auto' to left-align */
+    margin: 0 auto;
 }
 
 /* Hide divider line for full-width cards */
@@ -193,81 +215,14 @@
     display: none !important;
 }
 
-.card:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 5%;
-    width: 90%;
-    height: 2px;
-    background-color: #6b2f2a;
-    opacity: 0.65;
-    pointer-events: none;
+.link {
+    color: #6b2f2a;
+    text-decoration: underline;
+    transition: color 0.2s ease;
 }
 
-/* medium screens */
-@media (max-width: 1100px) {
-    .image {
-        flex-basis: 46%;
-    }
-}
-
-@media (max-width: 980px) {
-    .heading {
-        font-size: 3rem;
-    }
-
-    .imageEl {
-        max-height: 360px;
-    }
-}
-
-/* stack on small screens */
-@media (max-width: 860px) {
-
-    .card,
-    .card:nth-of-type(even) {
-        flex-direction: column;
-    }
-
-    .image {
-        flex-basis: auto;
-        max-width: 100%;
-    }
-
-    .imageEl {
-        max-height: 320px;
-    }
-
-    .text h2:after {
-        left: 0;
-        right: auto;
-    }
-
-    /* keep underline left-aligned */
-    .card:after {
-        left: 6%;
-        width: 88%;
-    }
-}
-
-/* very small */
-@media (max-width: 560px) {
-    .wrapper {
-        padding: 4rem 1rem;
-    }
-
-    .heading {
-        font-size: 2.2rem;
-    }
-
-    .text h2 {
-        font-size: 1.7rem;
-    }
-
-    .intro {
-        font-size: 1rem;
-    }
+.link:hover {
+    color: #3d1814;
 }
 
 .external {
@@ -290,15 +245,75 @@
     left: 0;
     right: auto;
     width: 40px;
-    /* matches other cards */
 }
 
-.noImage {
-    flex-direction: column;
-    padding: 3rem;
+/* medium screens */
+@media (max-width: 1100px) {
+    .image {
+        flex-basis: 46%;
+    }
 }
 
-.noImage .text {
-    width: 100%;
-    max-width: 900px;
+@media (max-width: 980px) {
+    .heading {
+        font-size: 3rem;
+    }
+
+    .imageEl {
+        max-height: 360px;
+    }
+}
+
+/* stack on small screens */
+@media (max-width: 860px) {
+    .card,
+    .card:nth-of-type(even) {
+        flex-direction: column;
+    }
+
+    .image {
+        flex-basis: auto;
+        max-width: 100%;
+    }
+
+    .imageEl {
+        max-height: 320px;
+    }
+
+    .text h2:after {
+        left: 0;
+        right: auto;
+    }
+
+    .card {
+        padding: 3rem 2rem;
+    }
+}
+
+/* very small */
+@media (max-width: 560px) {
+    .wrapper {
+        padding: 4rem 1rem 0;
+    }
+
+    .heading {
+        font-size: 2.2rem;
+        padding: 2rem 1rem 1.5rem;
+    }
+
+    .introSection {
+        padding: 1.5rem 1rem 3rem;
+    }
+
+    .text h2 {
+        font-size: 1.7rem;
+    }
+
+    .intro {
+        font-size: 1rem;
+    }
+
+    .card {
+        padding: 2.5rem 1.5rem;
+    }
 }
