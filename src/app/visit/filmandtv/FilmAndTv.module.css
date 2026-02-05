@@ -13,7 +13,7 @@
     color: rgb(23, 23, 23);
     position: relative;
     padding: 3rem 2rem 2rem;
-    background: #fff;
+
 }
 
 .heading:after {
@@ -68,7 +68,7 @@
 }
 
 .card:hover {
-    background: #f9f5f5;
+    background: #f9f5f5 !important;
 }
 
 .creamBg:hover {
@@ -132,7 +132,7 @@
     justify-content: center;
     min-width: 0;
     overflow-wrap: anywhere;
-    max-width: 900px;
+    max-width: 800px;
     margin: 0 auto;
 }
 
@@ -175,11 +175,16 @@
     font-style: normal;
 }
 
+.description {
+    max-width: 800px;
+    
+}
+
 .description,
 .notes {
     color: #2b2f36;
     line-height: 1.7;
-    margin: .5rem 0;
+    margin: 2rem 0 .5rem 0;
 }
 
 .spaceList {
