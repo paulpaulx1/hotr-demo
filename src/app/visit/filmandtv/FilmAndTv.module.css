@@ -1,200 +1,135 @@
 .wrapper {
-    padding: 6rem 2rem 0;
+    padding: 0;
     max-width: 100%;
     margin: 0;
-    background: #fff;
+    background: #fbf9f7;
+}
+
+/* Hero Section */
+.hero {
+    padding: 8rem 2rem 5rem;
+    max-width: 900px;
+    margin: 0 auto;
+    text-align: center;
+    background: #fbf9f7;
 }
 
 .heading {
     font-family: "Garamond", serif;
     font-size: 3.5rem;
-    text-align: center;
-    margin: 0 0 1.5rem;
-    color: rgb(23, 23, 23);
-    position: relative;
-    padding: 3rem 2rem 2rem;
-
+    margin: 0 0 2rem;
+    color: #6b2f2a;
+    font-weight: 400;
 }
 
-.heading:after {
-    content: "";
-    position: absolute;
-    bottom: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 80px;
-    height: 3px;
-    background: #6b2f2a;
-}
-
-.introSection {
-    background: #fff;
-    padding: 2rem 2rem 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.intro {
-    text-align: center;
+.heroText {
+    font-size: 1.2rem;
+    line-height: 1.8;
     color: #555;
-    margin: 0 auto;
-    font-size: 1.125rem;
-    line-height: 1.7;
-    max-width: 800px;
+    margin: 0;
 }
 
-/* list container: let the page grow; no fixed height */
-.grid {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    padding: 0;
-}
-
-/* each row */
-.card {
-    display: flex;
-    align-items: stretch;
-    gap: clamp(1rem, 3vw, 3rem);
-    padding: 4rem;
-    position: relative;
-    transition: background .2s ease;
-    contain: layout paint;
+/* Library Showcase Section */
+.libraryShowcase {
     background: #fff;
+    padding: 3rem 2rem;
 }
 
-.creamBg {
-    background: #fbf9f7 !important;
+.imageContainer {
+    max-width: 750px;
+    margin: 0 auto 2rem;
 }
 
-.card:hover {
-    background: #f9f5f5 !important;
-}
-
-.creamBg:hover {
-    background: #f5f0eb !important;
-}
-
-/* burgundy rule between items */
-.card:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    width: 80%;
-    height: 2px;
-    background: #6b2f2a;
-    opacity: .65;
-}
-
-.card:last-child:after {
-    display: none;
-}
-
-/* A/B alternating */
-.card:nth-of-type(even) {
-    flex-direction: row-reverse;
-}
-
-.card:nth-of-type(even).noImage {
-    flex-direction: row;
-}
-
-/* media block */
-.image {
-    flex: 0 1 42%;
-    max-width: 520px;
-    align-self: center;
-}
-
-.imageEl {
-    display: block;
+.showcaseImage {
     width: 100%;
     height: auto;
-    max-height: 420px;
-    object-fit: cover;
-    border-radius: 8px;
-    box-shadow: 0 5px 15px rgba(107, 47, 42, .15);
-    transition: transform .35s ease, box-shadow .35s ease;
+    border-radius: 4px;
+    box-shadow: 0 8px 30px rgba(107, 47, 42, .15);
+    display: block;
 }
 
-.card:hover .imageEl {
-    transform: scale(1.02);
-    box-shadow: 0 10px 28px rgba(107, 47, 42, .25);
+.photoCredit {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: #888;
+    font-style: italic;
+    text-align: right;
 }
 
-/* text block */
-.text {
-    flex: 1 1 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    min-width: 0;
-    overflow-wrap: anywhere;
+.libraryDescription {
     max-width: 800px;
     margin: 0 auto;
+    text-align: center;
 }
 
-.text h2 {
-    font-family: "Garamond", serif;
-    margin: 0 0 .75rem;
-    color: #222;
-    font-size: 2.1rem;
-    line-height: 1.2;
-    position: relative;
-}
-
-.text h2:after {
-    content: "";
-    position: absolute;
-    bottom: -8px;
-    left: 0;
-    width: 48px;
-    height: 2px;
-    background: #6b2f2a;
-}
-
-.year {
-    color: #6b2f2a;
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin: .75rem 0 1rem;
-}
-
-.location {
+.libraryDescription p {
+    font-size: 1.15rem;
+    line-height: 1.8;
     color: #444;
-    font-size: 1.02rem;
-    margin-top: .75rem;
     font-style: italic;
 }
 
-.location strong {
+/* Main Content Grid */
+.contentGrid {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+    background: #fbf9f7;
+}
+
+.section {
+    margin-bottom: 4.5rem;
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}
+
+.section h2 {
+    font-family: "Garamond", serif;
+    font-size: 2.2rem;
     color: #6b2f2a;
-    font-weight: 700;
-    font-style: normal;
+    margin: 0 0 1.5rem;
+    font-weight: 400;
 }
 
-.description {
-    max-width: 800px;
-    
-}
-
-.description,
-.notes {
+.section p {
+    font-size: 1.05rem;
+    line-height: 1.8;
     color: #2b2f36;
-    line-height: 1.7;
-    margin: 2rem 0 .5rem 0;
+    margin: 0 0 1.25rem;
 }
 
+.section p:last-child {
+    margin-bottom: 0;
+}
+
+.sectionIntro {
+    margin-bottom: 1.5rem !important;
+}
+
+/* Space List */
 .spaceList {
-    margin: 1.5rem 0 0 1.5rem;
-    color: #2b2f36;
-    line-height: 1.7;
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
 }
 
 .spaceList li {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #2b2f36;
     margin-bottom: 1rem;
+    padding-left: 1.5rem;
+    position: relative;
+}
+
+.spaceList li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #6b2f2a;
+    font-weight: bold;
 }
 
 .spaceList strong {
@@ -202,123 +137,111 @@
     font-weight: 600;
 }
 
-/* Full-width (no image) state */
-.noImage {
-    flex-direction: column;
-    gap: 0;
-    padding: 4rem;
+/* Two Column Layout */
+.twoColumn {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    margin-bottom: 4.5rem;
 }
 
-.noImage .text {
-    width: 100%;
-    max-width: 900px;
-    margin: 0 auto;
+/* Inquiries Section */
+.inquiriesSection {
+    background: #fff;
+    padding: 3rem;
+    border-radius: 8px;
+    margin-top: 2rem;
 }
 
-/* Hide divider line for full-width cards */
-.noImage:after {
-    display: none !important;
-}
-
-.link {
+.emailLink {
     color: #6b2f2a;
-    text-decoration: underline;
-    transition: color 0.2s ease;
+    text-decoration: none;
+    border-bottom: 1px solid #6b2f2a;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    font-weight: 500;
 }
 
-.link:hover {
+.emailLink:hover {
     color: #3d1814;
+    border-color: #3d1814;
 }
 
-.external {
-    margin-top: 1rem;
-    font-size: 0.95rem;
-    font-style: italic;
-}
-
-.external .link {
-    color: #6b2f2a;
-    text-decoration: underline;
-    transition: color 0.2s ease;
-}
-
-.external .link:hover {
-    color: #3d1814;
-}
-
-.noImage .text h2:after {
-    left: 0;
-    right: auto;
-    width: 40px;
-}
-
-/* medium screens */
-@media (max-width: 1100px) {
-    .image {
-        flex-basis: 46%;
-    }
-}
-
+/* Responsive */
 @media (max-width: 980px) {
     .heading {
-        font-size: 3rem;
+        font-size: 2.8rem;
     }
 
-    .imageEl {
-        max-height: 360px;
-    }
-}
-
-/* stack on small screens */
-@media (max-width: 860px) {
-    .card,
-    .card:nth-of-type(even) {
-        flex-direction: column;
-    }
-
-    .image {
-        flex-basis: auto;
-        max-width: 100%;
-    }
-
-    .imageEl {
-        max-height: 320px;
-    }
-
-    .text h2:after {
-        left: 0;
-        right: auto;
-    }
-
-    .card {
-        padding: 3rem 2rem;
+    .twoColumn {
+        grid-template-columns: 1fr;
+        gap: 3rem;
     }
 }
 
-/* very small */
-@media (max-width: 560px) {
-    .wrapper {
-        padding: 4rem 1rem 0;
+@media (max-width: 768px) {
+    .hero {
+        padding: 6rem 1.5rem 4rem;
     }
 
     .heading {
-        font-size: 2.2rem;
-        padding: 2rem 1rem 1.5rem;
+        font-size: 2.4rem;
     }
 
-    .introSection {
-        padding: 1.5rem 1rem 3rem;
+    .heroText {
+        font-size: 1.1rem;
     }
 
-    .text h2 {
-        font-size: 1.7rem;
+    .libraryShowcase {
+        padding: 2.5rem 1.5rem;
     }
 
-    .intro {
+    .imageContainer {
+        margin-bottom: 1.5rem;
+    }
+
+    .libraryDescription p {
+        font-size: 1.05rem;
+    }
+
+    .contentGrid {
+        padding: 4rem 1.5rem;
+    }
+
+    .section h2 {
+        font-size: 1.9rem;
+    }
+}
+
+@media (max-width: 560px) {
+    .hero {
+        padding: 5rem 1rem 3rem;
+    }
+
+    .heading {
+        font-size: 2rem;
+    }
+
+    .heroText {
         font-size: 1rem;
     }
 
-    .card {
-        padding: 2.5rem 1.5rem;
+    .libraryShowcase {
+        padding: 2rem 1rem;
+    }
+
+    .contentGrid {
+        padding: 3rem 1rem;
+    }
+
+    .section {
+        margin-bottom: 3.5rem;
+    }
+
+    .section h2 {
+        font-size: 1.6rem;
+    }
+
+    .inquiriesSection {
+        padding: 2rem 1.5rem;
     }
 }
