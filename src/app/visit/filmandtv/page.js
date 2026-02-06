@@ -70,10 +70,10 @@ export default async function FilmAndTvPage() {
           <section className={styles.section}>
             <h2>Near Central Park</h2>
             <p>
-              Given its proximity to Central Park and Museum Mile, the House of the Redeemer may
-              also serve as a base for productions filming nearby. Interior
-              rooms and the courtyard can be booked in support of off-site
-              shoots, including for holding, catering, and other
+              Given its proximity to Central Park and Museum Mile, the House of
+              the Redeemer may also serve as a base for productions filming
+              nearby. Interior rooms and the courtyard can be booked in support
+              of off-site shoots, including for holding, catering, and other
               production-related needs.
             </p>
           </section>
@@ -116,7 +116,7 @@ export default async function FilmAndTvPage() {
         </section>
 
         {/* Inquiries CTA */}
-        <section className={styles.inquiriesSection}>
+        <section className={styles.section}>
           <h2>Inquiries</h2>
           <p>
             For filming or photography inquiries, please contact{" "}
