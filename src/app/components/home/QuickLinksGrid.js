@@ -40,7 +40,7 @@ const defaultCards = [
   {
     title: "TV & Film",
     image: "/images/tvfilm-card.jpg",
-    link: "/filmandtv",
+    link: "/visit/filmandtv",
     description: "Film at House of the Redeemer",
   },
   {
