@@ -4,6 +4,7 @@ import styles from "./EventPage.module.css";
 import Link from "next/link";
 import { CalendarDays, Clock, MapPin, ArrowLeft } from "lucide-react";
 import { RRule } from "rrule";
+import { PortableText } from "@portabletext/react";
 
 export const revalidate = 86400;
 export const dynamic = "force-static";
@@ -31,6 +32,26 @@ async function getEvent(slug) {
   const { result } = await res.json();
   return result;
 }
+
+/* ---------- Portable Text Components ---------- */
+const portableTextComponents = {
+  marks: {
+    link: ({value, children}) => {
+      const target = value?.blank ? '_blank' : undefined;
+      const rel = value?.blank ? 'noopener noreferrer' : undefined;
+      return (
+        <a 
+          href={value?.href} 
+          target={target} 
+          rel={rel}
+          className="text-blue-600 hover:text-blue-800 underline"
+        >
+          {children}
+        </a>
+      );
+    }
+  }
+};
 
 /* ---------- Recurrence Helpers ---------- */
 function formatRecurrence(recur) {
@@ -140,14 +161,14 @@ export default async function EventPage({ params }) {
       month: "long",
       day: "numeric",
       year: "numeric",
-      timeZone: "America/New_York", // Add this
+      timeZone: "America/New_York",
     });
 
   const formatTime = (date) =>
     date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
-      timeZone: "America/New_York", // Add this
+      timeZone: "America/New_York",
     });
 
   return (
@@ -189,9 +210,18 @@ export default async function EventPage({ params }) {
                   <h2 className="text-2xl font-serif text-slate-800 mb-4">
                     About This Event
                   </h2>
-                  <p className="text-slate-700 leading-relaxed text-lg">
-                    {event.description}
-                  </p>
+                  <div className="text-slate-700 leading-relaxed text-lg prose prose-lg max-w-none">
+                    {typeof event.description === 'string' ? (
+                      // Old format: plain text (backward compatible)
+                      <p>{event.description}</p>
+                    ) : (
+                      // New format: portable text with clickable links
+                      <PortableText 
+                        value={event.description} 
+                        components={portableTextComponents}
+                      />
+                    )}
+                  </div>
                 </div>
               )}
 
