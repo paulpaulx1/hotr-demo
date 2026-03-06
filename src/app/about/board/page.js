@@ -239,7 +239,7 @@ export default async function BoardPage() {
           <div className="max-w-6xl mx-auto px-6">
             <div className="bg-[#fbf9f7] rounded-lg shadow-lg p-8 md:p-12">
               <h2 className="font-serif text-3xl font-medium text-[#6b2f2a] mb-8 border-b-2 border-slate-200 pb-3 text-center">
-                Trustees Emeritus
+                Trustees Emereti
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {emeritusSorted.map((t) => (
