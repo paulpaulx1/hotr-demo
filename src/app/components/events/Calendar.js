@@ -105,7 +105,7 @@ export default function EventsCalendar({ events = [] }) {
           const baseWeekday = start.getDay();
           const activeDays = daysOfWeek.length
             ? daysOfWeek.map((d) =>
-                ["SU", "MO", "TU", "WE", "TH", "FR", "SA"].indexOf(d)
+                ["SU", "MO", "TU", "WE", "TH", "FR", "SA"].indexOf(d),
               )
             : [baseWeekday];
 
@@ -331,8 +331,11 @@ export default function EventsCalendar({ events = [] }) {
             if (currentView === "month") {
               setCurrentDate(event.start);
               setCurrentView("day");
-            } else if (event?.href) {
-              router.push(event.href);
+            } else if (event?.slug) {
+              const url = event.recurrence?.isRecurring
+                ? `/events/${event.slug}?date=${event.start.toISOString()}`
+                : `/events/${event.slug}`;
+              router.push(url);
             }
           }}
           showMultiDayTimes={false}

@@ -7,8 +7,7 @@ import { RRule } from "rrule";
 import { PortableText } from "@portabletext/react";
 
 export const revalidate = 86400;
-export const dynamic = "force-static";
-export const fetchCache = "force-cache";
+export const dynamic = "force-dynamic";
 
 async function getEvent(slug) {
   const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "pionkkje";
@@ -22,7 +21,7 @@ async function getEvent(slug) {
     }
   `;
   const qs = `query=${encodeURIComponent(GROQ)}&$slug=${encodeURIComponent(
-    JSON.stringify(slug)
+    JSON.stringify(slug),
   )}`;
   const url = `https://${projectId}.api.sanity.io/v2023-10-10/data/query/${dataset}?${qs}`;
 
@@ -36,21 +35,21 @@ async function getEvent(slug) {
 /* ---------- Portable Text Components ---------- */
 const portableTextComponents = {
   marks: {
-    link: ({value, children}) => {
-      const target = value?.blank ? '_blank' : undefined;
-      const rel = value?.blank ? 'noopener noreferrer' : undefined;
+    link: ({ value, children }) => {
+      const target = value?.blank ? "_blank" : undefined;
+      const rel = value?.blank ? "noopener noreferrer" : undefined;
       return (
-        <a 
-          href={value?.href} 
-          target={target} 
+        <a
+          href={value?.href}
+          target={target}
           rel={rel}
           className="text-blue-600 hover:text-blue-800 underline"
         >
           {children}
         </a>
       );
-    }
-  }
+    },
+  },
 };
 
 /* ---------- Recurrence Helpers ---------- */
@@ -75,7 +74,7 @@ function formatRecurrence(recur) {
           FR: "Friday",
           SA: "Saturday",
           SU: "Sunday",
-        })[d]
+        })[d],
     )
     .filter(Boolean);
 
@@ -150,6 +149,8 @@ export default async function EventPage({ params }) {
   const event = await getEvent(slug);
   if (!event) notFound();
 
+  const isRecurring = !!event.recurrence?.isRecurring;
+
   const startDate = event.start ? new Date(event.start) : null;
   const endDate = event.end ? new Date(event.end) : null;
   const isPast = startDate ? startDate.getTime() < Date.now() : false;
@@ -183,7 +184,7 @@ export default async function EventPage({ params }) {
         <div className={styles.heroOverlay}></div>
         <div className={styles.heroContent}>
           <div className="container mx-auto px-6">
-            {isPast && (
+            {isPast && !isRecurring && (
               <span className="inline-block bg-amber-600 text-white px-3 py-1 rounded-md text-sm mb-4">
                 Past Event
               </span>
@@ -211,13 +212,11 @@ export default async function EventPage({ params }) {
                     About This Event
                   </h2>
                   <div className="text-slate-700 leading-relaxed text-lg prose prose-lg max-w-none">
-                    {typeof event.description === 'string' ? (
-                      // Old format: plain text (backward compatible)
+                    {typeof event.description === "string" ? (
                       <p>{event.description}</p>
                     ) : (
-                      // New format: portable text with clickable links
-                      <PortableText 
-                        value={event.description} 
+                      <PortableText
+                        value={event.description}
                         components={portableTextComponents}
                       />
                     )}
@@ -225,7 +224,7 @@ export default async function EventPage({ params }) {
                 </div>
               )}
 
-              {/* 🗓️ Upcoming Dates */}
+              {/* Upcoming Dates */}
               {upcoming.length > 0 && (
                 <div className="mb-12">
                   <h2 className="text-2xl font-serif text-slate-800 mb-4">
@@ -265,8 +264,8 @@ export default async function EventPage({ params }) {
                   Event Details
                 </h3>
 
-                {/* Date */}
-                {startDate && (
+                {/* Date — hidden for recurring events */}
+                {startDate && !isRecurring && (
                   <div className="flex items-start mb-6">
                     <div className={styles.iconWrapper}>
                       <CalendarDays size={20} />
@@ -284,8 +283,8 @@ export default async function EventPage({ params }) {
                   </div>
                 )}
 
-                {/* Time */}
-                {startDate && !event.allDay && (
+                {/* Time — hidden for recurring events */}
+                {startDate && !event.allDay && !isRecurring && (
                   <div className="flex items-start mb-6">
                     <div className={styles.iconWrapper}>
                       <Clock size={20} />
@@ -316,7 +315,7 @@ export default async function EventPage({ params }) {
                 )}
 
                 {/* Recurrence Summary */}
-                {event.recurrence?.isRecurring && (
+                {isRecurring && (
                   <div className="flex items-start mb-6">
                     <div className={styles.iconWrapper}>
                       <CalendarDays size={20} />
@@ -339,7 +338,7 @@ export default async function EventPage({ params }) {
                 <div className="mt-8">
                   <a
                     href={`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(
-                      event.title
+                      event.title,
                     )}&dates=${
                       startDate
                         ? startDate.toISOString().replace(/-|:|\.\d+/g, "")
@@ -349,7 +348,7 @@ export default async function EventPage({ params }) {
                         ? endDate.toISOString().replace(/-|:|\.\d+/g, "")
                         : ""
                     }&details=${encodeURIComponent(
-                      event.description || ""
+                      event.description || "",
                     )}&location=${encodeURIComponent(event.location || "")}`}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -373,7 +372,7 @@ export async function generateStaticParams() {
   const ds = process.env.NEXT_PUBLIC_SANITY_DATASET || "production";
   const q = `*[_type=="event" && defined(slug.current)][0...50]{ "slug": slug.current }`;
   const url = `https://${pid}.api.sanity.io/v2023-10-10/data/query/${ds}?query=${encodeURIComponent(
-    q
+    q,
   )}`;
   const r = await fetch(url, { cache: "no-store" });
   const { result = [] } = await r.json();
