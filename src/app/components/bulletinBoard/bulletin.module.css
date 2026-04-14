@@ -31,7 +31,8 @@
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
   background-color: #fbf9f7;
   border: 1px solid #e5e7eb;
-  opacity: 0; /* for fade-in animation */
+  opacity: 0;
+  /* for fade-in animation */
 }
 
 /* Fade-in animation */
@@ -40,6 +41,7 @@
     opacity: 0;
     transform: translateY(20px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -58,14 +60,8 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(30, 41, 59, 0.4), transparent);
 }
 
-@media (min-width: 768px) {
-  .overlay {
-    background: linear-gradient(to left, rgba(30, 41, 59, 0.4), transparent);
-  }
-}
 
 /* Mobile: remove fixed height, let page flow */
 @media (max-width: 768px) {
