@@ -7,45 +7,36 @@ export const metadata = {
     "Explore our list of preferred vendors for catering and event services at the House of the Redeemer.",
 };
 
-export default function PreferredVendorsPage() {
-  const vendors = [
-    {
-      name: "J n D Events",
-      address: "500 West 43rd Street, New York, NY 10036",
-      phone: "917-698-4498",
-      email: "JnDEventsNYC@gmail.com",
-      website: null,
-      instagram: "https://www.instagram.com/JnDEventsNY",
-      instagramHandle: "@JnDEventsNY",
-    },
-    {
-      name: "Kate Edmonds Events",
-      address: "200 Madison Ave, Suite 900, New York, NY 10016",
-      phone: "212-366-4447",
-      email: "contact@kateedmondsevents.com",
-      website: "https://www.kateedmondsevents.com",
-      instagram: "https://www.instagram.com/kateedmondsevents/",
-      instagramHandle: "@kateedmondsevents",
-    },
-    {
-      name: "Occasional Catering Company by Kate Edmonds Events",
-      address: "200 Madison Ave, Suite 900, New York, NY 10016",
-      phone: "212-366-0772",
-      email: "contact@occasionalcatering.com",
-      website: "https://www.occasionalcatering.com/",
-      instagram: "https://www.instagram.com/occasionalcatering/",
-      instagramHandle: "@occasionalcatering",
-    },
-    {
-      name: "Yura",
-      address: "1350 Madison Avenue, New York, NY 10128",
-      phone: "212-860-1707",
-      website: "https://yura.nyc/",
-      instagram: "https://www.instagram.com/yura_madison_ave/",
-      instagramHandle: "yura_madison_ave",
-      email: "catering@yura.nyc",
-    },
-  ];
+export const revalidate = 86400;
+
+async function getVendors() {
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID;
+  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET;
+
+  const query = `*[_type == "preferredVendor"] | order(order asc, name asc) {
+    _id,
+    name,
+    address,
+    phone,
+    email,
+    website,
+    instagramUrl,
+    instagramHandle
+  }`;
+
+  const url = `https://${projectId}.apicdn.sanity.io/v2023-10-10/data/query/${dataset}?query=${encodeURIComponent(query)}`;
+
+  const res = await fetch(url, {
+    next: { revalidate: 86400, tags: ["sanity"] },
+  });
+
+  if (!res.ok) throw new Error(`Sanity fetch failed: ${res.status}`);
+  const { result } = await res.json();
+  return result || [];
+}
+
+export default async function PreferredVendorsPage() {
+  const vendors = await getVendors();
 
   return (
     <main className="min-h-screen">
@@ -93,9 +84,9 @@ export default function PreferredVendorsPage() {
           </h2>
 
           <div className="space-y-8">
-            {vendors.map((vendor, index) => (
+            {vendors.map((vendor) => (
               <div
-                key={index}
+                key={vendor._id}
                 className="bg-white rounded-lg shadow-lg p-8 hover:shadow-xl transition-shadow"
               >
                 <h3 className="font-serif text-2xl font-medium text-[#6b2f2a] mb-6">
@@ -105,59 +96,61 @@ export default function PreferredVendorsPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Left Column */}
                   <div className="space-y-4">
-                    {/* Address */}
-                    <div className="flex items-start">
-                      <div className="w-10 h-10 bg-[#6b2f2a]/10 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                        <MapPin className="w-5 h-5 text-[#6b2f2a]" />
+                    {vendor.address && (
+                      <div className="flex items-start">
+                        <div className="w-10 h-10 bg-[#6b2f2a]/10 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
+                          <MapPin className="w-5 h-5 text-[#6b2f2a]" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-slate-900 mb-1">
+                            Address
+                          </p>
+                          <p className="text-slate-600">{vendor.address}</p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-slate-900 mb-1">
-                          Address
-                        </p>
-                        <p className="text-slate-600">{vendor.address}</p>
-                      </div>
-                    </div>
+                    )}
 
-                    {/* Phone */}
-                    <div className="flex items-start">
-                      <div className="w-10 h-10 bg-[#6b2f2a]/10 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                        <Phone className="w-5 h-5 text-[#6b2f2a]" />
+                    {vendor.phone && (
+                      <div className="flex items-start">
+                        <div className="w-10 h-10 bg-[#6b2f2a]/10 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
+                          <Phone className="w-5 h-5 text-[#6b2f2a]" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-slate-900 mb-1">
+                            Phone
+                          </p>
+                          <a
+                            href={`tel:${vendor.phone.replace(/[^0-9]/g, "")}`}
+                            className="text-[#6b2f2a] hover:text-[#4e1f1a] hover:underline"
+                          >
+                            {vendor.phone}
+                          </a>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-slate-900 mb-1">
-                          Phone
-                        </p>
-                        <a
-                          href={`tel:${vendor.phone.replace(/[^0-9]/g, "")}`}
-                          className="text-[#6b2f2a] hover:text-[#4e1f1a] hover:underline"
-                        >
-                          {vendor.phone}
-                        </a>
-                      </div>
-                    </div>
+                    )}
 
-                    {/* Email */}
-                    <div className="flex items-start">
-                      <div className="w-10 h-10 bg-[#6b2f2a]/10 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
-                        <Mail className="w-5 h-5 text-[#6b2f2a]" />
+                    {vendor.email && (
+                      <div className="flex items-start">
+                        <div className="w-10 h-10 bg-[#6b2f2a]/10 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
+                          <Mail className="w-5 h-5 text-[#6b2f2a]" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-slate-900 mb-1">
+                            Email
+                          </p>
+                          <a
+                            href={`mailto:${vendor.email}`}
+                            className="text-[#6b2f2a] hover:text-[#4e1f1a] hover:underline break-all"
+                          >
+                            {vendor.email}
+                          </a>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-slate-900 mb-1">
-                          Email
-                        </p>
-                        <a
-                          href={`mailto:${vendor.email}`}
-                          className="text-[#6b2f2a] hover:text-[#4e1f1a] hover:underline break-all"
-                        >
-                          {vendor.email}
-                        </a>
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Right Column */}
                   <div className="space-y-4">
-                    {/* Website */}
                     {vendor.website && (
                       <div className="flex items-start">
                         <div className="w-10 h-10 bg-[#6b2f2a]/10 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
@@ -179,8 +172,7 @@ export default function PreferredVendorsPage() {
                       </div>
                     )}
 
-                    {/* Instagram */}
-                    {vendor.instagram && (
+                    {vendor.instagramUrl && (
                       <div className="flex items-start">
                         <div className="w-10 h-10 bg-[#6b2f2a]/10 rounded-full flex items-center justify-center flex-shrink-0 mr-3">
                           <Instagram className="w-5 h-5 text-[#6b2f2a]" />
@@ -190,12 +182,12 @@ export default function PreferredVendorsPage() {
                             Instagram
                           </p>
                           <a
-                            href={vendor.instagram}
+                            href={vendor.instagramUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-[#6b2f2a] hover:text-[#4e1f1a] hover:underline"
                           >
-                            {vendor.instagramHandle}
+                            {vendor.instagramHandle || vendor.instagramUrl}
                           </a>
                         </div>
                       </div>
