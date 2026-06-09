@@ -19,7 +19,7 @@ export default function PreferredVendorsPage() {
       instagramHandle: "@JnDEventsNY",
     },
     {
-      name: "Kate Edmond Events",
+      name: "Kate Edmonds Events",
       address: "200 Madison Ave, Suite 900, New York, NY 10016",
       phone: "212-366-4447",
       email: "contact@kateedmondevents.com",
@@ -28,7 +28,7 @@ export default function PreferredVendorsPage() {
       instagramHandle: "@kateedmondsevents",
     },
     {
-      name: "Occasional Catering Company by Kate Edmond Events",
+      name: "Occasional Catering Company by Kate Edmonds Events",
       address: "200 Madison Ave, Suite 900, New York, NY 10016",
       phone: "212-366-0772",
       email: "contact@occasionalcatering.com",
