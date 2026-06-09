@@ -43,6 +43,7 @@ export default function PreferredVendorsPage() {
       website: "https://yura.nyc/",
       instagram: "https://www.instagram.com/yura_madison_ave/",
       instagramHandle: "yura_madison_ave",
+      email: "catering@yura.nyc",
     },
   ];
 
