@@ -22,7 +22,7 @@ export default function PreferredVendorsPage() {
       name: "Kate Edmonds Events",
       address: "200 Madison Ave, Suite 900, New York, NY 10016",
       phone: "212-366-4447",
-      email: "contact@kateedmondevents.com",
+      email: "contact@kateedmondsevents.com",
       website: "https://www.kateedmondsevents.com",
       instagram: "https://www.instagram.com/kateedmondsevents/",
       instagramHandle: "@kateedmondsevents",
