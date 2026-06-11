@@ -46,7 +46,7 @@ export default function FabbriPage() {
           for information about upcoming programs and events at the House. You
           can buy tickets for our upcoming concerts and performances on{" "}
           <Link
-            href="https://www.eventbrite.com/o/house-of-the-redeemer-16945185970"
+            href="https://www.eventbrite.com/o/house-of-the-redeemer-34427758073?aff=ebdsshcopyurl"
             target="_blank"
             rel="noopener noreferrer"
             className="text-slate-800 underline"
@@ -74,7 +74,7 @@ export default function FabbriPage() {
           to meet the artists at a reception following the concert allow
           audiences to share a unique and intimate musical salon experience.
         </p>
-
+        <br />
         <p>
           The House has been noted by the <em>New York Times</em> as embodying
           &ldquo;the artisanship of a bygone era.&rdquo; The House and its
