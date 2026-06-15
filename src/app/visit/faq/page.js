@@ -122,7 +122,7 @@ export default function FAQPage() {
         "No&nbsp;guests under&nbsp;16 are permitted to&nbsp;stay; likewise, no&nbsp;unaccompanied guests under&nbsp;21.",
     },
     {
-      question: "What is the cancellation policy?",
+      question: "What is your cancellation policy?",
       answer:
         "Guests must notify House staff via phone or email if they wish to cancel their reservation. The House reserves the right to charge the full remaining balance on the reservation if cancellation is made less than 48 hours before scheduled check-in.",
     },
