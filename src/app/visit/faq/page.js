@@ -37,7 +37,7 @@ const FaqSection = ({ title, items }) => {
   const [openItems, setOpenItems] = useState([]);
   const toggleItem = (i) =>
     setOpenItems((prev) =>
-      prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i]
+      prev.includes(i) ? prev.filter((x) => x !== i) : [...prev, i],
     );
 
   return (
@@ -121,6 +121,11 @@ export default function FAQPage() {
       answer:
         "No&nbsp;guests under&nbsp;16 are permitted to&nbsp;stay; likewise, no&nbsp;unaccompanied guests under&nbsp;21.",
     },
+    {
+      question: "What is the cancellation policy?",
+      answer:
+        "Guests must notify House staff via phone or email if they wish to cancel their reservation. The House reserves the right to charge the full remaining balance on the reservation if cancellation is made less than 48 hours before scheduled check-in.",
+    },
   ];
 
   const amenitiesFaqs = [
@@ -141,13 +146,11 @@ export default function FAQPage() {
     },
     {
       question: "Does the House have laundry facilities?",
-      answer:
-        "No, but there are laundromats and&nbsp;dry cleaners nearby.",
+      answer: "No, but there are laundromats and&nbsp;dry cleaners nearby.",
     },
     {
       question: "Does the House provide parking for guests?",
-      answer:
-        "No parking or&nbsp;bicycle storage is available on&nbsp;site.",
+      answer: "No parking or&nbsp;bicycle storage is available on&nbsp;site.",
     },
   ];
 
@@ -185,8 +188,9 @@ export default function FAQPage() {
       {/* Intro */}
       <div className="mb-12 text-center">
         <p className="text-lg text-slate-600">
-          Find answers to common questions about the House&nbsp;of&nbsp;the&nbsp;Redeemer,
-          our facilities, and&nbsp;guest guidelines.
+          Find answers to common questions about the
+          House&nbsp;of&nbsp;the&nbsp;Redeemer, our facilities, and&nbsp;guest
+          guidelines.
         </p>
       </div>
 
@@ -204,9 +208,10 @@ export default function FAQPage() {
           <div className="px-8 py-4 text-white max-w-md">
             <h2 className={`${styles.header} text-2xl mb-2`}>Our Mission</h2>
             <p className="text-white/90 italic">
-              &ldquo;The&nbsp;House&nbsp;of&nbsp;the&nbsp;Redeemer is&nbsp;an&nbsp;oasis
-              of&nbsp;serenity, a&nbsp;place&nbsp;apart, within&nbsp;the&nbsp;City&nbsp;of&nbsp;New&nbsp;York providing worship,
-              hospitality, and&nbsp;spiritual renewal.&rdquo;
+              &ldquo;The&nbsp;House&nbsp;of&nbsp;the&nbsp;Redeemer
+              is&nbsp;an&nbsp;oasis of&nbsp;serenity, a&nbsp;place&nbsp;apart,
+              within&nbsp;the&nbsp;City&nbsp;of&nbsp;New&nbsp;York providing
+              worship, hospitality, and&nbsp;spiritual renewal.&rdquo;
             </p>
           </div>
         </div>
